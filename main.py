@@ -44,6 +44,7 @@ if __name__ == '__main__':
         js_api=api
     )
     webview.start()
+    webview.join()
 
 # ejecutar 
 # venv\Scripts\activate.bat
