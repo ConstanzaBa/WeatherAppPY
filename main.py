@@ -20,7 +20,7 @@ def actualizar_clima_en_tiempo_real():
         if hora_actual != ultima_hora:
             try:
                 print(f"{ahora.strftime('%H:%M:%S')} → Actualizando el clima...")
-                subprocess.run(["python", "actualclima.py"], check=False)
+                subprocess.run(["python", "actualizarxhora.py"], check=False)
                 print("Actualización exitosa.")
             except Exception as e:
                 print(f"Error al actualizar el clima: {e}")
@@ -29,7 +29,7 @@ def actualizar_clima_en_tiempo_real():
 
         # Revisamos cada 10 segundos si cambió la hora
         time.sleep(10)
-
+    
 if __name__ == '__main__':
     # hilo daemon que ejecuta la función de actualización en tiempo real
     hilo = threading.Thread(target=actualizar_clima_en_tiempo_real, daemon=True)
