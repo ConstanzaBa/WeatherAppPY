@@ -1,0 +1,186 @@
+[
+  {
+    "provincia": "Buenos Aires",
+    "temperatura": 13.5,
+    "humedad": 76.0,
+    "coco": 3,
+    "icono": "cloudy.svg",
+    "fecha_hora": "2025-10-30 20:00:00 -03"
+  },
+  {
+    "provincia": "Catamarca",
+    "temperatura": 21.5,
+    "humedad": 47.0,
+    "coco": 1,
+    "icono": "clear_night.svg",
+    "fecha_hora": "2025-10-30 20:00:00 -03"
+  },
+  {
+    "provincia": "Chaco",
+    "temperatura": 19.0,
+    "humedad": 72.0,
+    "coco": 2,
+    "icono": "fair_night.svg",
+    "fecha_hora": "2025-10-30 20:00:00 -03"
+  },
+  {
+    "provincia": "Chubut",
+    "temperatura": 24.0,
+    "humedad": 28.0,
+    "coco": 3,
+    "icono": "cloudy.svg",
+    "fecha_hora": "2025-10-30 20:00:00 -03"
+  },
+  {
+    "provincia": "Corrientes",
+    "temperatura": 19.0,
+    "humedad": 72.0,
+    "coco": 2,
+    "icono": "fair_night.svg",
+    "fecha_hora": "2025-10-30 20:00:00 -03"
+  },
+  {
+    "provincia": "Córdoba",
+    "temperatura": 16.6,
+    "humedad": 62.0,
+    "coco": 3,
+    "icono": "cloudy.svg",
+    "fecha_hora": "2025-10-30 20:00:00 -03"
+  },
+  {
+    "provincia": "Entre Ríos",
+    "temperatura": 17.3,
+    "humedad": 61.0,
+    "coco": 3,
+    "icono": "cloudy.svg",
+    "fecha_hora": "2025-10-30 20:00:00 -03"
+  },
+  {
+    "provincia": "Formosa",
+    "temperatura": 19.5,
+    "humedad": 75.0,
+    "coco": 3,
+    "icono": "cloudy.svg",
+    "fecha_hora": "2025-10-30 20:00:00 -03"
+  },
+  {
+    "provincia": "Jujuy",
+    "temperatura": 18.2,
+    "humedad": 58.0,
+    "coco": 2,
+    "icono": "fair_night.svg",
+    "fecha_hora": "2025-10-30 20:00:00 -03"
+  },
+  {
+    "provincia": "La Pampa",
+    "temperatura": 18.5,
+    "humedad": 55.0,
+    "coco": 2,
+    "icono": "fair_night.svg",
+    "fecha_hora": "2025-10-30 20:00:00 -03"
+  },
+  {
+    "provincia": "La Rioja",
+    "temperatura": 19.4,
+    "humedad": 56.0,
+    "coco": 2,
+    "icono": "fair_night.svg",
+    "fecha_hora": "2025-10-30 20:00:00 -03"
+  },
+  {
+    "provincia": "Mendoza",
+    "temperatura": 22.3,
+    "humedad": 29.0,
+    "coco": 2,
+    "icono": "fair_night.svg",
+    "fecha_hora": "2025-10-30 20:00:00 -03"
+  },
+  {
+    "provincia": "Misiones",
+    "temperatura": 18.7,
+    "humedad": 68.0,
+    "coco": 1,
+    "icono": "clear_night.svg",
+    "fecha_hora": "2025-10-30 20:00:00 -03"
+  },
+  {
+    "provincia": "Neuquén",
+    "temperatura": 26.3,
+    "humedad": 17.0,
+    "coco": 3,
+    "icono": "cloudy.svg",
+    "fecha_hora": "2025-10-30 20:00:00 -03"
+  },
+  {
+    "provincia": "Río Negro",
+    "temperatura": 23.3,
+    "humedad": 37.0,
+    "coco": 3,
+    "icono": "cloudy.svg",
+    "fecha_hora": "2025-10-30 20:00:00 -03"
+  },
+  {
+    "provincia": "Salta",
+    "temperatura": 15.7,
+    "humedad": 66.0,
+    "coco": 3,
+    "icono": "cloudy.svg",
+    "fecha_hora": "2025-10-30 20:00:00 -03"
+  },
+  {
+    "provincia": "San Juan",
+    "temperatura": 21.2,
+    "humedad": 37.0,
+    "coco": 1,
+    "icono": "clear_night.svg",
+    "fecha_hora": "2025-10-30 20:00:00 -03"
+  },
+  {
+    "provincia": "San Luis",
+    "temperatura": 16.0,
+    "humedad": 63.0,
+    "coco": 1,
+    "icono": "clear_night.svg",
+    "fecha_hora": "2025-10-30 20:00:00 -03"
+  },
+  {
+    "provincia": "Santa Cruz",
+    "temperatura": 12.4,
+    "humedad": 69.0,
+    "coco": 8,
+    "icono": "rain.svg",
+    "fecha_hora": "2025-10-30 20:00:00 -03"
+  },
+  {
+    "provincia": "Santa Fe",
+    "temperatura": 17.3,
+    "humedad": 67.0,
+    "coco": 3,
+    "icono": "cloudy.svg",
+    "fecha_hora": "2025-10-30 20:00:00 -03"
+  },
+  {
+    "provincia": "Santiago del Estero",
+    "temperatura": 19.2,
+    "humedad": 68.0,
+    "coco": 3,
+    "icono": "cloudy.svg",
+    "fecha_hora": "2025-10-30 20:00:00 -03"
+  },
+  {
+    "provincia": "Tierra del Fuego",
+    "temperatura": 10.8,
+    "humedad": 68.0,
+    "coco": 3,
+    "icono": "cloudy.svg",
+    "fecha_hora": "2025-10-30 20:00:00 -03"
+  },
+  {
+    "provincia": "Tucumán",
+    "temperatura": 19.3,
+    "humedad": 60.0,
+    "coco": 3,
+    "icono": "cloudy.svg",
+    "fecha_hora": "2025-10-30 20:00:00 -03"
+  }
+]
