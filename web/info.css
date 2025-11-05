@@ -1,0 +1,239 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2rem;
+    backdrop-filter: blur(1rem);
+    border-radius: 2rem;
+    padding: 4rem 3rem;
+}
+
+.grid-container {
+    display: grid;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.provincia-container {
+    grid-area: 1/1;
+    display: grid;
+    width: 30rem;
+    height: 20rem;
+    padding: 2rem;
+    justify-content: center;
+    background: var(--detail-bg);
+    border-radius: 2rem;
+    text-align: center;
+    gap: 1.6rem;
+}
+
+.provincia-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.titulo-provincia {
+    font-size: 20px;
+    color: var(--text-color);
+    font-weight: 700;
+}
+
+.hora-provincia {
+    font-size: 14px;
+    color: var(--subtext-color);
+    margin-top: 5px;
+    font-weight: 500;
+}
+
+.current-weather {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-align: center;
+}
+
+.temperature {
+    font-size: 3.5rem;
+    font-weight: 300;
+    color: var(--primary-color);
+}
+
+.condition {
+    font-size: 18px;
+    color: var(--text-color);
+}
+
+.weather-details {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+}
+
+.detail-item {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    gap: 0.5rem;
+    border-radius: 15px;
+}
+
+.detail-item .icon {
+    display: flex;
+    justify-content: center;
+}
+
+.detail-item .label {
+    font-size: 12px;
+    color: var(--subtext-color);
+}
+
+.detail-item .value {
+    font-size: 12px;
+    color: var(--text-color);
+    font-weight: 600;
+}
+
+.chart-container {
+    grid-area: 1/2;
+    display: grid;
+    gap: 1rem;
+    height: 20rem;
+    background: var(--detail-bg);
+    padding: 20px;
+    border-radius: 15px;
+}
+
+.chart {
+    height: 90px;
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+}
+
+.chart-bar {
+    flex: 1;
+    background: linear-gradient(to top, var(--primary-color), var(--secondary-color));
+    border-radius: 8px 8px 0 0;
+    position: relative;
+    min-height: 30px;
+}
+
+.chart-label {
+    position: absolute;
+    bottom: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 11px;
+    color: var(--subtext-color);
+    white-space: nowrap;
+}
+
+.section-title {
+    font-size: 16px;
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+.hourly-container {
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto;
+    margin-top: 2rem;
+    padding-bottom: 10px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--secondary-color) transparent;
+}
+
+.hourly-container::-webkit-scrollbar {
+    height: 6px;
+}
+
+.hourly-container::-webkit-scrollbar-track {
+    background: var(--box-shadow-color);
+    border-radius: 10px;
+}
+
+.hourly-container::-webkit-scrollbar-thumb {
+    background: var(--secondary-color);
+    border-radius: 10px;
+}
+
+.hourly-item {
+    min-width: 80px;
+    padding: 15px 10px;
+    border-radius: 15px;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+.hourly-item .time {
+    font-size: 14px;
+    color: var(--text-color);
+}
+
+.hourly-item .hour-icon {
+    font-size: 1.5rem;
+    margin-bottom: 0.1rem;
+}
+
+.hourly-item .temp {
+    font-size: 16px;
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+.hourly-item .precipitation {
+    font-size: 12px;
+    color: var(--subtext-color);
+    margin-top: 5px;
+}
+
+.weekly-forecast {
+    display: grid;
+    gap: 1rem;
+    background: var(--detail-bg);
+    padding: 15px 20px;
+    border-radius: 15px;
+    grid-area: auto;
+}
+
+.daily-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.daily-item .day {
+    flex: 1;
+    font-size: 14px;
+    color: var(--text-color);
+}
+
+.daily-item .day-icon {
+    font-size: 28px;
+    margin: 0 15px;
+}
+
+.daily-item .temps {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.daily-item .high {
+    font-size: 16px;
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+.daily-item .low {
+    font-size: 16px;
+    color: var(--text-color);
+}
+
+.daily-item .precip {
+    font-size: 12px;
+    color: var(--subtext-color);
+    margin-left: 10px;
+}

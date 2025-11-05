@@ -1,0 +1,170 @@
+:root {
+  --primary-color: #B3D9FC;
+  --secondary-color: #ECF6FF;
+  --background-gradient: linear-gradient(135deg, #13315C 0%, #B3D9FC 50%, #B3D9FC 100%);
+  --text-color: #666;
+  --subtext-color: #999999;
+  --detail-bg: rgba(255, 255, 255, 0.6);
+  --container-bg: rgba(56, 112, 176, 0.10);
+  --box-shadow-color: rgba(179, 217, 252, 0.4);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Perpetua", Georgia, serif;
+  background: var(--primary-color);
+  background-attachment: fixed;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  margin: 0;
+}
+
+.card {
+  width: 100%;
+  margin: 2rem 0rem;
+  max-width: 120rem;
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(221, 222, 247, 0.25);
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  transition: all 0.4s ease;
+}
+
+.card.mapa {
+  height: 90vh;
+  max-height: 900px;
+}
+
+.card.mapa h1 {
+  position: absolute;
+  color: #3870b0;
+  font-weight: bold;
+  font-size: 42px;
+  letter-spacing: 1px;
+  bottom: 10px;
+  left: 20px;
+  margin: 0;
+  padding: 10px 10px 0px 0px;
+  border-radius: 10px;
+}
+
+.mapa-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  margin-left: -2rem;
+}
+
+.icono-clima {
+  opacity: 0.9;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+.icono-clima:hover {
+  transform: scale(1.2);
+  opacity: 1;
+}
+
+svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+path[id^="AR"] {
+  fill: #6eb8fc;
+  stroke: #ffffff;
+  stroke-width: 1;
+  cursor: pointer;
+  transition: fill 0.2s ease;
+}
+
+path[id^="AR"]:hover {
+  fill: #3870b0;
+}
+
+.card.loader {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  animation: aparecer 0.4s ease forwards;
+  height: 90vh;
+  max-height: 700px;
+  overflow-y: auto;
+  padding: 2rem 0;
+}
+
+#loader-text {
+  font-size: 22px;
+  color: #3870b0;
+  line-height: 1.5;
+}
+
+.card.info {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  animation: aparecer 0.4s ease forwards;
+  height: auto;
+}
+
+@keyframes aparecer {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.provincia-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  width: 85%;
+  text-align: center;
+  box-sizing: border-box;
+  padding: 2rem 0;
+}
+
+#titulo-provincia {
+  font-size: 46px;
+  color: #3870b0;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+#provincia-info {
+  font-size: 22px;
+  color: #3870b0;
+  line-height: 1.5;
+}
+
+#volver-btn {
+  margin-top: 30px;
+  padding: 12px 28px;
+  font-size: 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  background-color: #3870b0;
+  color: #fff;
+  border: none;
+  transition: background 0.2s;
+}
+
+#volver-btn:hover {
+  background-color: #3870b0;
+}
