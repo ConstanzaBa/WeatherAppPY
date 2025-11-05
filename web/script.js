@@ -1,3 +1,5 @@
+import { calcularSensacionTermica } from './parametros.js';
+
 document.addEventListener("DOMContentLoaded", async () => {
   const cardMapa = document.querySelector(".card.mapa");
   const cardInfo = document.querySelector(".card.info");
@@ -64,9 +66,15 @@ async function cargarTemplateInfo() {
     climaData = await climaResponse.json();
 
     climaPorProvincia = {};
-    climaData.forEach(item => {
-      climaPorProvincia[normalize(item.provincia)] = item;
-    });
+  climaData.forEach(item => {
+    // calcular y agregar la sensación térmica
+    item.sensacionTermica = calcularSensacionTermica(
+      item.temperatura,
+      item.humedad,
+      item.viento
+    );
+    climaPorProvincia[normalize(item.provincia)] = item;
+  });
   }
 
   async function inicializar() {
