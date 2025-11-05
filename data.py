@@ -12,8 +12,8 @@ os.makedirs(provincia_dir, exist_ok=True)
 stations = pd.read_csv(os.path.join(dataset, "stations.csv"))
 
 # Periodo del pronostico
-start = datetime(2025, 10, 31)
-end = datetime(2025, 11, 10, 23, 59)
+start = datetime(2025, 11, 4)
+end = datetime(2025, 11, 6, 23, 59)
 
 all_data = []
 

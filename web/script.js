@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const detailIconMap = {
     'Humedad': 'humidity.svg',
     'Viento': 'wind.svg',
-    'Sensación Térmica': 'fair.svg',
+    'Sensación Térmica': 'thermometer-sun.svg',
     'Precipitación': 'umbrella.svg',
     'Radiación UV': 'uv-index.svg'
   };

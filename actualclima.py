@@ -51,6 +51,10 @@ for archivo in os.listdir(provincia_dir):
         elif icono == "fair.svg":
             icono = "fair_night.svg" 
 
+
+# ---------------------------- Errores -----------------------------
+
+
     # Agregamos los datos a la lista
     clima_actual.append({
         "provincia": provincia,
@@ -59,13 +63,17 @@ for archivo in os.listdir(provincia_dir):
         "precipitacion": round(fila['prcp'], 1) if not pd.isna(fila['prcp']) else None,
         "viento": round(fila['wspd'], 1) if not pd.isna(fila['wspd']) else None,
         "visibilidad": round(fila['tsun'], 1) if not pd.isna(fila['tsun']) else None,
-        "sensacionTermica": round(fila['feels_like'], 1) if not pd.isna(fila['feels_like']) else None,
-        "uvIndex": int(fila['uv_index']) if not pd.isna(fila['uv_index']) else None,
+      # "sensacionTermica": round(fila['feels_like'], 1) if not pd.isna(fila['feels_like']) else None,
+      # "uvIndex": int(fila['uv_index']) if not pd.isna(fila['uv_index']) else None,
         "coco": coco,
         "icono": icono,
-        "condicion": descripcion,
+      # "condicion": descripcion,   Falla al traerlo
         "fecha_hora": fila['fecha_hora'].strftime("%Y-%m-%d %H:%M:%S %Z")  # incluimos zona horaria
-    })
+    })  
+
+    # la sensacion termica y el indice uv no son traidos por meteostat por eso no los encuentra en la columna 
+    # fecha_hora,temp,dwpt,rhum,prcp,snow,wdir,wspd,wpgt,pres,tsun,coco,province
+    # podes usar meteostat y poddes modificar data.py para traer el indice uv y la sensacion termica si es que esta disponible
 
 # Guardamos el resultado en un json
 output_path = os.path.join("web", "clima_actual.json")
