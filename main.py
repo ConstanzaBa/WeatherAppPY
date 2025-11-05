@@ -5,9 +5,11 @@ import subprocess  # y esta es para ejecutar los .py desde el main
 from datetime import datetime
 from zoneinfo import ZoneInfo
 
+
 class Api:
     def saludar(self, provincia):
         return f"¡Hola desde {provincia}!"
+
 
 def actualizar_clima_en_tiempo_real():
     ultima_hora = None  # guardamos la última hora que actualizamos
@@ -30,11 +32,23 @@ def actualizar_clima_en_tiempo_real():
         # Revisamos cada 10 segundos si cambió la hora
         time.sleep(10)
 
+
 if __name__ == '__main__':
-    # Actualizamos los datos iniciales antes de abrir la ventana
-    print("Actualizando datos iniciales antes de abrir la ventana...")
-    subprocess.run(["python", "actualizarxhora.py"], check=True)
-    print("Datos iniciales listos. Abriendo ventana...")
+    # Actualizamos el dataset completo (estaciones y datos por provincia)
+    print("Actualizando datasets iniciales...")
+    try:
+        subprocess.run(["python", "actualizarxfecha.py"], check=True)
+        print("Dataset inicial actualizado correctamente.")
+    except Exception as e:
+        print(f"Error al actualizar dataset inicial: {e}")
+
+    # Actualizamos los datos horarios antes de abrir la ventana
+    print("Actualizando datos horarios iniciales...")
+    try:
+        subprocess.run(["python", "actualizarxhora.py"], check=True)
+        print("Datos horarios iniciales listos. Abriendo ventana...")
+    except Exception as e:
+        print(f"Error al actualizar los datos horarios iniciales: {e}")
 
     # hilo daemon que ejecuta la función de actualización en tiempo real
     hilo = threading.Thread(target=actualizar_clima_en_tiempo_real, daemon=True)
@@ -51,6 +65,7 @@ if __name__ == '__main__':
 
     # inicia la ventana (bloquea el hilo principal)
     webview.start()
+
 
 # ejecutar 
 # venv\Scripts\activate.bat

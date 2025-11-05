@@ -1,6 +1,6 @@
 import pandas as pd
 from meteostat import Hourly
-from datetime import datetime
+from datetime import datetime, timedelta
 import os
 
 # creamos la carpeta dataset y provincia si no existen
@@ -12,8 +12,13 @@ os.makedirs(provincia_dir, exist_ok=True)
 stations = pd.read_csv(os.path.join(dataset, "stations.csv"))
 
 # Periodo del pronostico
-start = datetime(2025, 11, 4)
-end = datetime(2025, 11, 6, 23, 59)
+# Periodo deseado en hora local (Argentina)
+start_local = datetime(2025, 11, 5, 0, 0)
+end_local = datetime(2025, 11, 7, 0, 0)
+
+# Convertimos a UTC para pedírselo a Meteostat
+start = start_local + timedelta(hours=3)
+end = end_local + timedelta(hours=3)
 
 all_data = []
 
