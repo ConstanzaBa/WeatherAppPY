@@ -32,4 +32,36 @@ function calcularSensacionTermica(tempC, humedad, vientoKmh) {
   return parseFloat(hiC.toFixed(1));
 }
 
-export { calcularSensacionTermica };
+// Estimar radiación UV según hora, nubosidad (coco) y temperatura
+function calcularRadiacionUV(tempC, coco, fechaHoraStr) {
+  if (tempC === null || coco === null) return null;
+
+  // Determinar hora local
+  const hora = new Date(fechaHoraStr || Date.now()).getHours();
+
+  // Base UV por hora (máximo al mediodía)
+  let baseUV = 0;
+  if (hora >= 10 && hora <= 15) {
+    baseUV = 8; // rango máximo típico en Argentina
+  } else if (hora >= 8 && hora < 10 || hora > 15 && hora <= 17) {
+    baseUV = 4;
+  } else {
+    baseUV = 1; // noche o amanecer
+  }
+
+  // Ajuste por nubosidad según código "coco"
+  // (aproximación: 1=despejado, 2=few, 3=cloudy, 7=rain, 17=heavy rain)
+  let factorNubosidad = 0;
+  if ([1, 2].includes(coco)) factorNubosidad = 0;      // despejado
+  else if (coco === 3) factorNubosidad = 0.3;          // nublado
+  else if ([7, 17].includes(coco)) factorNubosidad = 0.6; // lluvia
+  else factorNubosidad = 0.4;                          // intermedio
+
+  // Ajuste leve por temperatura (más alta, más radiación)
+  const tempFactor = Math.min(Math.max((tempC - 10) / 15, 0.8), 1.2);
+
+  const uv = baseUV * (1 - factorNubosidad) * tempFactor;
+  return parseFloat(uv.toFixed(1));
+}
+
+export { calcularSensacionTermica, calcularRadiacionUV };

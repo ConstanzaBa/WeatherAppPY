@@ -1,255 +1,255 @@
 [
   {
     "provincia": "Buenos Aires",
-    "temperatura": 12.3,
-    "humedad": 76.0,
+    "temperatura": 10.4,
+    "humedad": 84.0,
     "precipitacion": 0.0,
-    "viento": 16.9,
+    "viento": 13.3,
     "visibilidad": null,
     "coco": 1,
     "icono": "clear_night.svg",
-    "fecha_hora": "2025-11-05 21:00:00 -03"
+    "fecha_hora": "2025-11-06 00:00:00 -03"
   },
   {
     "provincia": "Catamarca",
-    "temperatura": 25.4,
+    "temperatura": 24.3,
     "humedad": 40.0,
     "precipitacion": 0.0,
-    "viento": 31.5,
+    "viento": 29.6,
     "visibilidad": null,
     "coco": 2,
     "icono": "fair_night.svg",
-    "fecha_hora": "2025-11-05 21:00:00 -03"
+    "fecha_hora": "2025-11-06 00:00:00 -03"
   },
   {
     "provincia": "Chaco",
-    "temperatura": 21.4,
-    "humedad": 74.0,
+    "temperatura": 19.6,
+    "humedad": 76.0,
     "precipitacion": 0.0,
-    "viento": 15.5,
+    "viento": 13.7,
     "visibilidad": null,
     "coco": 1,
     "icono": "clear_night.svg",
-    "fecha_hora": "2025-11-05 21:00:00 -03"
+    "fecha_hora": "2025-11-06 00:00:00 -03"
   },
   {
     "provincia": "Chubut",
-    "temperatura": 15.5,
-    "humedad": 48.0,
-    "precipitacion": 0.0,
-    "viento": 37.4,
-    "visibilidad": null,
-    "coco": 2,
-    "icono": "fair_night.svg",
-    "fecha_hora": "2025-11-05 21:00:00 -03"
-  },
-  {
-    "provincia": "Corrientes",
-    "temperatura": 21.4,
-    "humedad": 74.0,
-    "precipitacion": 0.0,
-    "viento": 15.5,
-    "visibilidad": null,
-    "coco": 1,
-    "icono": "clear_night.svg",
-    "fecha_hora": "2025-11-05 21:00:00 -03"
-  },
-  {
-    "provincia": "Córdoba",
-    "temperatura": 21.9,
+    "temperatura": 16.5,
     "humedad": 44.0,
     "precipitacion": 0.0,
-    "viento": 16.6,
+    "viento": 29.5,
     "visibilidad": null,
     "coco": 3,
     "icono": "cloudy.svg",
-    "fecha_hora": "2025-11-05 21:00:00 -03"
+    "fecha_hora": "2025-11-06 00:00:00 -03"
+  },
+  {
+    "provincia": "Corrientes",
+    "temperatura": 19.6,
+    "humedad": 76.0,
+    "precipitacion": 0.0,
+    "viento": 13.7,
+    "visibilidad": null,
+    "coco": 1,
+    "icono": "clear_night.svg",
+    "fecha_hora": "2025-11-06 00:00:00 -03"
+  },
+  {
+    "provincia": "Córdoba",
+    "temperatura": 19.2,
+    "humedad": 58.0,
+    "precipitacion": 0.0,
+    "viento": 9.7,
+    "visibilidad": null,
+    "coco": 3,
+    "icono": "cloudy.svg",
+    "fecha_hora": "2025-11-06 00:00:00 -03"
   },
   {
     "provincia": "Entre Ríos",
-    "temperatura": 20.0,
+    "temperatura": 17.1,
     "humedad": 52.0,
     "precipitacion": 0.0,
-    "viento": 18.4,
+    "viento": 19.4,
     "visibilidad": null,
     "coco": 1,
     "icono": "clear_night.svg",
-    "fecha_hora": "2025-11-05 21:00:00 -03"
+    "fecha_hora": "2025-11-06 00:00:00 -03"
   },
   {
     "provincia": "Formosa",
-    "temperatura": 22.5,
-    "humedad": 74.0,
+    "temperatura": 20.9,
+    "humedad": 78.0,
     "precipitacion": 0.0,
-    "viento": 18.7,
+    "viento": 14.8,
     "visibilidad": null,
     "coco": 1,
     "icono": "clear_night.svg",
-    "fecha_hora": "2025-11-05 21:00:00 -03"
+    "fecha_hora": "2025-11-06 00:00:00 -03"
   },
   {
     "provincia": "Jujuy",
-    "temperatura": 19.3,
-    "humedad": 77.0,
-    "precipitacion": 0.4,
-    "viento": 14.8,
+    "temperatura": 18.7,
+    "humedad": 81.0,
+    "precipitacion": 0.2,
+    "viento": 11.1,
     "visibilidad": null,
     "coco": 7,
     "icono": "light_rain.svg",
-    "fecha_hora": "2025-11-05 21:00:00 -03"
+    "fecha_hora": "2025-11-06 00:00:00 -03"
   },
   {
     "provincia": "La Pampa",
-    "temperatura": 16.7,
-    "humedad": 49.0,
+    "temperatura": 13.7,
+    "humedad": 63.0,
     "precipitacion": 0.0,
-    "viento": 16.7,
+    "viento": 18.5,
     "visibilidad": null,
     "coco": 1,
     "icono": "clear_night.svg",
-    "fecha_hora": "2025-11-05 21:00:00 -03"
+    "fecha_hora": "2025-11-06 00:00:00 -03"
   },
   {
     "provincia": "La Rioja",
-    "temperatura": 27.5,
-    "humedad": 32.0,
+    "temperatura": 25.2,
+    "humedad": 36.0,
     "precipitacion": 0.0,
     "viento": 27.0,
     "visibilidad": null,
     "coco": 3,
     "icono": "cloudy.svg",
-    "fecha_hora": "2025-11-05 21:00:00 -03"
+    "fecha_hora": "2025-11-06 00:00:00 -03"
   },
   {
     "provincia": "Mendoza",
-    "temperatura": 21.5,
-    "humedad": 44.0,
+    "temperatura": 19.2,
+    "humedad": 56.0,
     "precipitacion": 0.0,
-    "viento": 14.8,
+    "viento": 11.1,
     "visibilidad": null,
     "coco": 3,
     "icono": "cloudy.svg",
-    "fecha_hora": "2025-11-05 21:00:00 -03"
+    "fecha_hora": "2025-11-06 00:00:00 -03"
   },
   {
     "provincia": "Misiones",
-    "temperatura": 20.8,
-    "humedad": 73.0,
+    "temperatura": 19.0,
+    "humedad": 70.0,
     "precipitacion": 0.0,
-    "viento": 15.8,
+    "viento": 16.6,
     "visibilidad": null,
     "coco": 1,
     "icono": "clear_night.svg",
-    "fecha_hora": "2025-11-05 21:00:00 -03"
+    "fecha_hora": "2025-11-06 00:00:00 -03"
   },
   {
     "provincia": "Neuquén",
-    "temperatura": 18.3,
-    "humedad": 48.0,
+    "temperatura": 17.2,
+    "humedad": 41.0,
     "precipitacion": 0.0,
-    "viento": 22.7,
+    "viento": 19.4,
     "visibilidad": null,
     "coco": 3,
     "icono": "cloudy.svg",
-    "fecha_hora": "2025-11-05 21:00:00 -03"
+    "fecha_hora": "2025-11-06 00:00:00 -03"
   },
   {
     "provincia": "Río Negro",
-    "temperatura": 20.3,
-    "humedad": 33.0,
+    "temperatura": 17.2,
+    "humedad": 51.0,
     "precipitacion": 0.0,
-    "viento": 30.6,
+    "viento": 31.3,
     "visibilidad": null,
-    "coco": 1,
-    "icono": "clear_night.svg",
-    "fecha_hora": "2025-11-05 21:00:00 -03"
+    "coco": 2,
+    "icono": "fair_night.svg",
+    "fecha_hora": "2025-11-06 00:00:00 -03"
   },
   {
     "provincia": "Salta",
-    "temperatura": 17.6,
-    "humedad": 79.0,
+    "temperatura": 16.6,
+    "humedad": 88.0,
     "precipitacion": 0.2,
-    "viento": 4.7,
+    "viento": 2.9,
     "visibilidad": null,
     "coco": 7,
     "icono": "light_rain.svg",
-    "fecha_hora": "2025-11-05 21:00:00 -03"
+    "fecha_hora": "2025-11-06 00:00:00 -03"
   },
   {
     "provincia": "San Juan",
-    "temperatura": 21.6,
-    "humedad": 56.0,
-    "precipitacion": 0.4,
+    "temperatura": 19.5,
+    "humedad": 65.0,
+    "precipitacion": 0.5,
     "viento": 14.0,
     "visibilidad": null,
     "coco": 17,
     "icono": "rain.svg",
-    "fecha_hora": "2025-11-05 21:00:00 -03"
+    "fecha_hora": "2025-11-06 00:00:00 -03"
   },
   {
     "provincia": "San Luis",
-    "temperatura": 19.3,
-    "humedad": 62.0,
+    "temperatura": 18.0,
+    "humedad": 68.0,
     "precipitacion": 0.0,
     "viento": 27.7,
     "visibilidad": null,
-    "coco": 3,
-    "icono": "cloudy.svg",
-    "fecha_hora": "2025-11-05 21:00:00 -03"
+    "coco": 2,
+    "icono": "fair_night.svg",
+    "fecha_hora": "2025-11-06 00:00:00 -03"
   },
   {
     "provincia": "Santa Cruz",
-    "temperatura": 10.6,
-    "humedad": 52.0,
+    "temperatura": 8.4,
+    "humedad": 62.0,
+    "precipitacion": 0.0,
+    "viento": 25.9,
+    "visibilidad": null,
+    "coco": 3,
+    "icono": "cloudy.svg",
+    "fecha_hora": "2025-11-06 00:00:00 -03"
+  },
+  {
+    "provincia": "Santa Fe",
+    "temperatura": 17.9,
+    "humedad": 56.0,
+    "precipitacion": 0.0,
+    "viento": 16.9,
+    "visibilidad": null,
+    "coco": 1,
+    "icono": "clear_night.svg",
+    "fecha_hora": "2025-11-06 00:00:00 -03"
+  },
+  {
+    "provincia": "Santiago del Estero",
+    "temperatura": 26.2,
+    "humedad": 39.0,
+    "precipitacion": 0.0,
+    "viento": 15.5,
+    "visibilidad": null,
+    "coco": 3,
+    "icono": "cloudy.svg",
+    "fecha_hora": "2025-11-06 00:00:00 -03"
+  },
+  {
+    "provincia": "Tierra del Fuego",
+    "temperatura": 6.7,
+    "humedad": 80.0,
     "precipitacion": 0.0,
     "viento": 24.1,
     "visibilidad": null,
     "coco": 3,
     "icono": "cloudy.svg",
-    "fecha_hora": "2025-11-05 21:00:00 -03"
-  },
-  {
-    "provincia": "Santa Fe",
-    "temperatura": 19.8,
-    "humedad": 64.0,
-    "precipitacion": 0.0,
-    "viento": 18.7,
-    "visibilidad": null,
-    "coco": 1,
-    "icono": "clear_night.svg",
-    "fecha_hora": "2025-11-05 21:00:00 -03"
-  },
-  {
-    "provincia": "Santiago del Estero",
-    "temperatura": 28.5,
-    "humedad": 28.0,
-    "precipitacion": 0.0,
-    "viento": 17.3,
-    "visibilidad": null,
-    "coco": 3,
-    "icono": "cloudy.svg",
-    "fecha_hora": "2025-11-05 21:00:00 -03"
-  },
-  {
-    "provincia": "Tierra del Fuego",
-    "temperatura": 7.8,
-    "humedad": 74.0,
-    "precipitacion": 0.0,
-    "viento": 29.6,
-    "visibilidad": null,
-    "coco": 3,
-    "icono": "cloudy.svg",
-    "fecha_hora": "2025-11-05 21:00:00 -03"
+    "fecha_hora": "2025-11-06 00:00:00 -03"
   },
   {
     "provincia": "Tucumán",
-    "temperatura": 21.9,
-    "humedad": 67.0,
+    "temperatura": 22.0,
+    "humedad": 64.0,
     "precipitacion": 0.0,
-    "viento": 7.9,
+    "viento": 6.8,
     "visibilidad": null,
     "coco": 3,
     "icono": "cloudy.svg",
-    "fecha_hora": "2025-11-05 21:00:00 -03"
+    "fecha_hora": "2025-11-06 00:00:00 -03"
   }
 ]

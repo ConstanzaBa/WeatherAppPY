@@ -1,4 +1,4 @@
-import { calcularSensacionTermica } from "./parametros.js";
+import { calcularSensacionTermica, calcularRadiacionUV } from "./parametros.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
   const cardMapa = document.querySelector(".card.mapa");
@@ -38,7 +38,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     Humedad: "humidity.svg",
     Viento: "wind.svg",
     "Sensación Térmica": "thermometer-sun.svg",
-    Precipitación: "umbrella.svg",
+    Precipitación: "rain.svg",
     "Radiación UV": "uv-index.svg",
   };
 
@@ -72,6 +72,12 @@ document.addEventListener("DOMContentLoaded", async () => {
         item.temperatura,
         item.humedad,
         item.viento
+      );
+
+      item.uvIndex = calcularRadiacionUV(
+        item.temperatura,
+        item.coco,
+        item.fecha_hora
       );
 
       climaPorProvincia[normalize(item.provincia)] = item;
