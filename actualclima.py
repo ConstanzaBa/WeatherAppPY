@@ -5,6 +5,7 @@ from zoneinfo import ZoneInfo  # Para manejar zonas horarias
 import json 
 from codclimatico import weather_icons  # importamos el diccionario
 from codclimatico import weather_descriptions  # importamos el diccionario
+from parametros import calcular_sensacion_termica, calcular_radiacion_uv
 
 provincia_dir = "dataset/provincia"
 # Obtenemos la hora actual en zona horaria de Argentina (tz-aware)
@@ -51,6 +52,8 @@ for archivo in os.listdir(provincia_dir):
         elif icono == "fair.svg":
             icono = "fair_night.svg" 
 
+    fecha_iso = fila['fecha_hora'].strftime("%Y-%m-%dT%H:%M:%SZ")
+
     # Agregamos los datos a la lista
     clima_actual.append({
         "provincia": provincia,
@@ -59,9 +62,11 @@ for archivo in os.listdir(provincia_dir):
         "precipitacion": round(fila['prcp'], 1) if not pd.isna(fila['prcp']) else None,
         "viento": round(fila['wspd'], 1) if not pd.isna(fila['wspd']) else None,
         "visibilidad": round(fila['tsun'], 1) if not pd.isna(fila['tsun']) else None,
+        "sensacionTermica": calcular_sensacion_termica(fila['temp'], fila['rhum'], fila['wspd']),
+        "uvIndex": calcular_radiacion_uv(fila['temp'], coco, fecha_iso),
         "coco": coco,
         "icono": icono,
-      # "condicion": descripcion,   Falla al traerlo
+        "condicion": descripcion,
         "fecha_hora": fila['fecha_hora'].strftime("%Y-%m-%d %H:%M:%S %Z")  # incluimos zona horaria
     })  
 
