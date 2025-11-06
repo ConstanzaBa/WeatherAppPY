@@ -1,5 +1,3 @@
-import { calcularSensacionTermica, calcularRadiacionUV } from "./parametros.js";
-
 document.addEventListener("DOMContentLoaded", async () => {
   const cardMapa = document.querySelector(".card.mapa");
   const cardInfo = document.querySelector(".card.info");
@@ -20,7 +18,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   // Helper para decidir el nombre de archivo del icono a usar
   function getIconFilename(clima) {
     if (!clima) return "clear.svg";
-    // Si el JSON ya trae el nombre del archivo, usarlo
+    // usar icono del JSON si existe
     if (clima.icono) return clima.icono;
     // Soporte para campos alternativos (si en el futuro hay códigos)
     const code = Number(clima.cocos ?? clima.coco);
@@ -33,10 +31,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     return "clear.svg";
   }
 
-  // Mapeo para iconos fijos en los .detail-item (puedes ajustar los nombres)
+  // mapeo para iconos en los .detail-item
   const detailIconMap = {
     Humedad: "humidity.svg",
     Viento: "wind.svg",
+    Visibilidad: "fog.svg",
     "Sensación Térmica": "thermometer-sun.svg",
     Precipitación: "rain.svg",
     "Radiación UV": "uv-index.svg",
@@ -68,18 +67,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     climaPorProvincia = {};
     climaData.forEach((item) => {
-      item.sensacionTermica = calcularSensacionTermica(
-        item.temperatura,
-        item.humedad,
-        item.viento
-      );
-
-      item.uvIndex = calcularRadiacionUV(
-        item.temperatura,
-        item.coco,
-        item.fecha_hora
-      );
-
       climaPorProvincia[normalize(item.provincia)] = item;
     });
   }
@@ -128,7 +115,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // función para actualizar los datos de la provincia en el template
   function actualizarDatosProvincia(nombre, clima) {
-    // Actualizar título y hora
     const tituloProvincia = cardInfo.querySelector(".titulo-provincia");
     const horaProvincia = cardInfo.querySelector(".hora-provincia");
 
@@ -162,7 +148,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       const weatherIcon = cardInfo.querySelector(".weather-icon");
       if (weatherIcon) {
         const iconFilename = getIconFilename(clima);
-        // Si el elemento ya es una <img>, actualizar su src, si no insertar una
         if (
           weatherIcon.tagName &&
           weatherIcon.tagName.toLowerCase() === "img"
@@ -181,7 +166,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
       }
 
-      // Iconos fijos para cada .detail-item (reemplaza emojis por <img>)
+      // iconos para cada .detail-item
       const detailItems = cardInfo.querySelectorAll(".detail-item");
       detailItems.forEach((item) => {
         const labelEl = item.querySelector(".label");

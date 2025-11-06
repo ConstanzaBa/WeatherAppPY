@@ -51,10 +51,6 @@ for archivo in os.listdir(provincia_dir):
         elif icono == "fair.svg":
             icono = "fair_night.svg" 
 
-
-# ---------------------------- Errores -----------------------------
-
-
     # Agregamos los datos a la lista
     clima_actual.append({
         "provincia": provincia,

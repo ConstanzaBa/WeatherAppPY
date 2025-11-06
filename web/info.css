@@ -89,7 +89,7 @@
 }
 
 .detail-item .value {
-    font-size: 12px;
+    font-size: 10px;
     color: var(--text-color);
     font-weight: 600;
 }
