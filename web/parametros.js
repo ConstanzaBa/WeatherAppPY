@@ -1,7 +1,11 @@
+// sensación térmica estimada a partir de datos de Meteostat
+// temperatura
+// velocidad del viento
+// humedad relativa
 function calcularSensacionTermica(tempC, humedad, vientoKmh) {
   if (tempC === null || humedad === null || vientoKmh === null) return null;
 
-  // 1. Si hace frío: fórmula de Wind Chill (válida ≤ 10°C)
+  // Si hace frío: fórmula de Wind Chill (válida ≤ 10°C)
   if (tempC <= 10 && vientoKmh >= 4.8) {
     const st =
       13.12 +
@@ -11,7 +15,7 @@ function calcularSensacionTermica(tempC, humedad, vientoKmh) {
     return parseFloat(st.toFixed(1));
   }
 
-  // 2. Si hace calor: fórmula de Heat Index (válida > 10°C)
+  // Si hace calor: fórmula de Heat Index (válida > 10°C)
   const tempF = (tempC * 9) / 5 + 32;
   const HI =
     -42.379 +

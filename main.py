@@ -21,6 +21,7 @@ def actualizar_clima_en_tiempo_real():
         # Ejecutamos solo si cambió la hora
         if hora_actual != ultima_hora:
             try:
+                print("..........................................................")
                 print(f"{ahora.strftime('%H:%M:%S')} → Actualizando el clima...")
                 subprocess.run(["python", "actualizarxhora.py"], check=True)
                 print("Actualización exitosa.")
@@ -35,18 +36,14 @@ def actualizar_clima_en_tiempo_real():
 
 if __name__ == '__main__':
     # Actualizamos el dataset completo (estaciones y datos por provincia)
-    print("Actualizando datasets iniciales...")
     try:
         subprocess.run(["python", "actualizarxfecha.py"], check=True)
-        print("Dataset inicial actualizado correctamente.")
     except Exception as e:
         print(f"Error al actualizar dataset inicial: {e}")
 
     # Actualizamos los datos horarios antes de abrir la ventana
-    print("Actualizando datos horarios iniciales...")
     try:
         subprocess.run(["python", "actualizarxhora.py"], check=True)
-        print("Datos horarios iniciales listos. Abriendo ventana...")
     except Exception as e:
         print(f"Error al actualizar los datos horarios iniciales: {e}")
 
@@ -63,7 +60,7 @@ if __name__ == '__main__':
         js_api=api
     )
 
-    # inicia la ventana (bloquea el hilo principal)
+    # inicia la ventana
     webview.start()
 
 
