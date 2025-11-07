@@ -2,36 +2,26 @@ document.addEventListener("DOMContentLoaded", async () => {
   const cardMapa = document.querySelector(".card.mapa");
   const cardInfo = document.querySelector(".card.info");
   const cardLoader = document.querySelector(".card.loader");
-  const provinciaContainer = document.querySelector(".provincia-container");
   const volverBtn = document.getElementById("volver-btn");
   const svgMapa = document.getElementById("mapa-argentina");
 
-  // normalizar nombres de provincias para coincidir con claves del JSON
-  const normalize = (str) => str.toLowerCase().replace(/\s+/g, "_");
+  // normalizar nombres de provincias
+  const normalize = (str) => {
+    return str
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/\s+/g, "_");
+  };
 
   // variables principales
-  let climaData = []; // guardar datos del clima
-  let climaPorProvincia = {}; // objeto por provincia
-  let iconos = []; // iconos svg
-  let infoHtmlTemplate = ""; // template del info.html
+  let climaData = [];
+  let climaPorProvincia = {};
+  let climaHorarioPorProvincia = {};
+  let iconos = [];
+  let infoHtmlTemplate = "";
 
-  // Helper para decidir el nombre de archivo del icono a usar
-  function getIconFilename(clima) {
-    if (!clima) return "clear.svg";
-    // usar icono del JSON si existe
-    if (clima.icono) return clima.icono;
-    // Soporte para campos alternativos (si en el futuro hay códigos)
-    const code = Number(clima.cocos ?? clima.coco);
-    if (!Number.isNaN(code)) {
-      // Si existe un mapeo `weatherIcons` en el futuro, úsalo
-      if (typeof weatherIcons !== "undefined" && weatherIcons[code])
-        return weatherIcons[code];
-    }
-    // Fallback
-    return "clear.svg";
-  }
-
-  // mapeo para iconos en los .detail-item
+  // iconos para detalles
   const detailIconMap = {
     Humedad: "humidity.svg",
     Viento: "wind.svg",
@@ -41,47 +31,70 @@ document.addEventListener("DOMContentLoaded", async () => {
     "Radiación UV": "uv-index.svg",
   };
 
-  // función para cargar el template de info.html
+  // función auxiliar para obtener icono
+  function getIconFilename(clima) {
+    if (!clima) return "clear.svg";
+    if (clima.icono) return clima.icono;
+    const code = Number(clima.coco);
+    if (!Number.isNaN(code) && typeof weatherIcons !== "undefined") {
+      return weatherIcons[code] || "clear.svg";
+    }
+    return "clear.svg";
+  }
+
+  // cargar info.html como plantilla
   async function cargarTemplateInfo() {
     try {
       const response = await fetch("info.html");
       const html = await response.text();
-
       const temp = document.createElement("div");
       temp.innerHTML = html;
-
-      // Extraer TODO el contenido del body si existe, o el container
       const container = temp.querySelector(".container");
-      if (container) {
-        infoHtmlTemplate = container.outerHTML; // CAMBIO: usar outerHTML en lugar de innerHTML
-      }
-    } catch (error) {
-      console.error("Error al cargar info.html:", error);
+      if (container) infoHtmlTemplate = container.outerHTML;
+    } catch (err) {
+      console.error("Error al cargar info.html:", err);
     }
   }
 
-  // función para cargar los datos del JSON
+  // cargar datos del clima actual
   async function cargarClima() {
-    const climaResponse = await fetch("clima_actual.json?cache=" + Date.now());
-    climaData = await climaResponse.json();
-
+    const response = await fetch("clima_actual.json?cache=" + Date.now());
+    const data = await response.json();
     climaPorProvincia = {};
-    climaData.forEach((item) => {
+    data.forEach((item) => {
       climaPorProvincia[normalize(item.provincia)] = item;
     });
+    climaData = data;
   }
 
+  // cargar datos del clima horario
+  async function cargarClimaHorario() {
+    try {
+      const response = await fetch("clima_horario.json?cache=" + Date.now());
+      const data = await response.json();
+      climaHorarioPorProvincia = {};
+      Object.keys(data).forEach((provincia) => {
+        climaHorarioPorProvincia[normalize(provincia)] = data[provincia];
+      });
+      console.log("Clima horario cargado:", climaHorarioPorProvincia);
+    } catch (err) {
+      console.error("Error al cargar clima_horario.json:", err);
+      climaHorarioPorProvincia = {};
+    }
+  }
+
+  // inicialización
   async function inicializar() {
-    await cargarTemplateInfo(); // Cargar el template primero
+    await cargarTemplateInfo();
     await cargarClima();
+    await cargarClimaHorario();
     colocarIconos();
   }
 
-  // seleccionar todos los puntos de referencia del SVG
+  // colocar iconos en el mapa
   const labels = document.querySelectorAll("#label_points circle");
 
   function colocarIconos() {
-    // eliminar iconos anteriores para evitar duplicados
     iconos.forEach((icon) => icon.remove());
     iconos = [];
 
@@ -90,11 +103,9 @@ document.addEventListener("DOMContentLoaded", async () => {
       const clima = climaPorProvincia[provincia];
       if (!clima) return;
 
-      const svgImage = document.createElementNS(
-        "http://www.w3.org/2000/svg",
-        "image"
-      );
+      const svgImage = document.createElementNS("http://www.w3.org/2000/svg", "image");
       const iconFilename = getIconFilename(clima);
+
       svgImage.setAttributeNS(null, "href", `img/weather/${iconFilename}`);
       svgImage.setAttributeNS(null, "width", "45");
       svgImage.setAttributeNS(null, "height", "45");
@@ -104,7 +115,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       svgImage.setAttributeNS(null, "x", cx - 24);
       svgImage.setAttributeNS(null, "y", cy - 24);
-
       svgImage.classList.add("icono-clima");
       svgImage.style.pointerEvents = "none";
 
@@ -113,15 +123,54 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
-  // función para actualizar los datos de la provincia en el template
+  // actualizar pronóstico horario
+  function actualizarPronosticoHorario(provincia) {
+    const hourlyContainer = cardInfo.querySelector(".hourly-container");
+    if (!hourlyContainer) return;
+
+    const provinciaKey = normalize(provincia);
+    const horasData = climaHorarioPorProvincia[provinciaKey];
+
+    if (!horasData || horasData.length === 0) {
+      hourlyContainer.innerHTML = '<p style="text-align: center; color: #666;">No hay datos horarios disponibles</p>';
+      return;
+    }
+
+    hourlyContainer.innerHTML = "";
+
+    horasData.forEach((hora) => {
+      const hourlyItem = document.createElement("div");
+      hourlyItem.className = "hourly-item";
+
+      const timeDiv = document.createElement("div");
+      timeDiv.className = "time";
+      timeDiv.textContent = hora.time;
+
+      const iconDiv = document.createElement("div");
+      iconDiv.className = "hour-icon";
+      const iconImg = document.createElement("img");
+      iconImg.src = `img/weather/${hora.icon}`;
+      iconImg.alt = hora.time;
+      iconImg.width = 35;
+      iconImg.height = 35;
+      iconDiv.appendChild(iconImg);
+
+      const tempDiv = document.createElement("div");
+      tempDiv.className = "temp";
+      tempDiv.textContent = `${hora.temp}°`;
+
+      hourlyItem.appendChild(timeDiv);
+      hourlyItem.appendChild(iconDiv);
+      hourlyItem.appendChild(tempDiv);
+      hourlyContainer.appendChild(hourlyItem);
+    });
+  }
+
+  // actualizar info de la provincia
   function actualizarDatosProvincia(nombre, clima) {
     const tituloProvincia = cardInfo.querySelector(".titulo-provincia");
     const horaProvincia = cardInfo.querySelector(".hora-provincia");
-
-    if (tituloProvincia) {
-      tituloProvincia.textContent = nombre;
-    }
-
+    if (tituloProvincia) tituloProvincia.textContent = nombre;
     if (horaProvincia && clima) {
       const ahora = new Date();
       horaProvincia.textContent = ahora.toLocaleTimeString("es-AR", {
@@ -130,43 +179,30 @@ document.addEventListener("DOMContentLoaded", async () => {
       });
     }
 
-    // Actualizar datos del clima
     if (clima) {
-      // Temperatura actual
       const tempActual = cardInfo.querySelector(".temperature");
-      if (tempActual) {
-        tempActual.textContent = `${clima.temperatura}°`;
-      }
+      if (tempActual) tempActual.textContent = `${clima.temperatura}°`;
 
-      // Condición del clima
       const condition = cardInfo.querySelector(".condition");
-      if (condition) {
-        condition.textContent = `${clima.condicion}` || "Despejado";
-      }
+      if (condition) condition.textContent = clima.condicion || "Despejado";
 
-      // Icono del clima
       const weatherIcon = cardInfo.querySelector(".weather-icon");
       if (weatherIcon) {
         const iconFilename = getIconFilename(clima);
-        if (
-          weatherIcon.tagName &&
-          weatherIcon.tagName.toLowerCase() === "img"
-        ) {
-          weatherIcon.src = `img/weather/${iconFilename}`;
-          weatherIcon.alt = `${clima.coco ?? ""}`;
-        } else {
-          weatherIcon.innerHTML = "";
-          const img = document.createElement("img");
-          img.src = `img/weather/${iconFilename}`;
-          img.alt = `${clima.coco ?? ""}`;
-          img.width = 75;
-          img.height = 75;
-          img.classList.add("weather-icon-img");
-          weatherIcon.appendChild(img);
-        }
+        weatherIcon.innerHTML = `<img src="img/weather/${iconFilename}" alt="${clima.coco ?? ""}" width="75" height="75" class="weather-icon-img">`;
       }
 
-      // iconos para cada .detail-item
+      const values = cardInfo.querySelectorAll(".value");
+      if (values.length >= 6) {
+        values[0].textContent = `${clima.humedad}%`;
+        values[1].textContent = `${clima.viento} km/h`;
+        values[2].textContent = `${clima.visibilidad} Km`;
+        values[3].textContent = `${clima.sensacionTermica}°`;
+        values[4].textContent = `${clima.precipitacion} mm`;
+        values[5].textContent = `${clima.uvIndex}`;
+      }
+
+      // iconos de detalle
       const detailItems = cardInfo.querySelectorAll(".detail-item");
       detailItems.forEach((item) => {
         const labelEl = item.querySelector(".label");
@@ -175,59 +211,16 @@ document.addEventListener("DOMContentLoaded", async () => {
         const label = labelEl.textContent.trim();
         const iconFilename = detailIconMap[label];
         if (iconFilename) {
-          iconEl.innerHTML = "";
-          const img = document.createElement("img");
-          img.src = `img/weather/${iconFilename}`;
-          img.alt = label;
-          img.width = 30;
-          img.height = 30;
-          img.classList.add("detail-icon-img");
-          iconEl.appendChild(img);
+          iconEl.innerHTML = `<img src="img/weather/${iconFilename}" alt="${label}" width="30" height="30" class="detail-icon-img">`;
         }
       });
-
-      // Humedad
-      const humidityValue = cardInfo.querySelectorAll(".value")[0];
-      if (humidityValue) {
-        humidityValue.textContent = `${clima.humedad}%`;
-      }
-
-      // Viento
-      const vientoValue = cardInfo.querySelectorAll(".value")[1];
-      if (vientoValue) {
-        vientoValue.textContent = `${clima.viento}km/h`;
-      }
-
-      // Visibilidad
-      const visibilidadValue = cardInfo.querySelectorAll(".value")[2];
-      if (visibilidadValue) {
-        visibilidadValue.textContent = `${clima.visibilidad}m`;
-      }
-
-      // Sensación Térmica
-      const sensacionValue = cardInfo.querySelectorAll(".value")[3];
-      if (sensacionValue) {
-        sensacionValue.textContent = `${clima.sensacionTermica}°`;
-      }
-
-      // Precipitación
-      const precipitacionValue = cardInfo.querySelectorAll(".value")[4];
-      if (precipitacionValue) {
-        precipitacionValue.textContent = `${clima.precipitacion}mm`;
-      }
-
-      // Radiación UV
-      const uvValue = cardInfo.querySelectorAll(".value")[5];
-      if (uvValue) {
-        uvValue.textContent = `${clima.uvIndex}`;
-      }
     }
+
+    actualizarPronosticoHorario(nombre);
   }
 
-  // manejar click en cada provincia
-  const provincias = document.querySelectorAll(
-    "#mapa-argentina path[id^='AR']"
-  );
+  // evento click en provincias
+  const provincias = document.querySelectorAll("#mapa-argentina path[id^='AR']");
   provincias.forEach((provinciaEl) => {
     provinciaEl.addEventListener("click", async () => {
       const nombre = provinciaEl.getAttribute("name");
@@ -236,24 +229,16 @@ document.addEventListener("DOMContentLoaded", async () => {
       cardMapa.style.display = "none";
       cardInfo.style.display = "none";
       cardLoader.style.display = "flex";
-      const loaderStart = Date.now();
 
+      const loaderStart = Date.now();
       await cargarClima();
+      await cargarClimaHorario();
       colocarIconos();
 
-      // Insertar el template
-      cardInfo.innerHTML = `
-      <div>
-        ${infoHtmlTemplate}
-      </div>
-    `;
-
-      // Actualizar los datos después de insertar el template
+      cardInfo.innerHTML = `<div>${infoHtmlTemplate}</div>`;
       actualizarDatosProvincia(nombre, clima);
 
-      // Crear el botón volver y agregarlo después del weekly-forecast
-      const container = cardInfo.querySelector(".container"); // Buscar el container principal
-
+      const container = cardInfo.querySelector(".container");
       if (container) {
         const nuevoVolverBtn = document.createElement("button");
         nuevoVolverBtn.id = "volver-btn";
@@ -263,14 +248,11 @@ document.addEventListener("DOMContentLoaded", async () => {
           cardLoader.style.display = "none";
           cardMapa.style.display = "flex";
         });
-
-        // Agregar el botón al final del container (después del weekly-forecast)
         container.appendChild(nuevoVolverBtn);
       }
 
       const elapsed = Date.now() - loaderStart;
       const remaining = Math.max(0, 4000 - elapsed);
-
       setTimeout(() => {
         cardLoader.style.display = "none";
         cardInfo.style.display = "flex";
@@ -278,7 +260,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   });
 
-  // volver al mapa (listener inicial)
   if (volverBtn) {
     volverBtn.addEventListener("click", () => {
       cardInfo.style.display = "none";
@@ -287,17 +268,43 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
-  // actualizar iconos si cambia la hora
+  // actualización automática cada hora
   let horaActual = new Date().getHours();
   setInterval(async () => {
     const nuevaHora = new Date().getHours();
     if (nuevaHora !== horaActual) {
       horaActual = nuevaHora;
-      console.log("Cambio de hora detectado, recargando datos...");
+      console.log("Cambio de hora detectado → recargando datos...");
       await cargarClima();
+      await cargarClimaHorario();
       colocarIconos();
     }
   }, 60000);
 
+
+  /* Probar
+  setInterval(async () => {
+  const nuevaHora = new Date().getHours();
+  if (nuevaHora !== horaActual) {
+    horaActual = nuevaHora;
+    console.log("Cambio de hora detectado, recargando datos...");
+    await cargarClima();
+    await cargarClimaHorario();
+    colocarIconos();
+
+    // Si la tarjeta de info está visible, actualizamos los datos de la provincia actual
+    if (cardInfo.style.display === "flex") {
+      const nombreProvincia = cardInfo.querySelector(".titulo-provincia")?.textContent;
+      if (nombreProvincia) {
+        const clima = climaPorProvincia[normalize(nombreProvincia)];
+        actualizarDatosProvincia(nombreProvincia, clima);
+      }
+    }
+  }
+}, 60000); // revisa cada minuto
+
+  */
+
   inicializar();
 });
+

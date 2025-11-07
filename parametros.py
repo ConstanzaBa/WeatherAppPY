@@ -10,6 +10,9 @@ Parámetros esperados:
     temp (°C): Temperatura del aire
     rhum (%): Humedad relativa
     wspd (km/h): Velocidad del viento
+    dwpt  : punto de rocío en °C (dew point)
+    prcp  : precipitación en mm/h (puede ser 0 o NaN)
+    snow  : nieve en mm/h (puede ser 0 o NaN)
     coco (int): Código de condición meteorológica (Meteostat)
     fecha_hora (str): Fecha y hora ISO (ej. "2025-11-06T13:00:00Z")
 """
@@ -153,3 +156,129 @@ def calcular_radiacion_uv(temp, coco, fecha_hora):
 
     uv = base_uv * (1 - factor_nubosidad) * temp_factor
     return round(uv, 1)
+
+
+
+def calcular_visibilidad(temp, rhum, dwpt, prcp, snow, wspd, coco):
+    """
+    Retorna:
+        float -> visibilidad estimada en km (redondeada a 1 decimal)
+        None  -> si datos insuficientes o inválidos
+    """
+    try:
+        # convertir si vienen como strings / NaN -> raise
+        temp = None if temp is None else float(temp)
+        rhum = None if rhum is None else float(rhum)
+        dwpt = None if dwpt is None else float(dwpt)
+        prcp = 0.0 if (prcp is None or (isinstance(prcp, float) and math.isnan(prcp))) else float(prcp)
+        snow = 0.0 if (snow is None or (isinstance(snow, float) and math.isnan(snow))) else float(snow)
+        wspd = 0.0 if (wspd is None or (isinstance(wspd, float) and math.isnan(wspd))) else float(wspd)
+        coco = None if coco is None else int(coco)
+    except Exception:
+        return None
+
+    # Requerimos al menos temp y rhum o dwpt para evaluar niebla; si faltan por completo devolvemos None
+    if temp is None or rhum is None:
+        return None
+
+    # Checks físicos básicos
+    if not (-80 <= temp <= 70 and 0 <= rhum <= 100 and wspd >= 0):
+        return None
+
+    # valor base
+    vis_km = 20.0
+
+    # Depresión del punto de rocío (T - Td)
+    if dwpt is not None:
+        dep = temp - dwpt
+    else:
+        dep = None
+
+    # Condición típica de niebla: RH muy alta y depresión pequeña
+    if rhum >= 95 and dep is not None and dep <= 2.0:
+        # Niebla densa si RH muy alta y dep muy pequeña
+        # Ajuste por viento: viento ligero mantiene niebla; viento fuerte la reduce.
+        if rhum >= 99 and dep <= 0.5:
+            base_fog = 0.05  # niebla muy densa
+        elif rhum >= 97:
+            base_fog = 0.2
+        else:
+            base_fog = 0.5
+
+        # viento ayuda a dispersar la niebla
+        if wspd >= 40:
+            vis_km = max(base_fog * 3.0, 0.1)  # viento fuerte mejora pero sigue baja vis
+        elif wspd >= 15:
+            vis_km = max(base_fog * 1.5, 0.05)
+        else:
+            vis_km = base_fog
+
+        # retornamos inmediatamente porque niebla domina en general
+        return round(vis_km, 1)
+
+    # Neblina leve / vapor: RH alto pero no completa
+    if rhum >= 85 and dep is not None and dep <= 4.0:
+        # reducción moderada
+        vis_km = 1.0 + (rhum - 85) / 15.0 * 3.0  # tendencia: de 1 km a ~4 km
+        # ajustar por viento
+        if wspd >= 30:
+            vis_km = max(vis_km * 1.3, 0.5)
+        return round(min(vis_km, 20.0), 1)
+
+    # Priorizar precipitación líquida (prcp) y luego nieve (snow)
+    if prcp > 0:
+        # Umbrales empíricos (mm/h)
+        if prcp < 0.5:
+            vis_km = 10.0  # llovizna ligera
+        elif prcp < 2.0:
+            vis_km = 6.0   # lluvia ligera-moderada
+        elif prcp < 10.0:
+            vis_km = 3.0   # lluvia moderada-fuerte
+        else:
+            vis_km = 0.8   # lluvia muy intensa / torrencial
+
+        # si coco indica tormenta o lluvia fuerte, bajar otro escalón
+        if coco in [23, 24, 25, 26, 27, 9, 8, 18]:  # tormentas, granizo, heavy rain, rain
+            vis_km = min(vis_km, 2.0 if prcp >= 2.0 else vis_km)
+
+        # el viento no aumenta vis en lluvia — puede reducir por aire levantado
+        if wspd > 80:
+            vis_km = max(vis_km * 0.8, 0.1)
+
+        return round(vis_km, 1)
+    
+    if snow > 0:
+        # Umbrales empiricos para nieve (mm/h)
+        if snow < 0.5:
+            vis_km = 6.0
+        elif snow < 2.0:
+            vis_km = 3.0
+        elif snow < 5.0:
+            vis_km = 1.5
+        else:
+            vis_km = 0.5
+
+        # viento agrava la reducción por blowing snow
+        if wspd >= 30:
+            vis_km = max(vis_km * 0.6, 0.05)
+
+        return round(vis_km, 1)
+
+    # Si hay códigos de lluvia aislada o tormentas sin prcp, reducir algo
+    if coco is not None:
+        if coco in [7, 17]:  # light rain / isolated rain (si no hubo prcp registrado, asumimos leve)
+            vis_km = min(vis_km, 10.0)
+        elif coco in [8, 18]:  # rain / heavy rain indicators
+            vis_km = min(vis_km, 6.0)
+        elif coco in [23, 24, 25, 26, 27]:  # stormy
+            vis_km = min(vis_km, 3.0)
+
+    # Viento muy fuerte puede reducir vis por polvo/suspensión 
+    if wspd >= 80:
+        vis_km = min(vis_km, 8.0)
+    elif wspd >= 60:
+        vis_km = min(vis_km, 12.0)
+
+    # Limitar rango final y devolver
+    vis_km = max(0.05, min(vis_km, 20.0))
+    return round(vis_km, 1)

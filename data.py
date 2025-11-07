@@ -13,8 +13,8 @@ stations = pd.read_csv(os.path.join(dataset, "stations.csv"))
 
 # Periodo del pronostico
 # Periodo deseado en hora local (Argentina)
-start_local = datetime(2025, 11, 5, 0, 0)
-end_local = datetime(2025, 11, 7, 0, 0)
+start_local = datetime(2025, 11, 7, 0, 0)
+end_local = datetime(2025, 11, 9, 0, 0)
 
 # Convertimos a UTC para pedírselo a Meteostat
 start = start_local + timedelta(hours=3)
