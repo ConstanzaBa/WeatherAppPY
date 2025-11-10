@@ -1,0 +1,90 @@
+<div class="weather-details">
+    <div class="detail-item humidity-card">
+      <h2>Humedad</h2>
+      <div class="humidity-gauge">
+        <svg viewBox="0 0 120 120">
+          <circle class="bg-ring" cx="60" cy="60" r="54" />
+          <circle class="progress-ring" cx="60" cy="60" r="54" />
+        </svg>
+        <div class="value" id="humValue"></div>
+      </div>
+      <div class="hum-status" id="humStatus">---</div>
+    </div>
+    <div class="detail-item wind-card">
+      <h2>Viento</h2>
+      <div class="wind-meter">
+        <svg viewBox="0 0 200 100">
+          <defs>
+            <linearGradient id="windGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#9be8ff" />
+              <stop offset="100%" stop-color="#004e92" />
+            </linearGradient>
+          </defs>
+          <path class="wind-bg" d="M20 100 A80 80 0 0 1 180 100" />
+          <path class="wind-value" d="M20 100 A80 80 0 0 1 180 100" />
+        </svg>
+        <div class="value" id="windSpeed"></div>
+      </div>
+      <div class="wind-status" id="windStatus"></div>
+    </div>
+    <div class="detail-item visibility-card">
+      <h2>Visibilidad</h2>
+      <div id="sky" class="sky"></div>
+      <div class="visibility-info">
+        <div class="value"></div>
+        <div class="vis-status" id="visStatus"></div>
+      </div>
+    </div>
+    <div class="detail-item temp-card">
+      <div class="thermo-container">
+        <div class="thermometer">
+          <div class="thermo-fill" id="thermoFill"></div>
+        </div>
+
+        <div class="temp-info">
+          <h2>Sensación Térmica</h2>
+          <div class="value" id="tempValue"></div>
+          <div class="temp-status" id="tempStatus"></div>
+        </div>
+      </div>
+    </div>
+    <div class="detail-item precipitation-card">
+      <h2>Precipitación</h2>
+      <div class="rain-glass" id="rainGlass">
+        <div class="rain-water" id="rainWater"></div>
+        <div class="raindrops" id="raindrops"></div>
+      </div>
+      <div class="precip-info">
+        <div class="value"></div>
+      </div>
+    </div>
+    <div class="detail-item uv-card">
+      <div class="uv-title">UV</div>
+
+      <div class="uv-meter">
+        <svg viewBox="0 0 100 60">
+          <defs>
+            <linearGradient
+              id="uvGradient"
+              x1="0%"
+              y1="100%"
+              x2="100%"
+              y2="100%"
+            >
+              <stop offset="0%" stop-color="#00b35f" />
+              <stop offset="30%" stop-color="#ffdd00" />
+              <stop offset="55%" stop-color="#ff9900" />
+              <stop offset="80%" stop-color="#e53935" />
+              <stop offset="100%" stop-color="#9c27b0" />
+            </linearGradient>
+          </defs>
+          <path class="uv-bg" d="M10,50 A40,40 0 0,1 90,50" />
+          <path class="uv-value" d="M10,50 A40,40 0 0,1 90,50" />
+        </svg>
+        <div class="value" id="uvNumber"></div>
+      </div>
+
+      <div class="uv-status" id="uvStatus"></div>
+      <div class="uv-desc" id="uvDesc"></div>
+    </div>
+  </div>
