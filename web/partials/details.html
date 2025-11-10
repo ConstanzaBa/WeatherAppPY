@@ -28,11 +28,11 @@
       <div class="wind-status" id="windStatus"></div>
     </div>
     <div class="detail-item visibility-card">
-      <h2>Visibilidad</h2>
+      <h2 class="visibility-title">Visibilidad</h2>
       <div id="sky" class="sky"></div>
       <div class="visibility-info">
-        <div class="value"></div>
-        <div class="vis-status" id="visStatus"></div>
+        <div class="vis-value"><span id="visValue">0</span> km</div>
+        <div class="vis-status" id="visStatus">---</div>
       </div>
     </div>
     <div class="detail-item temp-card">
@@ -55,7 +55,8 @@
         <div class="raindrops" id="raindrops"></div>
       </div>
       <div class="precip-info">
-        <div class="value"></div>
+        <div class="value" id="precipValue"></div>
+        <div class="precip-status" id="precipStatus">---</div>
       </div>
     </div>
     <div class="detail-item uv-card">

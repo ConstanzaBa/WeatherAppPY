@@ -1,3 +1,5 @@
+import { updateVisuals } from './details.js';
+
 document.addEventListener("DOMContentLoaded", async () => {
   const cardMapa = document.querySelector(".card.mapa");
   const cardInfo = document.querySelector(".card.info");
@@ -214,15 +216,20 @@ document.addEventListener("DOMContentLoaded", async () => {
         weatherIcon.innerHTML = `<img src="img/weather/${iconFilename}" alt="${clima.coco ?? ""}" width="75" height="75" class="weather-icon-img">`;
       }
 
-      const values = cardInfo.querySelectorAll(".value");
-      if (values.length >= 6) {
-        values[0].textContent = `${clima.humedad}%`;
-        values[1].textContent = `${clima.viento} km/h`;
-        values[2].textContent = `${clima.visibilidad} Km`;
-        values[3].textContent = `${clima.sensacionTermica}°`;
-        values[4].textContent = `${clima.precipitacion} mm`;
-        values[5].textContent = `${clima.uvIndex}`;
-      }
+      // Actualizar valores básicos directamente (fallback si updateVisuals falla)
+      const humValue = document.getElementById('humValue');
+      const windSpeed = document.getElementById('windSpeed');
+      const visValue = document.getElementById('visValue');
+      const tempValue = document.getElementById('tempValue');
+      const precipValue = document.getElementById('precipValue');
+      const uvNumber = document.getElementById('uvNumber');
+
+      if (humValue) humValue.textContent = `${clima.humedad}%`;
+      if (windSpeed) windSpeed.textContent = `${clima.viento} km/h`;
+      if (visValue) visValue.textContent = clima.visibilidad?.toFixed(1) || '0';
+      if (tempValue) tempValue.textContent = `${clima.sensacionTermica}°C`;
+      if (precipValue) precipValue.textContent = `${clima.precipitacion ?? 0} mm`;
+      if (uvNumber) uvNumber.textContent = `${clima.uvIndex}`;
 
       // iconos de detalle
       const detailItems = cardInfo.querySelectorAll(".detail-item");
@@ -235,6 +242,13 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (iconFilename) {
           iconEl.innerHTML = `<img src="img/weather/${iconFilename}" alt="${label}" width="30" height="30" class="detail-icon-img">`;
         }
+      });
+
+      // Actualizar animaciones visuales con un pequeño delay para asegurar que el DOM esté listo
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          updateVisuals(clima);
+        });
       });
     }
 
