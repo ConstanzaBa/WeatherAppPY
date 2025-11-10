@@ -1,57 +1,140 @@
-.pl {
-  display: block;
-  width: 9.375em;
-  height: 9.375em;
+/* From Uiverse.io by Novaxlo */ 
+.earth-loader {
+  --watercolor: #3344c1;
+  --landcolor: #7cc133;
+  width: 7.5em;
+  height: 7.5em;
+  background-color: var(--watercolor);
+  position: relative;
+  overflow: hidden;
+  border-radius: 50%;
+  box-shadow:
+    inset 0em 0.5em rgb(255, 255, 255, 0.25),
+    inset 0em -0.5em rgb(0, 0, 0, 0.25);
+  border: solid 0.15em white;
+  animation: startround 1s;
+  animation-iteration-count: 1;
 }
 
-.pl__arrows,
-.pl__ring-rotate,
-.pl__ring-stroke,
-.pl__tick {
-  animation-duration: 2s;
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
+.earth p {
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 0.25em;
+  font-size: 1.25em;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
 }
 
-.pl__arrows {
-  animation-name: arrows42;
-  transform: rotate(45deg);
-  transform-origin: 16px 52px;
+.earth-loader svg:nth-child(1) {
+  position: absolute;
+  bottom: -2em;
+  width: 7em;
+  height: auto;
+  animation: round1 5s infinite linear 0.75s;
 }
 
-.pl__ring-rotate,
-.pl__ring-stroke {
-  transform-origin: 80px 80px;
+.earth-loader svg:nth-child(2) {
+  position: absolute;
+  top: -3em;
+  width: 7em;
+  height: auto;
+  animation: round1 5s infinite linear;
+}
+.earth-loader svg:nth-child(3) {
+  position: absolute;
+  top: -2.5em;
+  width: 7em;
+  height: auto;
+  animation: round2 5s infinite linear;
+}
+.earth-loader svg:nth-child(4) {
+  position: absolute;
+  bottom: -2.2em;
+  width: 7em;
+  height: auto;
+  animation: round2 5s infinite linear 0.75s;
 }
 
-.pl__ring-rotate {
-  animation-name: ringRotate42;
+@keyframes startround {
+  0% {
+    filter: brightness(500%);
+    box-shadow: none;
+  }
+  75% {
+    filter: brightness(500%);
+    box-shadow: none;
+  }
+  100% {
+    filter: brightness(100%);
+    box-shadow:
+      inset 0em 0.5em rgb(255, 255, 255, 0.25),
+      inset 0em -0.5em rgb(0, 0, 0, 0.25);
+  }
 }
 
-.pl__ring-stroke {
-  animation-name: ringStroke42;
-  transform: rotate(-45deg);
+@keyframes round1 {
+  0% {
+    left: -2em;
+    opacity: 100%;
+    transform: skewX(0deg) rotate(0deg);
+  }
+  30% {
+    left: -6em;
+    opacity: 100%;
+    transform: skewX(-25deg) rotate(25deg);
+  }
+  31% {
+    left: -6em;
+    opacity: 0%;
+    transform: skewX(-25deg) rotate(25deg);
+  }
+  35% {
+    left: 7em;
+    opacity: 0%;
+    transform: skewX(25deg) rotate(-25deg);
+  }
+  45% {
+    left: 7em;
+    opacity: 100%;
+    transform: skewX(25deg) rotate(-25deg);
+  }
+  100% {
+    left: -2em;
+    opacity: 100%;
+    transform: skewX(0deg) rotate(0deg);
+  }
 }
 
-.pl__tick {
-  animation-name: tick42;
-}
-
-.pl__tick:nth-child(2) { animation-delay: -1.75s; }
-.pl__tick:nth-child(3) { animation-delay: -1.5s; }
-.pl__tick:nth-child(4) { animation-delay: -1.25s; }
-.pl__tick:nth-child(5) { animation-delay: -1s; }
-.pl__tick:nth-child(6) { animation-delay: -0.75s; }
-.pl__tick:nth-child(7) { animation-delay: -0.5s; }
-.pl__tick:nth-child(8) { animation-delay: -0.25s; }
-
-@keyframes arrows42 { from { transform: rotate(45deg); } to { transform: rotate(405deg); } }
-@keyframes ringRotate42 { from { transform: rotate(0); } to { transform: rotate(720deg); } }
-@keyframes ringStroke42 {
-  from, to { stroke-dashoffset: 452; transform: rotate(-45deg); }
-  50% { stroke-dashoffset: 169.5; transform: rotate(-180deg); }
-}
-@keyframes tick42 {
-  from, 3%, 47%, to { stroke-dashoffset: -12; }
-  14%, 36% { stroke-dashoffset: 0; }
+@keyframes round2 {
+  0% {
+    left: 5em;
+    opacity: 100%;
+    transform: skewX(0deg) rotate(0deg);
+  }
+  75% {
+    left: -7em;
+    opacity: 100%;
+    transform: skewX(-25deg) rotate(25deg);
+  }
+  76% {
+    left: -7em;
+    opacity: 0%;
+    transform: skewX(-25deg) rotate(25deg);
+  }
+  77% {
+    left: 8em;
+    opacity: 0%;
+    transform: skewX(25deg) rotate(-25deg);
+  }
+  80% {
+    left: 8em;
+    opacity: 100%;
+    transform: skewX(25deg) rotate(-25deg);
+  }
+  100% {
+    left: 5em;
+    opacity: 100%;
+    transform: skewX(0deg) rotate(0deg);
+  }
 }

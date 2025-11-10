@@ -16,21 +16,20 @@
 
 .provincia-container {
     grid-area: 1/1;
-    display: grid;
-    width: 30rem;
-    height: 20rem;
+    width: 20rem;
+    height: fit-content;
     padding: 2rem;
-    justify-content: center;
     background: var(--detail-bg);
     border-radius: 2rem;
     text-align: center;
-    gap: 1.6rem;
+    gap: 1rem;
 }
 
 .provincia-info {
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin-bottom: 2rem;
 }
 
 .titulo-provincia {
@@ -72,6 +71,9 @@
 
 .detail-item {
     display: flex;
+    padding: 2rem;
+    background: var(--detail-bg);
+    border-radius: 2rem;
     justify-content: start;
     align-items: center;
     gap: 0.5rem;
@@ -236,4 +238,20 @@
     font-size: 12px;
     color: var(--subtext-color);
     margin-left: 10px;
+}
+
+#volver-btn {
+  margin-top: 30px;
+  padding: 12px 28px;
+  font-size: 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  background-color: #3870b0;
+  color: #fff;
+  border: none;
+  transition: background 0.2s;
+}
+
+#volver-btn:hover {
+  background-color: #3870b0;
 }
