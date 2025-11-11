@@ -308,8 +308,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     const container = cardInfo.querySelector(".container");
     if (container) {
       const nuevoVolverBtn = document.createElement("button");
-      nuevoVolverBtn.id = "volver-btn";
-      nuevoVolverBtn.textContent = "Volver al mapa";
       nuevoVolverBtn.addEventListener("click", () => {
         cardInfo.style.display = "none";
         cardLoader.style.display = "none";

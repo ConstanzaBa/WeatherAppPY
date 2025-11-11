@@ -1,47 +1,120 @@
+/* === ROOT: Paleta moderna glass === */
+:root {
+  --primary-color: #3d8bfd;
+  --secondary-color: #9ec5fe;
+  --accent-color: #ffd66b;
+  --success-color: #4cd68e;
+  --warning-color: #f9b84a;
+  --error-color: #ff6f6f;
+
+  --bg-color: #e8f1fb;
+  --card-bg: rgba(255, 255, 255, 0.6);
+  --card-border: rgba(255, 255, 255, 0.4);
+
+  --text-color: #1f2a44;
+  --subtext-color: #5f6b86;
+  --title-color: #1a2137;
+
+  --shadow-soft: 0 6px 16px rgba(0, 0, 0, 0.1);
+  --shadow-strong: 0 12px 30px rgba(0, 0, 0, 0.2);
+}
+
+/* === TEMA OSCURO === */
+:root.dark-theme {
+  --primary-color: #6ea8fe;
+  --secondary-color: #4d84ff;
+  --accent-color: #ffd66b;
+  --success-color: #5be39c;
+  --warning-color: #f9b84a;
+  --error-color: #ff8a8a;
+
+  --bg-color: #0f1115;
+  --card-bg: rgba(27, 28, 30, 0.6);
+  --card-border: rgba(255, 255, 255, 0.08);
+
+  --text-color: #e5e7eb;
+  --subtext-color: #aeb2bc;
+  --title-color: #ffffff;
+
+  --shadow-soft: 0 6px 20px rgba(0, 0, 0, 0.4);
+  --shadow-strong: 0 12px 40px rgba(0, 0, 0, 0.7);
+}
+
+/* === BODY === */
+body {
+  font-family: 'Poppins', sans-serif;
+  background: var(--bg-color);
+  color: var(--text-color);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  min-height: 100vh;
+}
+
+/* === CONTENEDOR PRINCIPAL === */
 .container {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 2rem;
-  backdrop-filter: blur(1rem);
-  border-radius: 1.5rem;
-  padding: 4rem 3rem;
+  gap: 2.5rem;
+  width: 90%;
+  max-width: 1400px;
 }
 
+/* === GRID GENERAL === */
 .grid-container {
   display: grid;
-  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  width: 100%;
 }
 
+/* === CARD BASE === */
+.card {
+  background: var(--card-bg);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--card-border);
+  border-radius: 1.5rem;
+  box-shadow: var(--shadow-soft);
+  padding: 2rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-strong);
+}
+
+/* === CLIMA ACTUAL === */
 .provincia-container {
   grid-area: 1/1;
-  width: 20rem;
-  height: fit-content;
+  width: 75%;
+  height:79%;
   padding: 2rem;
-  background: var(--detail-bg);
-  border-radius: 1.5rem;
   text-align: center;
-  gap: 1rem;
+  background: var(--card-bg);
+  border-radius: 1.5rem;
+  box-shadow: var(--shadow-soft);
 }
 
 .provincia-info {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
 }
 
 .titulo-provincia {
-  font-size: 20px;
-  color: var(--text-color);
-  font-weight: 700;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--title-color);
 }
 
 .hora-provincia {
-  font-size: 14px;
+  font-size: 0.9rem;
   color: var(--subtext-color);
-  margin-top: 5px;
-  font-weight: 500;
+  margin-top: 4px;
 }
 
 .current-weather {
@@ -52,60 +125,71 @@
 }
 
 .temperature {
-  font-size: 3.5rem;
-  font-weight: 300;
+  font-size: 3rem;
+  font-weight: 400;
+  margin-top:40px;
+  margin-left:1.6rem;
   color: var(--primary-color);
 }
 
 .condition {
-  font-size: 18px;
+  font-size: 1.1rem;
   color: var(--text-color);
 }
-
 .weather-details {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, 0fr);
   gap: 1rem;
+  justify-items: stretch;
+  align-items: stretch;
+  justify-content: space-evenly;
 }
 
 .detail-item {
-  padding: 2rem;
-  background-color: var(--primary-color);
-  justify-content: start;
+  width: 180px;
+  height: 185px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
-  gap: 0.5rem;
-  border-radius: 1.5rem;
+  text-align: center;
+  border-radius: 20px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  overflow: hidden;
+  gap: 10px;
 }
 
 .detail-item .icon {
-  display: flex;
-  justify-content: center;
+  font-size: 2rem;
+  margin-bottom: 0.8rem;
+  color: var(--primary-color);
 }
 
 .detail-item .label {
-  font-size: 12px;
+  font-size: 0.9rem;
   color: var(--subtext-color);
+  margin-bottom: 0.3rem;
 }
 
 .detail-item .value {
-  font-size: 1.2rem;
-  font-weight: bold;
-  color: var(--text-color);
-  font-weight: 600;
+  font-size: 1.8rem;
+  font-weight: 500;
+  color: var(--title-color);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 /* Precipitación */
 
 .precipitation-card {
-  height: 220px;
-  text-align: center;
-  overflow: hidden;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
+   background: var(--card-bg);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+  padding: 25px 20px;
+  max-width:20rem;
+  max-height:10rem;
 }
 
 .precipitation-card:hover {
@@ -114,21 +198,23 @@
 }
 
 .precipitation-card h2 {
-  font-size: 1.3em;
-  margin-bottom: 10px;
+  font-size: 1.3rem;
+  margin-bottom: 9rem;
+  letter-spacing: 0.5px;
   z-index: 2;
   position: relative;
 }
 
+/* === VASO DE LLUVIA === */
+
 .rain-glass {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 70%;
   border-radius: 12px 12px 60% 60%;
-  background: linear-gradient(
-    to bottom right,
-    rgba(180, 200, 255, 0.15),
-    rgba(80, 90, 130, 0.2)
-  );
+  background: linear-gradient(to bottom right, rgba(180,200,255,0.15), rgba(80,90,130,0.2));
   backdrop-filter: blur(2px);
   overflow: hidden;
 }
@@ -145,6 +231,7 @@
   z-index: 1;
 }
 
+/* === GOTA DE LLUVIA === */
 .raindrops {
   position: absolute;
   top: 0;
@@ -159,12 +246,13 @@
   position: absolute;
   width: 1px;
   height: 5px;
-  margin-top: -10px;
+  margin-top:-10px;
   background: #4da0ff;
   opacity: 0.7;
   border-radius: 0%;
   animation: fall linear infinite;
 }
+
 
 @keyframes fall {
   0% {
@@ -187,22 +275,29 @@
   text-align: center;
 }
 
+.precip-value {
+  font-size: 1rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+.precip-status {
+  margin-top: 160px;
+  font-size: 1rem;
+  color: #ccc;
+  letter-spacing: 0.3px;
+}
+
 /* Visibilidad */
 
 .visibility-card {
-  position: relative;
-  background: rgba(255, 255, 255, 0.05);
+   background: var(--card-bg);
   backdrop-filter: blur(8px);
-  border-radius: 20px;
-  padding: 25px 20px;
-  overflow: hidden;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  text-align: center;
-  min-height: 240px;
-  display: flex;
-  flex-direction: column;
   justify-content: space-between;
+  padding: 25px 20px;
+  max-width:20rem;
+  max-height:10rem;
 }
 
 .visibility-card:hover {
@@ -211,10 +306,10 @@
 }
 
 .visibility-title {
-  font-size: 1.4em;
-  margin-bottom: 12px;
+  font-size: 1.3rem;
   letter-spacing: 0.5px;
   z-index: 2;
+  margin-top:-0.8rem;
   position: relative;
 }
 
@@ -277,10 +372,10 @@
 }
 
 .vis-value {
-  font-size: 1.2rem;
-  font-weight: bold;
+  font-size: 1.6rem;
   color: var(--text-color);
-  font-weight: 600;
+  font-weight: 500;
+  margin-bottom:4rem;
 }
 
 .vis-value span {
@@ -288,11 +383,9 @@
 }
 
 .vis-status {
-  font-weight: 600;
-  margin-top: 5px;
-  font-size: 1.1em;
-  color: #ccc;
-  letter-spacing: 0.3px;
+  font-size: 1rem;
+  color: #aaa;
+  margin-top:-0.5rem;
 }
 
 /* Sensación Térmica */
@@ -300,45 +393,47 @@
 .temp-card {
   backdrop-filter: blur(12px);
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
   gap: 15px;
+  width: 14rem;
+  height: 13rem;
+  background: var(--card-bg);
 }
 
 .temp-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6);
+  transform: translateY(-5px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
 }
 
 .thermo-container {
   display: flex;
-  align-items: center;
+  align-items: stretch;
   gap: 24px;
+  flex-direction: row;
+  margin-right:1rem;
+  justify-content: flex-end;
 }
 
 .thermometer {
   position: relative;
-  width: 40px;
-  height: 180px;
-  background: linear-gradient(180deg, #3e456b, #23263a);
+  width: 50px;
+  height: 150px;
+  background: linear-gradient(180deg, #c0c5d1, #e0e9ff);
   border-radius: 20px;
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.5),
-    0 0 8px rgba(255, 255, 255, 0.15);
+  box-shadow: inset 0 0 12px rgb(75 72 72 / 27%),
+              0 0 8px rgba(255, 255, 255, 0.15);
+  margin-left:1rem;
 }
 
 .thermo-fill {
-  width: 100%;
-  height: 0%;
   position: absolute;
   bottom: 0;
+  width: 100%;
   border-radius: 20px;
-  transition: height 1.2s cubic-bezier(0.4, 0, 0.2, 1), background 0.8s ease;
+  background: linear-gradient(to top, #ffae42, #ff6f00);
+  transition: height 1.2s cubic-bezier(0.4, 0, 0.2, 1),
+              background 0.8s ease;
   filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.3));
 }
 
@@ -354,44 +449,48 @@
   background: linear-gradient(145deg, #3a3f61, #1f2235);
   overflow: hidden;
   box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5),
-    0 0 8px rgba(255, 255, 255, 0.1);
+              0 0 8px rgba(255, 255, 255, 0.1);
   transition: background 0.8s ease, box-shadow 0.8s ease;
 }
+
 .temp-info {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-  gap: 10px;
+  align-items: center;
+  gap: 58px;
+  justify-content: space-evenly;
 }
 
 .temp-info h2 {
-  margin: 0;
-  font-size: 1.3em;
+  font-size: 1.3rem;
   font-weight: 500;
   opacity: 0.9;
   letter-spacing: 0.5px;
+  margin-left:-2rem;
+}
+
+#tempValue{
+  left:58%;
+  top:60%;
 }
 
 .temp-status {
-  margin-top: 4px;
-  font-weight: 600;
+  margin-top: 35px;
   font-size: 1.1em;
   opacity: 0.9;
   letter-spacing: 0.3px;
+  color: #ccc;
+  margin-left:-2rem;
 }
 
 /* Humedad */
 
 .humidity-card {
-  text-align: center;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
+box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+width: 14rem;
+height: 13rem;
+background: var(--card-bg);
+
 }
 
 .humidity-card:hover {
@@ -400,7 +499,9 @@
 }
 
 .humidity-card h2 {
-  margin-bottom: 15px;
+  margin-bottom: 1px;
+  margin-top:0.5rem;
+  font-size:1.3rem;
 }
 
 .humidity-gauge {
@@ -418,7 +519,7 @@
 
 .bg-ring {
   fill: none;
-  stroke: #555b78;
+  stroke: #e4e6f2;
   stroke-width: 12;
 }
 
@@ -432,22 +533,30 @@
   transition: stroke-dashoffset 1s ease;
 }
 
+.humidity-value {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1.3rem;
+}
+
 .hum-status {
-  margin-top: 8px;
-  font-weight: 600;
+  font-size: 1em;
+  color: #aaa;
+  margin-bottom:0.2rem;
+  margin-top:-0.5rem;
 }
 
 /* Viento */
 
 .wind-card {
-  text-align: center;
+  position: relative;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
+  overflow: hidden;
+  width: 14rem;
+  height: 13rem;
+   background: var(--card-bg);
 }
 
 .wind-card:hover {
@@ -455,26 +564,73 @@
   box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6);
 }
 
+.wind-card h2{
+  margin-bottom:1.2rem;
+  font-size:1.3rem;
+}
+
+.wind-card h2,
+.wind-card .wind-meter,
+.wind-card .wind-status {
+  position: relative;
+  z-index: 10;
+}
+
+.wind-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  overflow: hidden;
+  opacity: 0.8;
+}
+
+.wind-line {
+  position: absolute;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), rgba(255,255,255,0.4), transparent);
+  animation: windMove 3s linear infinite;
+  border-radius: 2px;
+  box-shadow: 0 0 4px rgba(255,255,255,0.3);
+}
+
+@keyframes windMove {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(calc(100vw));
+    opacity: 0;
+  }
+}
+
 .wind-title {
   font-size: 1.3em;
-  margin-bottom: 15px;
 }
 
 .wind-meter {
   position: relative;
-  width: 220px;
-  height: 120px;
-  margin: 0 auto 20px;
+  
 }
 
 .wind-meter svg {
   width: 100%;
   height: 100%;
+   margin-top:-15px;
 }
 
 .wind-bg {
   fill: none;
-  stroke: #4f567a;
+  stroke: #aaaaaa3b;
   stroke-width: 10;
   stroke-linecap: round;
 }
@@ -487,25 +643,22 @@
   stroke-dasharray: 251;
   stroke-dashoffset: 250;
   transition: stroke-dashoffset 1s ease;
+  
 }
 
 .wind-status {
-  font-weight: 600;
-  font-size: 1.1em;
-  margin-top: 5px;
+  font-size: 1em;
+  color: #aaa;
 }
 
 /* Radiación UV */
 
 .uv-card {
-  text-align: center;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
   gap: 10px;
+  background: var(--card-bg);
+  width: 14rem;
+  height: 13rem;
 }
 
 .uv-card:hover {
@@ -514,15 +667,15 @@
 }
 
 .uv-title {
-  font-size: 1.1em;
-  margin-bottom: 10px;
+  font-size: 1.3rem;
+  margin-bottom: 1.4rem;
+  font-weight: 700;
 }
 
 .uv-meter {
   position: relative;
-  width: 220px;
-  height: 120px;
-  margin: 0 auto 10px;
+  width: 150px;
+  height: 90px;
 }
 
 .uv-meter svg {
@@ -532,7 +685,7 @@
 
 .uv-bg {
   fill: none;
-  stroke: #4e567a;
+  stroke: #aaaaaa30;
   stroke-width: 8;
   stroke-linecap: round;
 }
@@ -548,14 +701,11 @@
 }
 
 .uv-status {
-  font-weight: 600;
-  margin-top: 5px;
+  color: #aba5a5;
+  font-weight: 500;
+  margin-bottom: -10px;
 }
 
-.uv-desc {
-  color: #c9c9c9;
-  font-size: 0.9em;
-}
 
 /* Fin de parametros de clima */
 
@@ -563,14 +713,16 @@
   grid-area: 1/2;
   display: grid;
   gap: 1rem;
-  height: 15rem;
-  background: var(--detail-bg);
+  background: var(--bg-color);
   padding: 2rem;
   border-radius: 1.5rem;
+  min-width:21rem;
+  margin-left:-20px;
 }
 
 .chart {
-  height: 90px;
+  height: 50px;
+  width:350px;
   display: flex;
   align-items: flex-end;
   gap: 8px;
@@ -585,7 +737,8 @@
   );
   border-radius: 8px 8px 0 0;
   position: relative;
-  min-height: 30px;
+  height: 50px;
+  width:350px;
 }
 
 .chart-label {
@@ -596,19 +749,21 @@
   font-size: 11px;
   color: var(--subtext-color);
   white-space: nowrap;
+  
 }
 
 .section-title {
   font-size: 16px;
   color: var(--primary-color);
-  font-weight: 600;
+  font-weight: 500;
 }
 
 .hourly-container {
   display: flex;
   gap: 1rem;
   overflow-x: auto;
-  width: 30rem;
+  height: 100px;
+  width:350px;
   margin-top: 2rem;
   padding-bottom: 1rem;
   scrollbar-width: thin;
@@ -650,7 +805,7 @@
 .hourly-item .temp {
   font-size: 16px;
   color: var(--primary-color);
-  font-weight: 600;
+  font-weight: 500;
 }
 
 .hourly-item .precipitation {
@@ -694,7 +849,7 @@
 .daily-item .high {
   font-size: 16px;
   color: var(--primary-color);
-  font-weight: 600;
+  font-weight: 500;
 }
 
 .daily-item .low {

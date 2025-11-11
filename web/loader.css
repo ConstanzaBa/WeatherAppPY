@@ -14,10 +14,12 @@
   border: solid 0.15em white;
   animation: startround 1s;
   animation-iteration-count: 1;
+  margin-left:50px;
+  margin-bottom: 10px;
 }
 
 .earth p {
-  color: white;
+  color: #6e7ad0;
   display: flex;
   justify-content: center;
   align-items: center;

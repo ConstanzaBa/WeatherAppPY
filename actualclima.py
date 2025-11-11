@@ -60,7 +60,7 @@ for archivo in os.listdir(provincia_dir):
         "fecha_hora": fila['fecha_hora'].strftime("%Y-%m-%d %H:%M:%S %Z")
     })
 
-    # PRONÓSTICO HORARIO (próximas 6 horas)
+    # PRONÓSTICO HORARIO
     # buscamos primero la hora más reciente pasada o igual a la hora actual
     idx_actual = df[df['fecha_hora'] <= ahora].index.max()
     if pd.isna(idx_actual):

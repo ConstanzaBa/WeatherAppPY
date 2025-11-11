@@ -50,54 +50,65 @@ export function updateVisuals(clima) {
   } catch (e) {}
 
   // PRECIPITACIÓN
-  try {
-    const precipValue = clima.precipitacion ?? clima.precip_mm ?? clima.precip ?? 0;
-    const precipitation = Number(precipValue) || 0;
-    const hasValidPrecip = precipValue !== null && precipValue !== undefined && !isNaN(precipitation);
-    
-    const precipStatus = document.getElementById('precipStatus');
-    const rainWater = document.getElementById('rainWater');
-    const raindropsContainer = document.getElementById('raindrops');
+try {
+  const precipValue = clima.precipitacion ?? clima.precip_mm ?? clima.precip ?? 0;
+  const precipitation = Number(precipValue) || 0;
+  const hasValidPrecip = precipValue !== null && precipValue !== undefined && !isNaN(precipitation);
 
-    if (precipStatus) {
-      if (hasValidPrecip) {
-        let status;
-        if (precipitation === 0) status = 'Sin lluvia';
-        else if (precipitation < 2.5) status = 'Llovizna';
-        else if (precipitation < 10) status = 'Lluvia ligera';
-        else if (precipitation < 50) status = 'Lluvia moderada';
-        else if (precipitation < 100) status = 'Lluvia intensa';
-        else status = 'Tormenta';
-        precipStatus.textContent = status;
-      } else if (clima.prob_precipitacion != null) {
-        precipStatus.textContent = 'Probabilidad';
-      } else {
-        precipStatus.textContent = 'Sin datos';
-      }
+  const precipStatus = document.getElementById('precipStatus');
+  const rainWater = document.getElementById('rainWater');
+  const raindropsContainer = document.getElementById('raindrops');
+
+  // Texto de estado
+  if (precipStatus) {
+    if (hasValidPrecip) {
+      let status;
+      if (precipitation === 0) status = 'Sin lluvia';
+      else if (precipitation < 2.5) status = 'Llovizna';
+      else if (precipitation < 10) status = 'Lluvia ligera';
+      else if (precipitation < 50) status = 'Lluvia moderada';
+      else if (precipitation < 100) status = 'Lluvia intensa';
+      else status = 'Tormenta';
+      precipStatus.textContent = status;
+    } else if (clima.prob_precipitacion != null) {
+      precipStatus.textContent = 'Probabilidad';
+    } else {
+      precipStatus.textContent = 'Sin datos';
     }
-    
-    if (rainWater) {
-      const waterHeight = hasValidPrecip ? Math.min((precipitation / 100) * 100, 100) : 0;
-      rainWater.style.height = waterHeight + '%';
-    }
-    
-    if (raindropsContainer) {
-      raindropsContainer.innerHTML = '';
-      if (hasValidPrecip && precipitation > 0) {
-        const numDrops = Math.floor((precipitation / 100) * 60);
-        for (let i = 0; i < numDrops; i++) {
-          const drop = document.createElement('div');
-          drop.classList.add('raindrop');
-          drop.style.left = Math.random() * 100 + '%';
-          drop.style.animationDuration = 0.5 + Math.random() * 1 + 's';
-          drop.style.animationDelay = Math.random() * 2 + 's';
-          raindropsContainer.appendChild(drop);
-        }
-      }
-    }
-  } catch (e) {
-    console.warn('Error en animación de precipitación:', e);
   }
+
+  // Altura del agua
+  if (rainWater) {
+    const waterHeight = hasValidPrecip ? Math.min((precipitation / 100) * 100, 100) : 0;
+    rainWater.style.height = waterHeight + '%';
+  }
+
+  // Gotas de lluvia animadas
+  if (raindropsContainer) {
+    raindropsContainer.innerHTML = '';
+
+    if (hasValidPrecip && precipitation > 0) {
+      // Aumentamos el número de gotas según intensidad
+      const numDrops = Math.max(10, Math.floor((precipitation / 100) * 80));
+
+      for (let i = 0; i < numDrops; i++) {
+        const drop = document.createElement('div');
+        drop.classList.add('raindrop');
+
+        // Posición y animación aleatoria
+        drop.style.left = Math.random() * 100 + '%';
+        drop.style.animationDuration = (0.8 + Math.random() * 1.2).toFixed(2) + 's';
+        drop.style.animationDelay = (Math.random() * 2).toFixed(2) + 's';
+
+        raindropsContainer.appendChild(drop);
+      }
+    }
+  }
+
+} catch (e) {
+  console.warn('Error en animación de precipitación:', e);
+}
+
 
   // HUMEDAD
   try {
@@ -158,6 +169,7 @@ export function updateVisuals(clima) {
     
     const windValue = document.querySelector('.wind-value');
     const windStatus = document.getElementById('windStatus');
+    const windBackground = document.getElementById('windBackground');
     
     if (windValue) {
       const pathLength = 251;
@@ -175,6 +187,51 @@ export function updateVisuals(clima) {
     else if (windSpeed < 50) desc = 'Viento fuerte';
     else desc = 'Temporal';
     if (windStatus) windStatus.textContent = desc;
+    
+    // Crear animación de líneas de viento
+    if (windBackground) {
+      windBackground.innerHTML = ''; // Limpiar líneas anteriores
+      
+      // Calcular velocidad de animación basada en velocidad del viento
+      // Viento más fuerte = animación más rápida
+      let animationSpeed = 3; // velocidad base en segundos
+      if (windSpeed < 5) animationSpeed = 6; // muy lento
+      else if (windSpeed < 15) animationSpeed = 4; // lento
+      else if (windSpeed < 30) animationSpeed = 2.5; // medio
+      else if (windSpeed < 50) animationSpeed = 1.5; // rápido
+      else animationSpeed = 1; // muy rápido
+      
+      // Calcular número de líneas basado en velocidad del viento
+      let lineCount = Math.floor(windSpeed / 5) + 3;
+      lineCount = Math.min(Math.max(lineCount, 3), 12); // entre 3 y 12 líneas
+      
+      for (let i = 0; i < lineCount; i++) {
+        const line = document.createElement('div');
+        line.classList.add('wind-line');
+        
+        // Posición vertical aleatoria
+        line.style.top = `${Math.random() * 100}%`;
+        
+        // Ancho variable para las líneas
+        const width = Math.random() * 150 + 80; // entre 80px y 230px
+        line.style.width = `${width}px`;
+        
+        // Altura variable para simular diferentes intensidades
+        const height = Math.random() * 2 + 1.5; // entre 1.5px y 3.5px
+        line.style.height = `${height}px`;
+        
+        // Delay aleatorio para que no todas las líneas salgan al mismo tiempo
+        line.style.animationDelay = `${Math.random() * animationSpeed}s`;
+        
+        // Aplicar la velocidad de animación
+        line.style.animationDuration = `${animationSpeed}s`;
+        
+        // Opacidad variable
+        line.style.opacity = Math.random() * 0.4 + 0.4; // entre 0.4 y 0.8
+        
+        windBackground.appendChild(line);
+      }
+    }
   } catch(e){}
 
   // UV
@@ -187,8 +244,7 @@ export function updateVisuals(clima) {
     
     const path = document.querySelector('.uv-value');
     const statusEl = document.getElementById('uvStatus');
-    const descEl = document.getElementById('uvDesc');
-    
+  
     if (path) {
       const totalLength = 126;
       path.style.strokeDasharray = totalLength;
@@ -198,14 +254,13 @@ export function updateVisuals(clima) {
       }, 200);
       
       let estado, descripcion;
-      if (uvVal <= 2) { estado = 'Bajo '; descripcion = 'El nivel máximo de UV será bajo.'; }
-      else if (uvVal <= 5) { estado = 'Moderado '; descripcion = 'El nivel máximo de UV será moderado.'; }
-      else if (uvVal <= 7) { estado = 'Alto '; descripcion = 'El nivel máximo de UV será alto.'; }
-      else if (uvVal <= 10) { estado = 'Muy alto '; descripcion = 'El nivel máximo de UV será muy alto.'; }
-      else { estado = 'Extremo '; descripcion = 'El nivel máximo de UV será extremo.'; }
+      if (uvVal <= 2) { estado = 'Bajo '; }
+      else if (uvVal <= 5) { estado = 'Moderado '; }
+      else if (uvVal <= 7) { estado = 'Alto ';  }
+      else if (uvVal <= 10) { estado = 'Muy alto ';  }
+      else { estado = 'Extremo ';  }
       
       if (statusEl) statusEl.textContent = estado;
-      if (descEl) descEl.textContent = descripcion;
     }
   } catch(e){}
 }
