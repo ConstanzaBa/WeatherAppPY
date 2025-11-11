@@ -1,57 +1,3 @@
-/* === ROOT: Paleta moderna glass === */
-:root {
-  --primary-color: #3d8bfd;
-  --secondary-color: #9ec5fe;
-  --accent-color: #ffd66b;
-  --success-color: #4cd68e;
-  --warning-color: #f9b84a;
-  --error-color: #ff6f6f;
-
-  --bg-color: #e8f1fb;
-  --card-bg: rgba(255, 255, 255, 0.6);
-  --card-border: rgba(255, 255, 255, 0.4);
-
-  --text-color: #1f2a44;
-  --subtext-color: #5f6b86;
-  --title-color: #1a2137;
-
-  --shadow-soft: 0 6px 16px rgba(0, 0, 0, 0.1);
-  --shadow-strong: 0 12px 30px rgba(0, 0, 0, 0.2);
-}
-
-/* === TEMA OSCURO === */
-:root.dark-theme {
-  --primary-color: #6ea8fe;
-  --secondary-color: #4d84ff;
-  --accent-color: #ffd66b;
-  --success-color: #5be39c;
-  --warning-color: #f9b84a;
-  --error-color: #ff8a8a;
-
-  --bg-color: #0f1115;
-  --card-bg: rgba(27, 28, 30, 0.6);
-  --card-border: rgba(255, 255, 255, 0.08);
-
-  --text-color: #e5e7eb;
-  --subtext-color: #aeb2bc;
-  --title-color: #ffffff;
-
-  --shadow-soft: 0 6px 20px rgba(0, 0, 0, 0.4);
-  --shadow-strong: 0 12px 40px rgba(0, 0, 0, 0.7);
-}
-
-/* === BODY === */
-body {
-  font-family: 'Poppins', sans-serif;
-  background: var(--bg-color);
-  color: var(--text-color);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 2rem;
-  min-height: 100vh;
-}
-
 /* === CONTENEDOR PRINCIPAL === */
 .container {
   display: flex;
@@ -65,8 +11,7 @@ body {
 /* === GRID GENERAL === */
 .grid-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1.5rem;
+  gap: 3rem;
   width: 100%;
 }
 
@@ -713,7 +658,7 @@ background: var(--card-bg);
   grid-area: 1/2;
   display: grid;
   gap: 1rem;
-  background: var(--bg-color);
+  background: var(--card-bg);
   padding: 2rem;
   border-radius: 1.5rem;
   min-width:21rem;

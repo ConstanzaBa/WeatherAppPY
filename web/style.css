@@ -1,34 +1,73 @@
-/* === ROOT: Paleta base === */
+/* === ROOT: Paleta moderna glass + temas === */
 :root {
-  --primary-color: #B3D9FC;
-  --secondary-color: #ECF6FF;
-  --background-gradient: linear-gradient(135deg, #13315C 0%, #B3D9FC 50%, #B3D9FC 100%);
-  --text-color: #444;
-  --subtext-color: #777;
-  --detail-bg: rgba(236, 246, 255, 0.6);
-  --container-bg: rgba(56, 112, 176, 0.10);
-  --box-shadow-color: rgba(179, 217, 252, 0.4);
+  /* Colores principales */
+  --primary-color: #3d8bfd;
+  --secondary-color: #9ec5fe;
+  --accent-color: #ffd66b;
+  --success-color: #4cd68e;
+  --warning-color: #f9b84a;
+  --error-color: #ff6f6f;
 
-  /* Variables para header */
-  --header-blur: 10px;
-  --header-bg: rgba(236, 246, 255, 0.1); 
-  --header-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-}
-
-/* === MODO OSCURO === */
-:root.dark-theme {
-  --primary-color: #12233b;
-  --secondary-color: #050f1d;
-  --background-gradient: linear-gradient(135deg, #0b1625 0%, #1f385c 60%, #383c42 100%);
-  --text-color: #e4e8f0;
-  --subtext-color: #a7b0c4;
-  --detail-bg: rgba(40, 60, 90, 0.4);
-  --container-bg: rgba(24, 40, 66, 0.3);
-  --box-shadow-color: rgba(0, 0, 0, 0.6);
+  /* Fondos */
+  --bg-color: #3870B0;
+  --card-bg: rgba(255, 255, 255, 0.25);
+  --card-border: rgba(255, 255, 255, 0.4);
 
   /* Header */
-  --header-bg: rgba(20, 30, 50, 0.35);
-  --header-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+  --header-bg: rgba(255, 255, 255, 0.25);
+  --header-blur: 10px;
+  --header-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+
+  /* Textos */
+  --text-color: #222;
+  --subtext-color: #5f6b86;
+  --title-color: #1a2137;
+
+  /* Iconos */
+  --icon-color: #6eb8fc;
+  --icon-hover: #9ec5fe;
+
+  /* Sombras */
+  --shadow-soft: 0 6px 16px rgba(0, 0, 0, 0.1);
+  --shadow-strong: 0 12px 30px rgba(0, 0, 0, 0.2);
+}
+
+/* === TEMA OSCURO === */
+:root.dark-theme {
+  /* Colores principales */
+  --primary-color: #ebeef2;
+  --secondary-color: #ccdff1;
+  --accent-color: #ffd66b;
+  --success-color: #5be39c;
+  --warning-color: #f9b84a;
+  --error-color: #ff8a8a;
+
+  /* Fondos */
+  --bg-color: #13315C;
+  --card-bg: rgba(27, 28, 30, 0.6);
+  --card-border: rgba(255, 255, 255, 0.08);
+
+  /* Header */
+  --header-bg: rgba(15, 17, 26, 0.5);
+  --header-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
+
+  /* Textos */
+  --text-color: #f5f5f5;
+  --subtext-color: #aeb2bc;
+  --title-color: #ffffff;
+
+  /* Iconos */
+  --icon-color: #d6e7f8;
+  --icon-hover: #9ec5fe;
+
+  /* Sombras */
+  --shadow-soft: 0 6px 20px rgba(0, 0, 0, 0.4);
+  --shadow-strong: 0 12px 40px rgba(0, 0, 0, 0.7);
+}
+
+/* === TRANSICIONES GLOBALES === */
+html, body, * {
+  transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease;
 }
 
 /* === ESTILOS GLOBALES === */
@@ -41,6 +80,8 @@ body {
   font-family: "Perpetua", Georgia, serif;
   background: var(--background-gradient);
   background-attachment: fixed;
+  background-color: var(--bg-color);
+  color: var(--text-color);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -127,7 +168,7 @@ path[id^="AR"]:hover {
 }
 
 .dark-theme path[id^="AR"] {
-  fill: #79818acc;
+  fill: #084c9a;
   stroke: #e4e8ee;
 }
 
