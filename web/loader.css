@@ -19,11 +19,13 @@
 }
 
 .earth p {
-  color: #6e7ad0;
+  color: #a13dee;
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: 1.8rem;
+  margin-left: 2rem;
+  margin-top:1rem;
 }
 
 .earth-loader svg:nth-child(1) {

@@ -1,4 +1,6 @@
-/* === CONTENEDOR PRINCIPAL === */
+@import url('style.css');
+
+
 .container {
   display: flex;
   flex-direction: column;
@@ -11,7 +13,7 @@
 /* === GRID GENERAL === */
 .grid-container {
   display: grid;
-  gap: 3rem;
+  gap: 4rem;
   width: 100%;
 }
 
@@ -34,8 +36,8 @@
 /* === CLIMA ACTUAL === */
 .provincia-container {
   grid-area: 1/1;
-  width: 75%;
-  height:79%;
+  width: 110%;
+  height: 81%;
   padding: 2rem;
   text-align: center;
   background: var(--card-bg);
@@ -67,13 +69,14 @@
   align-items: center;
   justify-content: space-between;
   text-align: center;
+  flex-direction: column;
 }
 
 .temperature {
   font-size: 3rem;
   font-weight: 400;
-  margin-top:40px;
-  margin-left:1.6rem;
+  margin-top: 40px;
+  margin-left: 1.6rem;
   color: var(--primary-color);
 }
 
@@ -81,6 +84,7 @@
   font-size: 1.1rem;
   color: var(--text-color);
 }
+
 .weather-details {
   display: grid;
   grid-template-columns: repeat(3, 0fr);
@@ -129,12 +133,12 @@
 /* Precipitación */
 
 .precipitation-card {
-   background: var(--card-bg);
+  background: var(--card-bg);
   backdrop-filter: blur(10px);
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
   padding: 25px 20px;
-  max-width:20rem;
-  max-height:10rem;
+  max-width: 20rem;
+  max-height: 10rem;
 }
 
 .precipitation-card:hover {
@@ -159,7 +163,7 @@
   width: 100%;
   height: 70%;
   border-radius: 12px 12px 60% 60%;
-  background: linear-gradient(to bottom right, rgba(180,200,255,0.15), rgba(80,90,130,0.2));
+  background: linear-gradient(to bottom right, rgba(180, 200, 255, 0.15), rgba(80, 90, 130, 0.2));
   backdrop-filter: blur(2px);
   overflow: hidden;
 }
@@ -170,7 +174,7 @@
   left: 0;
   width: 100%;
   height: 0%;
-  background: linear-gradient(to top, #4da0ff 0%, #80c0ff 80%);
+  background: linear-gradient(to top, var(--rain-drop), var(--rain-light));
   border-radius: 0 0 60% 60%;
   transition: height 1s ease;
   z-index: 1;
@@ -191,8 +195,8 @@
   position: absolute;
   width: 1px;
   height: 5px;
-  margin-top:-10px;
-  background: #4da0ff;
+  margin-top: -10px;
+  background: var(--rain-drop);
   opacity: 0.7;
   border-radius: 0%;
   animation: fall linear infinite;
@@ -204,9 +208,11 @@
     transform: translateY(-10px);
     opacity: 0;
   }
+
   10% {
     opacity: 1;
   }
+
   100% {
     transform: translateY(220px);
     opacity: 0;
@@ -229,20 +235,22 @@
 .precip-status {
   margin-top: 160px;
   font-size: 1rem;
-  color: #ccc;
+  color: var(--precip-status);
   letter-spacing: 0.3px;
 }
 
 /* Visibilidad */
 
 .visibility-card {
-   background: var(--card-bg);
+  position: relative;
+  background: var(--card-bg);
   backdrop-filter: blur(8px);
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
   justify-content: space-between;
   padding: 25px 20px;
-  max-width:20rem;
-  max-height:10rem;
+  max-width: 20rem;
+  max-height: 10rem;
+  overflow: hidden;
 }
 
 .visibility-card:hover {
@@ -254,7 +262,7 @@
   font-size: 1.3rem;
   letter-spacing: 0.5px;
   z-index: 2;
-  margin-top:-0.8rem;
+  margin-top: -0.8rem;
   position: relative;
 }
 
@@ -266,9 +274,9 @@
   width: 100%;
   height: 70%;
   border-radius: 12px 12px 60% 60%;
-  background: linear-gradient(to bottom, #1c263b, #0b1522);
+  background: linear-gradient(to bottom, var(--sky-top), var(--sky-bottom));
   overflow: hidden;
-  z-index: 0;
+  z-index: 1;
 }
 
 /* === NUBES === */
@@ -282,25 +290,27 @@
 .cloud svg {
   width: 100%;
   height: auto;
-  fill: #cdd5e0;
+  fill: var(--cloud-medium);
 }
 
 .cloud.small svg {
   width: 100px;
   opacity: 0.8;
-  fill: #dce3ee;
+  fill: var(--cloud-light);
 }
+
 
 .cloud.big svg {
   width: 200px;
   opacity: 0.9;
-  fill: #bac6d6;
+  fill: var(--cloud-dark);
 }
 
 @keyframes moveCloud {
   0% {
     transform: translateX(-250px);
   }
+
   100% {
     transform: translateX(400px);
   }
@@ -320,7 +330,7 @@
   font-size: 1.6rem;
   color: var(--text-color);
   font-weight: 500;
-  margin-bottom:4rem;
+  margin-bottom: 4rem;
 }
 
 .vis-value span {
@@ -329,8 +339,8 @@
 
 .vis-status {
   font-size: 1rem;
-  color: #aaa;
-  margin-top:-0.5rem;
+  color: var(--info-muted);
+  margin-top: -0.5rem;
 }
 
 /* Sensación Térmica */
@@ -354,21 +364,21 @@
   align-items: stretch;
   gap: 24px;
   flex-direction: row;
-  margin-right:1rem;
+  margin-right: 1rem;
   justify-content: flex-end;
 }
 
 .thermometer {
   position: relative;
-  width: 50px;
+  width: 40px;
   height: 150px;
-  background: linear-gradient(180deg, #c0c5d1, #e0e9ff);
+  background: linear-gradient(180deg, var(--thermo-body), var(--thermo-body));
   border-radius: 20px;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid var(--thermo-border);
   box-shadow: inset 0 0 12px rgb(75 72 72 / 27%),
-              0 0 8px rgba(255, 255, 255, 0.15);
-  margin-left:1rem;
+    0 0 8px rgba(255, 255, 255, 0.15);
+  margin-left: 2rem;
 }
 
 .thermo-fill {
@@ -376,9 +386,9 @@
   bottom: 0;
   width: 100%;
   border-radius: 20px;
-  background: linear-gradient(to top, #ffae42, #ff6f00);
+  background: linear-gradient(to top, var(--thermo-top), var(--thermo-bottom));
   transition: height 1.2s cubic-bezier(0.4, 0, 0.2, 1),
-              background 0.8s ease;
+    background 0.8s ease;
   filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.3));
 }
 
@@ -390,11 +400,11 @@
   width: 70px;
   height: 70px;
   border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  background: linear-gradient(145deg, #3a3f61, #1f2235);
+  border: 1px solid var(--thermo-border);
+  background: linear-gradient(145deg, var(--thermo-bulb), var(--thermo-body));
   overflow: hidden;
   box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5),
-              0 0 8px rgba(255, 255, 255, 0.1);
+    0 0 8px rgba(255, 255, 255, 0.1);
   transition: background 0.8s ease, box-shadow 0.8s ease;
 }
 
@@ -411,12 +421,12 @@
   font-weight: 500;
   opacity: 0.9;
   letter-spacing: 0.5px;
-  margin-left:-2rem;
+  margin-left: -2rem;
 }
 
-#tempValue{
-  left:58%;
-  top:60%;
+#tempValue {
+  left: 62%;
+  top: 60%;
 }
 
 .temp-status {
@@ -424,17 +434,17 @@
   font-size: 1.1em;
   opacity: 0.9;
   letter-spacing: 0.3px;
-  color: #ccc;
-  margin-left:-2rem;
+  color: var(--info-muted);
+  margin-left: -2rem;
 }
 
 /* Humedad */
 
 .humidity-card {
-box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
-width: 14rem;
-height: 13rem;
-background: var(--card-bg);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+  width: 14rem;
+  height: 13rem;
+  background: var(--card-bg);
 
 }
 
@@ -445,8 +455,8 @@ background: var(--card-bg);
 
 .humidity-card h2 {
   margin-bottom: 1px;
-  margin-top:0.5rem;
-  font-size:1.3rem;
+  margin-top: 0.5rem;
+  font-size: 1.3rem;
 }
 
 .humidity-gauge {
@@ -464,16 +474,17 @@ background: var(--card-bg);
 
 .bg-ring {
   fill: none;
-  stroke: #e4e6f2;
+  stroke: var(--ring-bg);
   stroke-width: 12;
 }
 
 .progress-ring {
   fill: none;
-  stroke: #4da0ff;
+  stroke: var(--ring-progress);
   stroke-width: 12;
   stroke-linecap: round;
-  stroke-dasharray: 339.292; /* 2 * PI * r */
+  stroke-dasharray: 339.292;
+  /* 2 * PI * r */
   stroke-dashoffset: 339.292;
   transition: stroke-dashoffset 1s ease;
 }
@@ -488,9 +499,9 @@ background: var(--card-bg);
 
 .hum-status {
   font-size: 1em;
-  color: #aaa;
-  margin-bottom:0.2rem;
-  margin-top:-0.5rem;
+  color: var(--info-muted);
+  margin-bottom: 0.2rem;
+  margin-top: -0.5rem;
 }
 
 /* Viento */
@@ -501,7 +512,7 @@ background: var(--card-bg);
   overflow: hidden;
   width: 14rem;
   height: 13rem;
-   background: var(--card-bg);
+  background: var(--card-bg);
 }
 
 .wind-card:hover {
@@ -509,9 +520,9 @@ background: var(--card-bg);
   box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6);
 }
 
-.wind-card h2{
-  margin-bottom:1.2rem;
-  font-size:1.3rem;
+.wind-card h2 {
+  margin-bottom: 1.2rem;
+  font-size: 1.3rem;
 }
 
 .wind-card h2,
@@ -532,26 +543,54 @@ background: var(--card-bg);
   opacity: 0.8;
 }
 
+/* === LÍNEAS DE VIENTO === */
 .wind-line {
   position: absolute;
   height: 2px;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), rgba(255,255,255,0.4), transparent);
+  background: linear-gradient(90deg,
+      transparent,
+      var(--wind-line-light),
+      var(--wind-line-medium),
+      transparent);
   animation: windMove 3s linear infinite;
   border-radius: 2px;
-  box-shadow: 0 0 4px rgba(255,255,255,0.3);
+  box-shadow: 0 0 6px rgba(180, 200, 255, 0.4);
+  opacity: 0.9;
+  transition: background 0.4s ease, box-shadow 0.4s ease;
 }
+
+/* === ANIMACIÓN DEL VIENTO === */
+@keyframes windMove {
+  0% {
+    transform: translateX(-10%);
+    opacity: 0.2;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateX(110%);
+    opacity: 0.2;
+  }
+}
+
 
 @keyframes windMove {
   0% {
     transform: translateX(-100%);
     opacity: 0;
   }
+
   10% {
     opacity: 1;
   }
+
   90% {
     opacity: 1;
   }
+
   100% {
     transform: translateX(calc(100vw));
     opacity: 0;
@@ -564,18 +603,18 @@ background: var(--card-bg);
 
 .wind-meter {
   position: relative;
-  
+
 }
 
 .wind-meter svg {
   width: 100%;
   height: 100%;
-   margin-top:-15px;
+  margin-top: -15px;
 }
 
 .wind-bg {
   fill: none;
-  stroke: #aaaaaa3b;
+  stroke: var(--wind-bg);
   stroke-width: 10;
   stroke-linecap: round;
 }
@@ -584,16 +623,19 @@ background: var(--card-bg);
   fill: none;
   stroke-width: 10;
   stroke-linecap: round;
-  stroke: url(#windGradient);
-  stroke-dasharray: 251;
-  stroke-dashoffset: 250;
+  stroke: url(#windGradientLight);
   transition: stroke-dashoffset 1s ease;
-  
+}
+
+
+
+.dark-theme .wind-value {
+  stroke: url(#windGradientDark);
 }
 
 .wind-status {
   font-size: 1em;
-  color: #aaa;
+  color: var(--info-muted);
 }
 
 /* Radiación UV */
@@ -630,14 +672,14 @@ background: var(--card-bg);
 
 .uv-bg {
   fill: none;
-  stroke: #aaaaaa30;
+  stroke: var(--wind-bg);
   stroke-width: 8;
   stroke-linecap: round;
 }
 
 .uv-value {
   fill: none;
-  stroke: url(#uvGradient);
+  stroke: url(#uvGradientLight);
   stroke-width: 8;
   stroke-linecap: round;
   stroke-dasharray: 126;
@@ -645,8 +687,13 @@ background: var(--card-bg);
   transition: stroke-dashoffset 1s ease;
 }
 
+
+.dark-theme .uv-value {
+  stroke: url(#uvGradientDark);
+}
+
 .uv-status {
-  color: #aba5a5;
+  color: var(--info-muted);
   font-weight: 500;
   margin-bottom: -10px;
 }
@@ -661,13 +708,13 @@ background: var(--card-bg);
   background: var(--card-bg);
   padding: 2rem;
   border-radius: 1.5rem;
-  min-width:21rem;
-  margin-left:-20px;
+  min-width: 22rem;
+  margin-left: 35px;
 }
 
 .chart {
   height: 50px;
-  width:350px;
+  width: 350px;
   display: flex;
   align-items: flex-end;
   gap: 8px;
@@ -675,15 +722,13 @@ background: var(--card-bg);
 
 .chart-bar {
   flex: 1;
-  background: linear-gradient(
-    to top,
-    var(--primary-color),
-    var(--secondary-color)
-  );
+  background: linear-gradient(to top,
+      var(--primary-color),
+      var(--secondary-color));
   border-radius: 8px 8px 0 0;
   position: relative;
   height: 50px;
-  width:350px;
+  width: 350px;
 }
 
 .chart-label {
@@ -694,7 +739,7 @@ background: var(--card-bg);
   font-size: 11px;
   color: var(--subtext-color);
   white-space: nowrap;
-  
+
 }
 
 .section-title {
@@ -708,7 +753,7 @@ background: var(--card-bg);
   gap: 1rem;
   overflow-x: auto;
   height: 100px;
-  width:350px;
+  width: 350px;
   margin-top: 2rem;
   padding-bottom: 1rem;
   scrollbar-width: thin;

@@ -87,8 +87,8 @@
   --container-width: 2.4em;
   --container-height: 1.2em;
   --container-radius: 2em;
-  --container-light-bg: #3d7eae;
-  --container-night-bg: #1d1f2c;
+  --container-light-bg: #8260e0;
+  --container-night-bg: #0c0d1d;
   --circle-container-diameter: 1.5em;
   --sun-moon-diameter: 1em;
   --sun-bg: #ecca2f;
@@ -98,8 +98,8 @@
     (var(--circle-container-diameter) - var(--container-height)) / 2 * -1
   );
   --stars-color: #fff;
-  --clouds-color: #f3fdff;
-  --back-clouds-color: #aacadf;
+  --clouds-color: #f8f3ff;
+  --back-clouds-color: #c4baff;
   --transition: 0.4s cubic-bezier(0, -0.02, 0.4, 1.25);
   --circle-transition: 0.25s cubic-bezier(0, -0.02, 0.35, 1.17);
   transform: scale(1);

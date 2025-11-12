@@ -1,69 +1,144 @@
-/* === ROOT: Paleta moderna glass + temas === */
 :root {
-  /* Colores principales */
-  --primary-color: #3d8bfd;
-  --secondary-color: #9ec5fe;
-  --accent-color: #ffd66b;
-  --success-color: #4cd68e;
-  --warning-color: #f9b84a;
-  --error-color: #ff6f6f;
+  /* === PALETA BASE === */
+  --primary-color: #9381ff;
+  --secondary-color: #b8b8ff;
+  --accent-color: #ffd8be;
+  --success-color: #ffeedd;
+  --warning-color: #ffd8be;
+  --error-color: #ff9ea8;
 
-  /* Fondos */
-  --bg-color: #3870B0;
-  --card-bg: rgba(255, 255, 255, 0.25);
-  --card-border: rgba(255, 255, 255, 0.4);
+  --primary-dark: #7160e0;
+  --primary-light: #7b85ff;
+  --text-highlight: #c4baff;
 
-  /* Header */
-  --header-bg: rgba(255, 255, 255, 0.25);
-  --header-blur: 10px;
-  --header-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  --bg-color: #dad7f878;
+  --card-bg: #d0caff00;
+  --card-border: #d0caff00;
 
-  /* Textos */
-  --text-color: #222;
-  --subtext-color: #5f6b86;
-  --title-color: #1a2137;
+  --header-bg: #d0caff00;
+  --header-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 
-  /* Iconos */
-  --icon-color: #6eb8fc;
-  --icon-hover: #9ec5fe;
+  --text-color: #2a2445;
+  --subtext-color: #585377;
+  --title-color: #1d1540;
 
-  /* Sombras */
+  --icon-color: #7160e0;
+  --icon-hover: #b8b8ff;
+
   --shadow-soft: 0 6px 16px rgba(0, 0, 0, 0.1);
   --shadow-strong: 0 12px 30px rgba(0, 0, 0, 0.2);
+
+  /* === info.css (armonizado) === */
+  
+
+  /* Cielo y nubes */
+   --sky-good-top: #c6d8ff;     /* azul lavanda */
+  --sky-good-bottom: #f6eaff;  /* rosado violeta suave */
+
+  --sky-medium-top: #b1b3ff;  
+  --sky-medium-bottom: #d9d0ff;
+
+  --sky-low-top: #9e9eff;
+  --sky-low-bottom: #bfb4ff;
+
+  --sky-verylow-top: #8576ff;
+  --sky-verylow-bottom: #a29bff;
+  --cloud-light: #ffffff;
+  --cloud-medium: #e6e2ff;
+  --cloud-dark: #c8c3ff;
+
+  /* Lluvia */
+  --rain-drop: #b3a4ff;
+  --rain-light: #d0caff;
+  --precip-status: #b8b8ff;
+
+  /* Termómetro */
+  --thermo-body: #f4f2ff;
+  --thermo-border: rgba(147, 129, 255, 0.25);
+  --thermo-bulb: #9381ff;
+
+  /* Indicadores generales */
+  --info-muted: #9f98c9;
+  --info-alt: #b8b0ff;
+
+  /* Anillos indicadores */
+  --ring-bg: #e8e4ff;
+  --ring-progress: #9381ff;
+
+  /* Viento */
+  --wind-line-light: rgba(179, 171, 255, 0.7);
+  --wind-line-medium: rgba(200, 190, 255, 0.5);
+  --wind-bg: #cfc9ff52;
 }
 
-/* === TEMA OSCURO === */
 :root.dark-theme {
-  /* Colores principales */
-  --primary-color: #ebeef2;
-  --secondary-color: #ccdff1;
-  --accent-color: #ffd66b;
-  --success-color: #5be39c;
-  --warning-color: #f9b84a;
-  --error-color: #ff8a8a;
+  /* === PALETA BASE OSCURA === */
+  --primary-color: #b9b5ff;
+  --secondary-color: #9ba9ff;
+  --accent-color: #c4baff;
+  --success-color: #e2c6ff;
+  --warning-color: #d8c2ff;
+  --error-color: #ff7a8f;
 
-  /* Fondos */
-  --bg-color: #13315C;
-  --card-bg: rgba(27, 28, 30, 0.6);
-  --card-border: rgba(255, 255, 255, 0.08);
+  --primary-dark: #14142b;
+  --primary-light: #7b85ff;
+  --text-highlight: #c4baff;
 
-  /* Header */
-  --header-bg: rgba(15, 17, 26, 0.5);
-  --header-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
+  --bg-color: #0e0f1a;
+  --card-bg: rgba(50, 50, 80, 0.45);
+  --card-border: rgba(255, 255, 255, 0.1);
 
-  /* Textos */
-  --text-color: #f5f5f5;
-  --subtext-color: #aeb2bc;
+  --header-bg: rgba(25, 25, 45, 0.45);
+  --header-shadow: 0 4px 14px rgba(0, 0, 0, 0.6);
+
+  --text-color: #f9f9ff;
+  --subtext-color: #bdbdff;
   --title-color: #ffffff;
 
-  /* Iconos */
-  --icon-color: #d6e7f8;
-  --icon-hover: #9ec5fe;
+  --icon-color: #c4baff;
+  --icon-hover: #b9b5ff;
 
-  /* Sombras */
   --shadow-soft: 0 6px 20px rgba(0, 0, 0, 0.4);
-  --shadow-strong: 0 12px 40px rgba(0, 0, 0, 0.7);
+  --shadow-strong: 0 12px 38px rgba(0, 0, 0, 0.65);
+
+  /* === info.css (armonizado oscuro) === */
+
+ --sky-good-top: #4b4376;
+  --sky-good-bottom: #2b2245;
+
+  --sky-medium-top: #3d3466;
+  --sky-medium-bottom: #1d1838;
+
+  --sky-low-top: #2d2757;
+  --sky-low-bottom: #161230;
+
+  --sky-verylow-top: #20183f;
+  --sky-verylow-bottom: #0f0b1f;
+  --cloud-light: #7b75a6;
+  --cloud-medium: #625d8c;
+  --cloud-dark: #4e4a73;
+
+  --rain-drop: #a69cff;
+  --rain-light: #bcb3ff;
+  --precip-status: #8c87cc;
+
+  --thermo-body: #3a3f61;
+  --thermo-border: rgba(200, 180, 255, 0.25);
+  --thermo-bulb: #7160e0;
+
+  --info-muted: #a79edb;
+  --info-alt: #b9b5ff;
+
+  --ring-bg: #3e3b63;
+  --ring-progress: #b8b0ff;
+
+  --test: #ceb9f7;
+  --wind-line-light: rgba(180, 160, 255, 0.7);
+  --wind-line-medium: rgba(150, 130, 255, 0.5);
+  --wind-bg: #2e2a4d80;
 }
+
+
 
 /* === TRANSICIONES GLOBALES === */
 html, body, * {
@@ -89,7 +164,6 @@ body {
   align-items: center;
   padding: 2rem;
   margin: 0;
-  color: var(--text-color);
   transition: background-color 0.4s ease, color 0.4s ease, background 0.4s ease;
 }
 
@@ -98,14 +172,15 @@ body {
   margin: 2rem 0rem;
   max-width: 44rem;
   border-radius: 1.5rem;
-  box-shadow: 0 4px 20px var(--box-shadow-color);
+  box-shadow: var(--shadow-soft);
   overflow: hidden;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 0;
   transition: all 0.4s ease;
-  background: var(--detail-bg);
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
   backdrop-filter: blur(10px);
 }
 
@@ -117,7 +192,7 @@ body {
 
 .card.mapa h1 {
   position: absolute;
-  color: #3870b0;
+  color: var(--primary-dark);
   font-weight: bold;
   font-size: 42px;
   letter-spacing: 1px;
@@ -129,7 +204,7 @@ body {
 }
 
 .dark-theme .card.mapa h1 {
-  color: #7ba4e1;
+  color: var(--text-highlight);
 }
 
 .mapa-container {
@@ -156,7 +231,7 @@ svg {
 }
 
 path[id^="AR"] {
-  fill: #73bbff;
+  fill: var(--primary-light);
   stroke: #ffffff;
   stroke-width: 1;
   cursor: pointer;
@@ -164,16 +239,16 @@ path[id^="AR"] {
 }
 
 path[id^="AR"]:hover {
-  fill: #3870b0;
+  fill: var(--primary-dark);
 }
 
 .dark-theme path[id^="AR"] {
-  fill: #084c9a;
+  fill: var(--primary-light);
   stroke: #e4e8ee;
 }
 
 .dark-theme path[id^="AR"]:hover {
-  fill: #081d3d;
+  fill: var(--primary-dark);
 }
 
 /* === LOADER === */
@@ -183,7 +258,7 @@ path[id^="AR"]:hover {
   align-content: space-around;
   animation: aparecer 0.4s ease forwards;
   min-height: 900px;
-  min-width:48rem;
+  min-width: 48rem;
   overflow-y: auto;
   padding: 2rem 0;
   justify-content: space-around;
@@ -192,12 +267,12 @@ path[id^="AR"]:hover {
 
 #loader-text {
   font-size: 22px;
-  color: #3870b0;
+  color: var(--primary-dark);
   line-height: 1.5;
 }
 
 .dark-theme #loader-text {
-  color: #9ec5fe;
+  color: var(--secondary-color);
 }
 
 /* === INFO === */
@@ -207,7 +282,7 @@ path[id^="AR"]:hover {
   align-items: center;
   animation: aparecer 0.4s ease forwards;
   height: auto;
-  min-width:30rem;
+  min-width: 30rem;
 }
 
 /* === ANIMACIONES === */
