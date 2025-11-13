@@ -1,13 +1,11 @@
-@import url('style.css');
-
+@import url("style.css");
 
 .container {
   display: flex;
   flex-direction: column;
   justify-content: center;
   gap: 2.5rem;
-  width: 90%;
-  max-width: 1400px;
+  width: 100%;
 }
 
 /* === GRID GENERAL === */
@@ -36,8 +34,7 @@
 /* === CLIMA ACTUAL === */
 .provincia-container {
   grid-area: 1/1;
-  width: 110%;
-  height: 81%;
+  width: 100%;
   padding: 2rem;
   text-align: center;
   background: var(--card-bg);
@@ -95,17 +92,16 @@
 }
 
 .detail-item {
-  width: 180px;
-  height: 185px;
+  background: var(--card-bg);
+  width: 14rem;
+  height: 13rem;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   text-align: center;
   border-radius: 20px;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   overflow: hidden;
-  gap: 10px;
 }
 
 .detail-item .icon {
@@ -121,24 +117,17 @@
 }
 
 .detail-item .value {
-  font-size: 1.8rem;
+  font-size: 1.4rem;
   font-weight: 500;
   color: var(--title-color);
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
 }
 
 /* Precipitación */
 
 .precipitation-card {
-  background: var(--card-bg);
   backdrop-filter: blur(10px);
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
-  padding: 25px 20px;
-  max-width: 20rem;
-  max-height: 10rem;
+  justify-content: space-between;
 }
 
 .precipitation-card:hover {
@@ -148,9 +137,9 @@
 
 .precipitation-card h2 {
   font-size: 1.3rem;
-  margin-bottom: 9rem;
   letter-spacing: 0.5px;
   z-index: 2;
+  margin-top: 1.2rem;
   position: relative;
 }
 
@@ -163,7 +152,11 @@
   width: 100%;
   height: 70%;
   border-radius: 12px 12px 60% 60%;
-  background: linear-gradient(to bottom right, rgba(180, 200, 255, 0.15), rgba(80, 90, 130, 0.2));
+  background: linear-gradient(
+    to bottom right,
+    rgba(180, 200, 255, 0.15),
+    rgba(80, 90, 130, 0.2)
+  );
   backdrop-filter: blur(2px);
   overflow: hidden;
 }
@@ -202,7 +195,6 @@
   animation: fall linear infinite;
 }
 
-
 @keyframes fall {
   0% {
     transform: translateY(-10px);
@@ -220,10 +212,9 @@
 }
 
 .precip-info {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
   text-align: center;
+  display: grid;
+  margin-bottom: 0.5rem;
 }
 
 .precip-value {
@@ -242,15 +233,9 @@
 /* Visibilidad */
 
 .visibility-card {
-  position: relative;
-  background: var(--card-bg);
   backdrop-filter: blur(8px);
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
   justify-content: space-between;
-  padding: 25px 20px;
-  max-width: 20rem;
-  max-height: 10rem;
-  overflow: hidden;
 }
 
 .visibility-card:hover {
@@ -262,7 +247,7 @@
   font-size: 1.3rem;
   letter-spacing: 0.5px;
   z-index: 2;
-  margin-top: -0.8rem;
+  margin-top: 1.2rem;
   position: relative;
 }
 
@@ -274,7 +259,6 @@
   width: 100%;
   height: 70%;
   border-radius: 12px 12px 60% 60%;
-  background: linear-gradient(to bottom, var(--sky-top), var(--sky-bottom));
   overflow: hidden;
   z-index: 1;
 }
@@ -299,7 +283,6 @@
   fill: var(--cloud-light);
 }
 
-
 .cloud.big svg {
   width: 200px;
   opacity: 0.9;
@@ -318,19 +301,17 @@
 
 /* === INFORMACIÓN DE VISIBILIDAD === */
 .visibility-info {
-  position: absolute;
-  bottom: 15px;
-  left: 50%;
-  transform: translateX(-50%);
+  display: grid;
   text-align: center;
+  gap: 0.2rem;
   z-index: 2;
+  margin-bottom: 0.5rem;
 }
 
 .vis-value {
-  font-size: 1.6rem;
+  font-size: 1.4rem;
   color: var(--text-color);
   font-weight: 500;
-  margin-bottom: 4rem;
 }
 
 .vis-value span {
@@ -340,18 +321,14 @@
 .vis-status {
   font-size: 1rem;
   color: var(--info-muted);
-  margin-top: -0.5rem;
 }
 
 /* Sensación Térmica */
 
 .temp-card {
+  justify-content: center;
   backdrop-filter: blur(12px);
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
-  gap: 15px;
-  width: 14rem;
-  height: 13rem;
-  background: var(--card-bg);
 }
 
 .temp-card:hover {
@@ -361,17 +338,14 @@
 
 .thermo-container {
   display: flex;
-  align-items: stretch;
-  gap: 24px;
-  flex-direction: row;
-  margin-right: 1rem;
-  justify-content: flex-end;
+  align-items: center;
+  gap: 1rem;
 }
 
 .thermometer {
   position: relative;
-  width: 40px;
-  height: 150px;
+  width: 3rem;
+  height: 10rem;
   background: linear-gradient(180deg, var(--thermo-body), var(--thermo-body));
   border-radius: 20px;
   overflow: hidden;
@@ -387,8 +361,7 @@
   width: 100%;
   border-radius: 20px;
   background: linear-gradient(to top, var(--thermo-top), var(--thermo-bottom));
-  transition: height 1.2s cubic-bezier(0.4, 0, 0.2, 1),
-    background 0.8s ease;
+  transition: height 1.2s cubic-bezier(0.4, 0, 0.2, 1), background 0.8s ease;
   filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.3));
 }
 
@@ -410,42 +383,30 @@
 
 .temp-info {
   display: flex;
+  height: 10rem;
   flex-direction: column;
-  align-items: center;
-  gap: 58px;
-  justify-content: space-evenly;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 1rem;
 }
 
 .temp-info h2 {
   font-size: 1.3rem;
-  font-weight: 500;
   opacity: 0.9;
   letter-spacing: 0.5px;
-  margin-left: -2rem;
-}
-
-#tempValue {
-  left: 62%;
-  top: 60%;
 }
 
 .temp-status {
-  margin-top: 35px;
   font-size: 1.1em;
   opacity: 0.9;
   letter-spacing: 0.3px;
   color: var(--info-muted);
-  margin-left: -2rem;
 }
 
 /* Humedad */
 
 .humidity-card {
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
-  width: 14rem;
-  height: 13rem;
-  background: var(--card-bg);
-
 }
 
 .humidity-card:hover {
@@ -507,12 +468,10 @@
 /* Viento */
 
 .wind-card {
+  justify-content: space-between;
   position: relative;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
-  overflow: hidden;
-  width: 14rem;
-  height: 13rem;
-  background: var(--card-bg);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
 }
 
 .wind-card:hover {
@@ -521,15 +480,11 @@
 }
 
 .wind-card h2 {
-  margin-bottom: 1.2rem;
   font-size: 1.3rem;
-}
-
-.wind-card h2,
-.wind-card .wind-meter,
-.wind-card .wind-status {
+  letter-spacing: 0.5px;
+  z-index: 2;
+  margin-top: 1.2rem;
   position: relative;
-  z-index: 10;
 }
 
 .wind-background {
@@ -537,24 +492,27 @@
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
+  height: 70%;
   z-index: 1;
   overflow: hidden;
-  opacity: 0.8;
+  border-radius: 12px 12px 60% 60%;
 }
 
 /* === LÍNEAS DE VIENTO === */
 .wind-line {
   position: absolute;
   height: 2px;
-  background: linear-gradient(90deg,
-      transparent,
-      var(--wind-line-light),
-      var(--wind-line-medium),
-      transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.6),
+    rgba(255, 255, 255, 0.9),
+    rgba(255, 255, 255, 0.6),
+    transparent
+  );
   animation: windMove 3s linear infinite;
   border-radius: 2px;
-  box-shadow: 0 0 6px rgba(180, 200, 255, 0.4);
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
   opacity: 0.9;
   transition: background 0.4s ease, box-shadow 0.4s ease;
 }
@@ -575,7 +533,6 @@
     opacity: 0.2;
   }
 }
-
 
 @keyframes windMove {
   0% {
@@ -599,11 +556,12 @@
 
 .wind-title {
   font-size: 1.3em;
+  position: relative;
+  z-index: 1;
 }
 
 .wind-meter {
-  position: relative;
-
+  display: none;
 }
 
 .wind-meter svg {
@@ -619,22 +577,26 @@
   stroke-linecap: round;
 }
 
-.wind-value {
-  fill: none;
-  stroke-width: 10;
-  stroke-linecap: round;
-  stroke: url(#windGradientLight);
-  transition: stroke-dashoffset 1s ease;
+.wind-info {
+  display: grid;
+  text-align: center;
+  gap: 0.2rem;
+  z-index: 2;
+  margin-bottom: 0.5rem;
 }
 
-
+.wind-value {
+  font-size: 1.4rem;
+  color: var(--text-color);
+  font-weight: 500;
+}
 
 .dark-theme .wind-value {
   stroke: url(#windGradientDark);
 }
 
 .wind-status {
-  font-size: 1em;
+  font-size: 1rem;
   color: var(--info-muted);
 }
 
@@ -643,9 +605,6 @@
 .uv-card {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
   gap: 10px;
-  background: var(--card-bg);
-  width: 14rem;
-  height: 13rem;
 }
 
 .uv-card:hover {
@@ -687,7 +646,6 @@
   transition: stroke-dashoffset 1s ease;
 }
 
-
 .dark-theme .uv-value {
   stroke: url(#uvGradientDark);
 }
@@ -697,7 +655,6 @@
   font-weight: 500;
   margin-bottom: -10px;
 }
-
 
 /* Fin de parametros de clima */
 
@@ -722,9 +679,11 @@
 
 .chart-bar {
   flex: 1;
-  background: linear-gradient(to top,
-      var(--primary-color),
-      var(--secondary-color));
+  background: linear-gradient(
+    to top,
+    var(--primary-color),
+    var(--secondary-color)
+  );
   border-radius: 8px 8px 0 0;
   position: relative;
   height: 50px;
@@ -739,7 +698,6 @@
   font-size: 11px;
   color: var(--subtext-color);
   white-space: nowrap;
-
 }
 
 .section-title {

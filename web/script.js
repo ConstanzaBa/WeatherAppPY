@@ -50,10 +50,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     try {
       const response = await fetch("info.html");
       const html = await response.text();
-      const temp = document.createElement("div");
-      temp.innerHTML = html;
-      const container = temp.querySelector('.container');
-      if (container) {
+      const container = document.createElement("div");
+      container.innerHTML = html;
+      const containerEl = container.querySelector('.container');
+      if (containerEl) {
         // Intentar cargar el partial de detalles dinámicamente (si existe)
         try {
           const detailsResp = await fetch('partials/details.html');
@@ -63,16 +63,16 @@ document.addEventListener("DOMContentLoaded", async () => {
             detailsTemp.innerHTML = detailsHtml;
             const detailsEl = detailsTemp.querySelector('.weather-details') || detailsTemp.firstElementChild;
             if (detailsEl) {
-              const existing = container.querySelector('.weather-details');
+              const existing = containerEl.querySelector('.weather-details');
               // reemplazar el bloque de detalles por el partial cargado
               if (existing) existing.replaceWith(detailsEl.cloneNode(true));
-              else container.appendChild(detailsEl.cloneNode(true));
+              else containerEl.appendChild(detailsEl.cloneNode(true));
             }
           }
         } catch (err) {
           console.warn('No se pudo cargar partial details:', err);
         }
-        infoHtmlTemplate = container.outerHTML;
+        infoHtmlTemplate = containerEl.outerHTML;
       }
     } catch (err) {
       console.error("Error al cargar info.html:", err);
@@ -277,7 +277,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       await cargarClimaHorario();
       colocarIconos();
 
-      cardInfo.innerHTML = `<div>${infoHtmlTemplate}</div>`;
+      cardInfo.innerHTML = infoHtmlTemplate;
       actualizarDatosProvincia(nombre, clima);
 
       const elapsed = Date.now() - loaderStart;
@@ -302,7 +302,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     await cargarClimaHorario();
     colocarIconos();
 
-    cardInfo.innerHTML = `<div>${infoHtmlTemplate}</div>`;
+    cardInfo.innerHTML = infoHtmlTemplate;
     actualizarDatosProvincia(nombre, clima);
 
     const container = cardInfo.querySelector(".container");

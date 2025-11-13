@@ -6,41 +6,17 @@
         <circle class="bg-ring" cx="60" cy="60" r="54" />
         <circle class="progress-ring" cx="60" cy="60" r="54" />
       </svg>
-      <div class="value" id="humValue"></div>
     </div>
+      <div class="value" id="humValue"></div>
     <div class="hum-status" id="humStatus">---</div>
   </div>
   <div class="detail-item wind-card">
     <div class="wind-background" id="windBackground"></div>
     <h2>Viento</h2>
-    <div class="wind-meter">
-      <svg viewBox="0 0 200 100">
-        <defs>
-          <linearGradient id="windGradientLight" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stop-color="#9381ff" stop-opacity="0.8" />
-            <stop offset="40%" stop-color="#4e3abe" stop-opacity="0.95" />
-            <stop offset="100%" stop-color="#230e97" stop-opacity="1" />
-          </linearGradient>
-
-          <linearGradient id="windGradientDark" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stop-color="#e8dcff" />
-            <stop offset="50%" stop-color="#c4baff" />
-            <stop offset="100%" stop-color="#a295ff" />
-          </linearGradient>
-
-        </defs>
-
-        <!-- Arco de fondo -->
-        <path class="wind-bg" d="M20 100 A80 80 0 0 1 180 100" />
-
-        <!-- Arco con valor dinámico -->
-        <path class="wind-value" d="M20 100 A80 80 0 0 1 180 100" />
-      </svg>
-
+    <div class="wind-info">
       <div class="value" id="windSpeed"></div>
+      <div class="wind-status" id="windStatus"></div>
     </div>
-
-    <div class="wind-status" id="windStatus"></div>
   </div>
   <div class="detail-item visibility-card">
     <h2 class="visibility-title">Visibilidad</h2>
@@ -80,7 +56,13 @@
     <div class="uv-meter">
       <svg viewBox="0 0 100 60">
         <defs>
-          <linearGradient id="uvGradientLight" x1="0%" y1="100%" x2="100%" y2="100%">
+          <linearGradient
+            id="uvGradientLight"
+            x1="0%"
+            y1="100%"
+            x2="100%"
+            y2="100%"
+          >
             <stop offset="0%" stop-color="#c9b0ff" />
             <stop offset="30%" stop-color="#a884ff" />
             <stop offset="55%" stop-color="#8860ff" />
@@ -88,15 +70,19 @@
             <stop offset="100%" stop-color="#4226b2" />
           </linearGradient>
 
-
-          <linearGradient id="uvGradientDark" x1="0%" y1="100%" x2="100%" y2="100%">
+          <linearGradient
+            id="uvGradientDark"
+            x1="0%"
+            y1="100%"
+            x2="100%"
+            y2="100%"
+          >
             <stop offset="0%" stop-color="#f1e8ff" />
             <stop offset="30%" stop-color="#d0bfff" />
             <stop offset="55%" stop-color="#b4a5ff" />
             <stop offset="80%" stop-color="#9a85ff" />
             <stop offset="100%" stop-color="#7c63e6" />
           </linearGradient>
-
         </defs>
         <path class="uv-bg" d="M10,50 A40,40 0 0,1 90,50" />
         <path class="uv-value" d="M10,50 A40,40 0 0,1 90,50" />

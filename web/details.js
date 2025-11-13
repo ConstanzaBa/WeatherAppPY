@@ -249,17 +249,57 @@ try {
       }, 100);
     }
 
-    let desc;
-    if (windSpeed < 5) desc = "Calma";
-    else if (windSpeed < 15) desc = "Brisa ligera";
-    else if (windSpeed < 30) desc = "Hay brisa";
-    else if (windSpeed < 50) desc = "Viento fuerte";
-    else desc = "Temporal";
+    // Definir colores según la intensidad del viento
+    const isDark = document.documentElement.classList.contains("dark-theme");
+    const rootStyles = getComputedStyle(document.documentElement);
+    const baseTop = rootStyles.getPropertyValue("--sky-good-top").trim();
+    const baseBottom = rootStyles.getPropertyValue("--sky-good-bottom").trim();
+    
+    let desc, colorTop, colorBottom;
+    
+    if (windSpeed < 5) {
+      // Calma - usa los colores de "Buena" visibilidad
+      desc = "Calma";
+      colorTop = baseTop;
+      colorBottom = baseBottom;
+    } else if (windSpeed < 15) {
+      // Brisa ligera - usa los colores de "Moderada" visibilidad
+      desc = "Brisa ligera";
+      colorTop = rootStyles.getPropertyValue("--sky-medium-top").trim();
+      colorBottom = rootStyles.getPropertyValue("--sky-medium-bottom").trim();
+    } else if (windSpeed < 30) {
+      // Hay brisa - usa los colores de "Reducida" visibilidad
+      desc = "Hay brisa";
+      colorTop = rootStyles.getPropertyValue("--sky-low-top").trim();
+      colorBottom = rootStyles.getPropertyValue("--sky-low-bottom").trim();
+    } else if (windSpeed < 50) {
+      // Viento fuerte - usa los colores de "Muy baja" visibilidad
+      desc = "Viento fuerte";
+      colorTop = isDark
+        ? rootStyles.getPropertyValue("--sky-verylow-top").trim()
+        : rootStyles.getPropertyValue("--sky-verylow-bottom").trim();
+      colorBottom = isDark
+        ? rootStyles.getPropertyValue("--sky-verylow-bottom").trim()
+        : rootStyles.getPropertyValue("--sky-verylow-top").trim();
+    } else {
+      // Temporal - usa tonos aún más oscuros
+      desc = "Temporal";
+      colorTop = isDark
+        ? rootStyles.getPropertyValue("--sky-verylow-top").trim()
+        : rootStyles.getPropertyValue("--sky-verylow-bottom").trim();
+      colorBottom = isDark
+        ? rootStyles.getPropertyValue("--sky-verylow-bottom").trim()
+        : rootStyles.getPropertyValue("--sky-verylow-top").trim();
+    }
+    
     if (windStatus) windStatus.textContent = desc;
 
     // Crear animación de líneas de viento
     if (windBackground) {
       windBackground.innerHTML = ""; // Limpiar líneas anteriores
+      
+      // Aplicar el color de fondo según la intensidad
+      windBackground.style.background = `linear-gradient(135deg, ${colorTop} 0%, ${colorBottom} 100%)`;
 
       // Calcular velocidad de animación basada en velocidad del viento
       // Viento más fuerte = animación más rápida
@@ -337,6 +377,38 @@ try {
       }
 
       if (statusEl) statusEl.textContent = estado;
+    }
+
+    // Animación de rayos de sol
+    if (uvCardEl) {
+      // Limpiar rayos anteriores
+      const oldRays = uvCardEl.querySelectorAll(".uv-ray");
+      oldRays.forEach((ray) => ray.remove());
+
+      // Número de rayos según intensidad UV
+      const rayCount = Math.min(Math.ceil(uvVal * 1.5), 16);
+      
+      // Crear rayos solo si hay radiación UV
+      if (uvVal > 0) {
+        for (let i = 0; i < rayCount; i++) {
+          const ray = document.createElement("div");
+          ray.classList.add("uv-ray");
+          
+          // Posición angular del rayo
+          const angle = (360 / rayCount) * i;
+          ray.style.setProperty("--angle", `${angle}deg`);
+          
+          // Opacidad y duración según intensidad
+          const opacity = Math.min(0.3 + (uvVal / 11) * 0.4, 0.7);
+          ray.style.opacity = opacity;
+          
+          // Variación en la animación
+          ray.style.animationDelay = `${Math.random() * 2}s`;
+          ray.style.animationDuration = `${2 + Math.random() * 1}s`;
+          
+          uvCardEl.appendChild(ray);
+        }
+      }
     }
   } catch (e) {}
 }
