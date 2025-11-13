@@ -194,7 +194,12 @@ document.addEventListener("DOMContentLoaded", async () => {
   function actualizarDatosProvincia(nombre, clima) {
     const tituloProvincia = cardInfo.querySelector(".titulo-provincia");
     const horaProvincia = cardInfo.querySelector(".hora-provincia");
-    if (tituloProvincia) tituloProvincia.textContent = nombre;
+    if (tituloProvincia) {
+      const ahora = new Date();
+      const diaSemana = ahora.toLocaleDateString('es-AR', { weekday: 'long' });
+      // Capitalizar primera letra
+      tituloProvincia.textContent = diaSemana.charAt(0).toUpperCase() + diaSemana.slice(1);
+    }
     if (horaProvincia && clima) {
       const ahora = new Date();
       horaProvincia.textContent = ahora.toLocaleTimeString("es-AR", {

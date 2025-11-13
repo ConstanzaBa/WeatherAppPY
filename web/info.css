@@ -64,16 +64,14 @@
 .current-weather {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   text-align: center;
   flex-direction: column;
+  gap: 2rem;
 }
 
 .temperature {
   font-size: 3rem;
   font-weight: 400;
-  margin-top: 40px;
-  margin-left: 1.6rem;
   color: var(--primary-color);
 }
 
@@ -152,13 +150,9 @@
   width: 100%;
   height: 70%;
   border-radius: 12px 12px 60% 60%;
-  background: linear-gradient(
-    to bottom right,
-    rgba(180, 200, 255, 0.15),
-    rgba(80, 90, 130, 0.2)
-  );
-  backdrop-filter: blur(2px);
   overflow: hidden;
+  z-index: 0;
+  transition: background 0.5s ease;
 }
 
 .rain-water {
@@ -214,20 +208,16 @@
 .precip-info {
   text-align: center;
   display: grid;
+  gap: 0.4rem;
+  z-index: 2;
+  position: relative;
   margin-bottom: 0.5rem;
 }
 
-.precip-value {
-  font-size: 1rem;
-  font-weight: bold;
-  letter-spacing: 1px;
-}
-
 .precip-status {
-  margin-top: 160px;
   font-size: 1rem;
-  color: var(--precip-status);
-  letter-spacing: 0.3px;
+  color: var(--info-muted);
+  font-weight: 500;
 }
 
 /* Visibilidad */
@@ -304,7 +294,6 @@
   display: grid;
   text-align: center;
   gap: 0.2rem;
-  z-index: 2;
   margin-bottom: 0.5rem;
 }
 
@@ -352,7 +341,6 @@
   border: 1px solid var(--thermo-border);
   box-shadow: inset 0 0 12px rgb(75 72 72 / 27%),
     0 0 8px rgba(255, 255, 255, 0.15);
-  margin-left: 2rem;
 }
 
 .thermo-fill {
@@ -406,7 +394,9 @@
 /* Humedad */
 
 .humidity-card {
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+  justify-content: space-between;
 }
 
 .humidity-card:hover {
@@ -415,54 +405,66 @@
 }
 
 .humidity-card h2 {
-  margin-bottom: 1px;
-  margin-top: 0.5rem;
   font-size: 1.3rem;
-}
-
-.humidity-gauge {
+  letter-spacing: 0.5px;
+  z-index: 2;
+  margin-top: 1.2rem;
   position: relative;
-  width: 120px;
-  height: 120px;
-  margin: 0 auto 10px;
 }
 
-.humidity-gauge svg {
-  transform: rotate(-90deg);
-  width: 100%;
-  height: 100%;
-}
-
-.bg-ring {
-  fill: none;
-  stroke: var(--ring-bg);
-  stroke-width: 12;
-}
-
-.progress-ring {
-  fill: none;
-  stroke: var(--ring-progress);
-  stroke-width: 12;
-  stroke-linecap: round;
-  stroke-dasharray: 339.292;
-  /* 2 * PI * r */
-  stroke-dashoffset: 339.292;
-  transition: stroke-dashoffset 1s ease;
-}
-
-.humidity-value {
+/* === FONDO DE HUMEDAD === */
+.humidity-sky {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 1.3rem;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 70%;
+  border-radius: 12px 12px 60% 60%;
+  overflow: hidden;
+  z-index: 0;
+  transition: background 0.5s ease;
+}
+
+/* === PARTÍCULAS DE VAPOR === */
+.vapor-particle {
+  position: absolute;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.6), rgba(200, 220, 255, 0.3));
+  border-radius: 50%;
+  animation: floatVapor linear infinite;
+  opacity: 0;
+  filter: blur(3px);
+  z-index: 1;
+}
+
+@keyframes floatVapor {
+  0% {
+    transform: translateY(0) scale(0.5);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.7;
+  }
+  80% {
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateY(-150px) scale(1.5);
+    opacity: 0;
+  }
+}
+
+/* === INFORMACIÓN DE HUMEDAD === */
+.humidity-info {
+  display: grid;
+  text-align: center;
+  gap: 0.4rem;
+  margin-bottom: 0.5rem;
 }
 
 .hum-status {
-  font-size: 1em;
+  font-size: 1rem;
   color: var(--info-muted);
-  margin-bottom: 0.2rem;
-  margin-top: -0.5rem;
+  font-weight: 500;
 }
 
 /* Viento */
@@ -560,16 +562,6 @@
   z-index: 1;
 }
 
-.wind-meter {
-  display: none;
-}
-
-.wind-meter svg {
-  width: 100%;
-  height: 100%;
-  margin-top: -15px;
-}
-
 .wind-bg {
   fill: none;
   stroke: var(--wind-bg);
@@ -581,7 +573,6 @@
   display: grid;
   text-align: center;
   gap: 0.2rem;
-  z-index: 2;
   margin-bottom: 0.5rem;
 }
 
@@ -603,8 +594,11 @@
 /* Radiación UV */
 
 .uv-card {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
-  gap: 10px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
 }
 
 .uv-card:hover {
@@ -614,46 +608,118 @@
 
 .uv-title {
   font-size: 1.3rem;
-  margin-bottom: 1.4rem;
-  font-weight: 700;
-}
-
-.uv-meter {
+  letter-spacing: 0.5px;
+  z-index: 2;
+  margin-top: 1.2rem;
   position: relative;
-  width: 150px;
-  height: 90px;
 }
 
-.uv-meter svg {
+/* === CIELO UV === */
+.uv-sky {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
-  height: 100%;
+  height: 70%;
+  border-radius: 12px 12px 60% 60%;
+  overflow: hidden;
+  z-index: 0;
+  transition: background 0.5s ease;
 }
 
-.uv-bg {
-  fill: none;
-  stroke: var(--wind-bg);
-  stroke-width: 8;
-  stroke-linecap: round;
+/* === SOL UV === */
+.uv-sun {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: radial-gradient(circle, #FFF9C4, #FFE082);
+  animation: uvSunPulse 3s ease-in-out infinite;
+  z-index: 2;
 }
 
-.uv-value {
-  fill: none;
-  stroke: url(#uvGradientLight);
-  stroke-width: 8;
-  stroke-linecap: round;
-  stroke-dasharray: 126;
-  stroke-dashoffset: 126;
-  transition: stroke-dashoffset 1s ease;
+@keyframes uvSunPulse {
+  0%, 100% {
+    transform: translateX(-50%) scale(1);
+    opacity: 0.9;
+  }
+  50% {
+    transform: translateX(-50%) scale(1.1);
+    opacity: 1;
+  }
 }
 
-.dark-theme .uv-value {
-  stroke: url(#uvGradientDark);
+/* === LUNA UV === */
+.uv-moon {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: radial-gradient(circle, #F0F0F0, #C8C8D0);
+  animation: uvMoonGlow 4s ease-in-out infinite;
+  z-index: 2;
+  position: relative;
+}
+
+.uv-moon::before {
+  content: '';
+  position: absolute;
+  top: 15%;
+  left: 25%;
+  width: 25%;
+  height: 25%;
+  border-radius: 50%;
+  background: rgba(180, 180, 190, 0.3);
+  box-shadow: 
+    10px 5px 0 -2px rgba(180, 180, 190, 0.2),
+    -5px 10px 0 -3px rgba(180, 180, 190, 0.15);
+}
+
+@keyframes uvMoonGlow {
+  0%, 100% {
+    transform: translateX(-50%) scale(1);
+    opacity: 0.85;
+  }
+  50% {
+    transform: translateX(-50%) scale(1.05);
+    opacity: 1;
+  }
+}
+
+/* === NUBES UV === */
+.uv-cloud {
+  position: absolute;
+  animation: moveUvCloud linear infinite;
+  opacity: 0.8;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+  z-index: 1;
+}
+
+.uv-cloud svg {
+  width: 100%;
+  height: auto;
+}
+
+@keyframes moveUvCloud {
+  0% {
+    transform: translateX(-100px);
+  }
+  100% {
+    transform: translateX(280px);
+  }
+}
+
+.uv-info {
+  display: grid;
+  text-align: center;
+  gap: 0.4rem;
+  margin-bottom: 0.5rem;
 }
 
 .uv-status {
   color: var(--info-muted);
   font-weight: 500;
-  margin-bottom: -10px;
+  font-size: 1rem;
 }
 
 /* Fin de parametros de clima */
@@ -809,4 +875,14 @@
   font-size: 12px;
   color: var(--subtext-color);
   margin-left: 10px;
+}
+
+/* === MODO CLARO - Mantener títulos blancos en cards de animación === */
+:root:not(.dark-theme) .visibility-title,
+:root:not(.dark-theme) .uv-title,
+:root:not(.dark-theme) .wind-card h2,
+:root:not(.dark-theme) .temp-info h2,
+:root:not(.dark-theme) .precipitation-card h2,
+:root:not(.dark-theme) .humidity-card h2 {
+  color: #ffffff;
 }

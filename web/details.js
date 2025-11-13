@@ -102,6 +102,28 @@ try {
     const precipStatus = document.getElementById("precipStatus");
     const rainWater = document.getElementById("rainWater");
     const raindropsContainer = document.getElementById("raindrops");
+    const rainGlass = document.getElementById("rainGlass");
+
+    // Aplicar colores de fondo según intensidad
+    if (rainGlass && hasValidPrecip) {
+      let topColor, bottomColor;
+      
+      if (precipitation === 0) {
+        topColor = 'var(--sky-good-top)';
+        bottomColor = 'var(--sky-good-bottom)';
+      } else if (precipitation < 10) {
+        topColor = 'var(--sky-medium-top)';
+        bottomColor = 'var(--sky-medium-bottom)';
+      } else if (precipitation < 50) {
+        topColor = 'var(--sky-low-top)';
+        bottomColor = 'var(--sky-low-bottom)';
+      } else {
+        topColor = 'var(--sky-verylow-top)';
+        bottomColor = 'var(--sky-verylow-bottom)';
+      }
+      
+      rainGlass.style.background = `linear-gradient(to bottom, ${topColor}, ${bottomColor})`;
+    }
 
     // Texto de estado
     if (precipStatus) {
@@ -161,23 +183,65 @@ try {
     if (Number.isNaN(humidity)) return;
 
     const humStatus = document.getElementById("humStatus");
-    const progressRing = document.querySelector(".progress-ring");
+    const humiditySky = document.getElementById("humiditySky");
 
-    let status;
-    if (humidity < 30) status = "Seco";
-    else if (humidity < 60) status = "Moderado";
-    else if (humidity < 85) status = "Húmedo";
-    else status = "Condensado";
+    // Determinar color de fondo y estado según nivel de humedad
+    let topColor, bottomColor, status;
+    if (humidity < 30) {
+      topColor = 'var(--sky-good-top)';
+      bottomColor = 'var(--sky-good-bottom)';
+      status = "Seco";
+    } else if (humidity < 60) {
+      topColor = 'var(--sky-medium-top)';
+      bottomColor = 'var(--sky-medium-bottom)';
+      status = "Moderado";
+    } else if (humidity < 85) {
+      topColor = 'var(--sky-low-top)';
+      bottomColor = 'var(--sky-low-bottom)';
+      status = "Húmedo";
+    } else {
+      topColor = 'var(--sky-verylow-top)';
+      bottomColor = 'var(--sky-verylow-bottom)';
+      status = "Condensado";
+    }
+
     if (humStatus) humStatus.textContent = status;
 
-    if (progressRing) {
-      const radius = progressRing.r.baseVal.value;
-      const circumference = 2 * Math.PI * radius;
-      progressRing.style.strokeDasharray = `${circumference} ${circumference}`;
-      progressRing.style.strokeDashoffset =
-        circumference - (humidity / 100) * circumference;
+    // Aplicar colores de fondo
+    if (humiditySky) {
+      humiditySky.style.background = `linear-gradient(to bottom, ${topColor}, ${bottomColor})`;
+      
+      // Limpiar partículas anteriores
+      humiditySky.innerHTML = '';
+      
+      // Generar partículas de vapor según nivel de humedad
+      const numParticles = Math.max(5, Math.floor((humidity / 100) * 25));
+      
+      for (let i = 0; i < numParticles; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'vapor-particle';
+        
+        // Tamaño variable
+        const size = 15 + Math.random() * 25;
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+        
+        // Posición horizontal aleatoria
+        particle.style.left = `${Math.random() * 100}%`;
+        
+        // Posición inicial en la parte inferior
+        particle.style.bottom = '-20px';
+        
+        // Duración de animación variable
+        particle.style.animationDuration = `${4 + Math.random() * 4}s`;
+        particle.style.animationDelay = `${Math.random() * 3}s`;
+        
+        humiditySky.appendChild(particle);
+      }
     }
-  } catch (e) {}
+  } catch (e) {
+    console.error("Error en animación de humedad:", e);
+  }
 
   // SENSACIÓN TÉRMICA
   try {
@@ -351,63 +415,160 @@ try {
     const uvCardEl = document.querySelector(".uv-card");
     if (uvCardEl) uvCardEl.dataset.uv = uvVal;
 
-    const path = document.querySelector(".uv-value");
+    const uvValueEl = document.getElementById("uvValue");
     const statusEl = document.getElementById("uvStatus");
+    const uvSky = document.getElementById("uvSky");
 
-    if (path) {
-      const totalLength = 126;
-      path.style.strokeDasharray = totalLength;
-      path.style.strokeDashoffset = totalLength;
-      setTimeout(() => {
-        path.style.strokeDashoffset =
-          totalLength * (1 - Math.min(uvVal / 11, 1));
-      }, 200);
+    // Actualizar el valor numérico del índice UV
+    if (uvValueEl) uvValueEl.textContent = uvVal;
 
-      let estado, descripcion;
-      if (uvVal <= 2) {
-        estado = "Bajo ";
-      } else if (uvVal <= 5) {
-        estado = "Moderado ";
-      } else if (uvVal <= 7) {
-        estado = "Alto ";
-      } else if (uvVal <= 10) {
-        estado = "Muy alto ";
-      } else {
-        estado = "Extremo ";
-      }
-
-      if (statusEl) statusEl.textContent = estado;
+    // Determinar el estado según el valor UV
+    let estado;
+    if (uvVal <= 2) {
+      estado = "Bajo";
+    } else if (uvVal <= 5) {
+      estado = "Moderado";
+    } else if (uvVal <= 7) {
+      estado = "Alto";
+    } else if (uvVal <= 10) {
+      estado = "Muy alto";
+    } else {
+      estado = "Extremo";
     }
 
-    // Animación de rayos de sol
-    if (uvCardEl) {
-      // Limpiar rayos anteriores
-      const oldRays = uvCardEl.querySelectorAll(".uv-ray");
-      oldRays.forEach((ray) => ray.remove());
+    if (statusEl) statusEl.textContent = estado;
 
-      // Número de rayos según intensidad UV
-      const rayCount = Math.min(Math.ceil(uvVal * 1.5), 16);
+    // Animación visual del UV (sol y nubes)
+    if (uvSky) {
+      uvSky.innerHTML = "";
       
-      // Crear rayos solo si hay radiación UV
-      if (uvVal > 0) {
-        for (let i = 0; i < rayCount; i++) {
-          const ray = document.createElement("div");
-          ray.classList.add("uv-ray");
-          
-          // Posición angular del rayo
-          const angle = (360 / rayCount) * i;
-          ray.style.setProperty("--angle", `${angle}deg`);
-          
-          // Opacidad y duración según intensidad
-          const opacity = Math.min(0.3 + (uvVal / 11) * 0.4, 0.7);
-          ray.style.opacity = opacity;
-          
-          // Variación en la animación
-          ray.style.animationDelay = `${Math.random() * 2}s`;
-          ray.style.animationDuration = `${2 + Math.random() * 1}s`;
-          
-          uvCardEl.appendChild(ray);
+      const rootStyles = getComputedStyle(document.documentElement);
+      const baseTop = rootStyles.getPropertyValue("--sky-good-top").trim();
+      const baseBottom = rootStyles.getPropertyValue("--sky-good-bottom").trim();
+      const isDark = document.documentElement.classList.contains("dark-theme");
+      
+      // Color del cielo según intensidad UV usando las mismas variables que visibilidad
+      let skyColorTop, skyColorBottom;
+      if (uvVal <= 2) {
+        // UV bajo - usa colores de "Muy baja" visibilidad (más gris/nublado)
+        skyColorTop = isDark
+          ? rootStyles.getPropertyValue("--sky-verylow-top").trim()
+          : rootStyles.getPropertyValue("--sky-verylow-bottom").trim();
+        skyColorBottom = isDark
+          ? rootStyles.getPropertyValue("--sky-verylow-bottom").trim()
+          : rootStyles.getPropertyValue("--sky-verylow-top").trim();
+      } else if (uvVal <= 5) {
+        // UV moderado - usa colores de "Reducida" visibilidad
+        skyColorTop = rootStyles.getPropertyValue("--sky-low-top").trim();
+        skyColorBottom = rootStyles.getPropertyValue("--sky-low-bottom").trim();
+      } else if (uvVal <= 7) {
+        // UV alto - usa colores de "Moderada" visibilidad
+        skyColorTop = rootStyles.getPropertyValue("--sky-medium-top").trim();
+        skyColorBottom = rootStyles.getPropertyValue("--sky-medium-bottom").trim();
+      } else {
+        // UV muy alto/extremo - usa colores de "Buena" visibilidad (cielo más despejado)
+        skyColorTop = baseTop;
+        skyColorBottom = baseBottom;
+      }
+      
+      uvSky.style.background = `linear-gradient(to bottom, ${skyColorTop}, ${skyColorBottom})`;
+      
+      // Determinar si es de noche (20:00 a 07:00)
+      const fechaHora = clima.fecha_hora ?? new Date().toISOString();
+      const hora = new Date(fechaHora).getHours();
+      const esNoche = hora >= 20 || hora < 7;
+      
+      // Crear el sol o la luna según la hora
+      const celestialBody = document.createElement("div");
+      
+      if (esNoche) {
+        // Es de noche - mostrar luna
+        celestialBody.classList.add("uv-moon");
+        
+        // Posición de la luna (más baja en la noche)
+        const moonHeight = 20; // Posición fija para la luna
+        celestialBody.style.top = `${moonHeight}%`;
+        
+        // Tamaño de la luna
+        const moonSize = 35;
+        celestialBody.style.width = `${moonSize}px`;
+        celestialBody.style.height = `${moonSize}px`;
+        
+        // Brillo suave de la luna (resplandor plateado suave)
+        celestialBody.style.boxShadow = `0 0 20px 8px rgba(220, 230, 255, 0.5)`;
+      } else {
+        // Es de día - mostrar sol
+        celestialBody.classList.add("uv-sun");
+        
+        // Posición del sol según intensidad UV (más alto = más UV)
+        const sunHeight = Math.max(10, Math.min(50, uvVal * 5)); // 10% a 50% desde arriba
+        celestialBody.style.top = `${sunHeight}%`;
+        
+        // Tamaño e intensidad del sol según UV
+        const sunSize = 30 + (uvVal * 3); // 30px a 60px
+        celestialBody.style.width = `${sunSize}px`;
+        celestialBody.style.height = `${sunSize}px`;
+        
+        // Brillo del sol según UV (color amarillo pastel suave)
+        const glowIntensity = Math.min(uvVal * 2, 20);
+        celestialBody.style.boxShadow = `0 0 ${glowIntensity}px ${glowIntensity/2}px rgba(255, 245, 157, 0.7)`;
+      }
+      
+      uvSky.appendChild(celestialBody);
+      
+      // Nubes según código climático (si está disponible)
+      const coco = Number(clima.coco ?? clima.condition_code);
+      let cloudCount = 0;
+      let cloudOpacity = 0.7;
+      
+      if (!Number.isNaN(coco)) {
+        if (coco >= 1 && coco <= 2) {
+          // Despejado
+          cloudCount = Math.max(0, 3 - Math.floor(uvVal / 3));
+          cloudOpacity = 0.3;
+        } else if (coco >= 3 && coco <= 4) {
+          // Parcialmente nublado
+          cloudCount = 5;
+          cloudOpacity = 0.6;
+        } else if (coco >= 5 && coco <= 6) {
+          // Niebla
+          cloudCount = 10;
+          cloudOpacity = 0.8;
+        } else if (coco >= 7 && coco <= 27) {
+          // Lluvia, nieve, tormentas
+          cloudCount = 12;
+          cloudOpacity = 0.9;
         }
+      } else {
+        // Si no hay coco, inferir por UV
+        cloudCount = Math.max(2, 10 - Math.floor(uvVal * 1.5));
+        cloudOpacity = 0.5;
+      }
+      
+      // Crear nubes
+      const cloudShapes = [
+        '<svg viewBox="0 0 64 32"><path d="M10 20c2-6 8-10 14-10 4 0 8 2 10 5 2-1 4-1 6-1 6 0 11 4 12 9 1 4-2 7-6 7H16c-5 0-8-4-6-10z"/></svg>',
+        '<svg viewBox="0 0 64 32"><path d="M12 20c1-5 6-8 11-8 3 0 6 1 8 3 2-1 4-1 6-1 5 0 9 3 10 7 1 4-2 6-5 6H18c-4 0-7-3-6-7z"/></svg>',
+      ];
+      
+      for (let i = 0; i < cloudCount; i++) {
+        const cloud = document.createElement("div");
+        cloud.classList.add("uv-cloud");
+        cloud.innerHTML = cloudShapes[Math.floor(Math.random() * cloudShapes.length)];
+        
+        const path = cloud.querySelector("path");
+        if (path) {
+          path.setAttribute("fill", "#ffffff");
+          path.setAttribute("opacity", cloudOpacity);
+        }
+        
+        cloud.style.width = `${Math.random() * 50 + 40}px`;
+        cloud.style.top = `${Math.random() * 60 + 5}%`;
+        cloud.style.left = `${Math.random() * 200 - 50}px`;
+        cloud.style.animationDuration = `${15 + Math.random() * 10}s`;
+        cloud.style.animationDelay = `${Math.random() * -20}s`;
+        
+        uvSky.appendChild(cloud);
       }
     }
   } catch (e) {}

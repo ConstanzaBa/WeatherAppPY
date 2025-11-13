@@ -1,14 +1,11 @@
 <div class="weather-details">
   <div class="detail-item humidity-card">
     <h2>Humedad</h2>
-    <div class="humidity-gauge">
-      <svg viewBox="0 0 120 120">
-        <circle class="bg-ring" cx="60" cy="60" r="54" />
-        <circle class="progress-ring" cx="60" cy="60" r="54" />
-      </svg>
-    </div>
+    <div class="humidity-sky" id="humiditySky"></div>
+    <div class="humidity-info">
       <div class="value" id="humValue"></div>
-    <div class="hum-status" id="humStatus">---</div>
+      <div class="hum-status" id="humStatus">---</div>
+    </div>
   </div>
   <div class="detail-item wind-card">
     <div class="wind-background" id="windBackground"></div>
@@ -30,6 +27,7 @@
     <div class="thermo-container">
       <div class="thermometer">
         <div class="thermo-fill" id="thermoFill"></div>
+        <div class="thermo-bulb" id="thermoBulb"></div>
       </div>
 
       <div class="temp-info">
@@ -51,46 +49,11 @@
     </div>
   </div>
   <div class="detail-item uv-card">
-    <div class="uv-title">UV</div>
-
-    <div class="uv-meter">
-      <svg viewBox="0 0 100 60">
-        <defs>
-          <linearGradient
-            id="uvGradientLight"
-            x1="0%"
-            y1="100%"
-            x2="100%"
-            y2="100%"
-          >
-            <stop offset="0%" stop-color="#c9b0ff" />
-            <stop offset="30%" stop-color="#a884ff" />
-            <stop offset="55%" stop-color="#8860ff" />
-            <stop offset="80%" stop-color="#6540e6" />
-            <stop offset="100%" stop-color="#4226b2" />
-          </linearGradient>
-
-          <linearGradient
-            id="uvGradientDark"
-            x1="0%"
-            y1="100%"
-            x2="100%"
-            y2="100%"
-          >
-            <stop offset="0%" stop-color="#f1e8ff" />
-            <stop offset="30%" stop-color="#d0bfff" />
-            <stop offset="55%" stop-color="#b4a5ff" />
-            <stop offset="80%" stop-color="#9a85ff" />
-            <stop offset="100%" stop-color="#7c63e6" />
-          </linearGradient>
-        </defs>
-        <path class="uv-bg" d="M10,50 A40,40 0 0,1 90,50" />
-        <path class="uv-value" d="M10,50 A40,40 0 0,1 90,50" />
-      </svg>
-      <div class="value" id="uvNumber"></div>
+    <h2 class="uv-title">Radiación UV</h2>
+    <div id="uvSky" class="uv-sky"></div>
+    <div class="uv-info">
+      <div class="value" id="uvValue">0</div>
+      <div class="uv-status" id="uvStatus">---</div>
     </div>
-
-    <div class="uv-status" id="uvStatus"></div>
-    <div class="uv-desc" id="uvDesc"></div>
   </div>
 </div>

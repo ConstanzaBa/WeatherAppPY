@@ -3,13 +3,6 @@
     {
       "time": "AHORA",
       "icon": "clear_night.svg",
-      "temp": 18.1,
-      "coco": 1,
-      "fecha_hora": "2025-11-12 21:00:00"
-    },
-    {
-      "time": "10 PM",
-      "icon": "clear_night.svg",
       "temp": 17.2,
       "coco": 1,
       "fecha_hora": "2025-11-12 22:00:00"
@@ -41,18 +34,18 @@
       "temp": 14.3,
       "coco": 1,
       "fecha_hora": "2025-11-13 02:00:00"
+    },
+    {
+      "time": "3 AM",
+      "icon": "clear_night.svg",
+      "temp": 13.9,
+      "coco": 1,
+      "fecha_hora": "2025-11-13 03:00:00"
     }
   ],
   "Catamarca": [
     {
       "time": "AHORA",
-      "icon": "cloudy.svg",
-      "temp": 22.0,
-      "coco": 3,
-      "fecha_hora": "2025-11-12 21:00:00"
-    },
-    {
-      "time": "10 PM",
       "icon": "cloudy.svg",
       "temp": 21.2,
       "coco": 3,
@@ -85,18 +78,18 @@
       "temp": 20.1,
       "coco": 3,
       "fecha_hora": "2025-11-13 02:00:00"
+    },
+    {
+      "time": "3 AM",
+      "icon": "cloudy.svg",
+      "temp": 19.6,
+      "coco": 3,
+      "fecha_hora": "2025-11-13 03:00:00"
     }
   ],
   "Chaco": [
     {
       "time": "AHORA",
-      "icon": "cloudy.svg",
-      "temp": 22.8,
-      "coco": 3,
-      "fecha_hora": "2025-11-12 21:00:00"
-    },
-    {
-      "time": "10 PM",
       "icon": "fair_night.svg",
       "temp": 22.4,
       "coco": 2,
@@ -129,18 +122,18 @@
       "temp": 21.6,
       "coco": 3,
       "fecha_hora": "2025-11-13 02:00:00"
+    },
+    {
+      "time": "3 AM",
+      "icon": "light_rain.svg",
+      "temp": 21.4,
+      "coco": 7,
+      "fecha_hora": "2025-11-13 03:00:00"
     }
   ],
   "Chubut": [
     {
       "time": "AHORA",
-      "icon": "clear_night.svg",
-      "temp": 16.5,
-      "coco": 1,
-      "fecha_hora": "2025-11-12 21:00:00"
-    },
-    {
-      "time": "10 PM",
       "icon": "clear_night.svg",
       "temp": 16.0,
       "coco": 1,
@@ -173,18 +166,18 @@
       "temp": 16.1,
       "coco": 2,
       "fecha_hora": "2025-11-13 02:00:00"
+    },
+    {
+      "time": "3 AM",
+      "icon": "cloudy.svg",
+      "temp": 15.5,
+      "coco": 3,
+      "fecha_hora": "2025-11-13 03:00:00"
     }
   ],
   "Corrientes": [
     {
       "time": "AHORA",
-      "icon": "cloudy.svg",
-      "temp": 22.8,
-      "coco": 3,
-      "fecha_hora": "2025-11-12 21:00:00"
-    },
-    {
-      "time": "10 PM",
       "icon": "fair_night.svg",
       "temp": 22.4,
       "coco": 2,
@@ -217,18 +210,18 @@
       "temp": 21.6,
       "coco": 3,
       "fecha_hora": "2025-11-13 02:00:00"
+    },
+    {
+      "time": "3 AM",
+      "icon": "light_rain.svg",
+      "temp": 21.4,
+      "coco": 7,
+      "fecha_hora": "2025-11-13 03:00:00"
     }
   ],
   "Córdoba": [
     {
       "time": "AHORA",
-      "icon": "clear_night.svg",
-      "temp": 21.2,
-      "coco": 1,
-      "fecha_hora": "2025-11-12 21:00:00"
-    },
-    {
-      "time": "10 PM",
       "icon": "clear_night.svg",
       "temp": 20.4,
       "coco": 1,
@@ -261,18 +254,18 @@
       "temp": 16.4,
       "coco": 1,
       "fecha_hora": "2025-11-13 02:00:00"
+    },
+    {
+      "time": "3 AM",
+      "icon": "clear_night.svg",
+      "temp": 15.6,
+      "coco": 1,
+      "fecha_hora": "2025-11-13 03:00:00"
     }
   ],
   "Entre Ríos": [
     {
       "time": "AHORA",
-      "icon": "clear_night.svg",
-      "temp": 19.2,
-      "coco": 1,
-      "fecha_hora": "2025-11-12 21:00:00"
-    },
-    {
-      "time": "10 PM",
       "icon": "clear_night.svg",
       "temp": 18.4,
       "coco": 1,
@@ -305,18 +298,18 @@
       "temp": 16.2,
       "coco": 1,
       "fecha_hora": "2025-11-13 02:00:00"
+    },
+    {
+      "time": "3 AM",
+      "icon": "clear_night.svg",
+      "temp": 15.7,
+      "coco": 1,
+      "fecha_hora": "2025-11-13 03:00:00"
     }
   ],
   "Formosa": [
     {
       "time": "AHORA",
-      "icon": "cloudy.svg",
-      "temp": 22.7,
-      "coco": 3,
-      "fecha_hora": "2025-11-12 21:00:00"
-    },
-    {
-      "time": "10 PM",
       "icon": "cloudy.svg",
       "temp": 22.4,
       "coco": 3,
@@ -349,18 +342,18 @@
       "temp": 21.7,
       "coco": 3,
       "fecha_hora": "2025-11-13 02:00:00"
+    },
+    {
+      "time": "3 AM",
+      "icon": "cloudy.svg",
+      "temp": 21.5,
+      "coco": 3,
+      "fecha_hora": "2025-11-13 03:00:00"
     }
   ],
   "Jujuy": [
     {
       "time": "AHORA",
-      "icon": "light_rain.svg",
-      "temp": 21.3,
-      "coco": 7,
-      "fecha_hora": "2025-11-12 21:00:00"
-    },
-    {
-      "time": "10 PM",
       "icon": "light_rain.svg",
       "temp": 20.5,
       "coco": 7,
@@ -393,18 +386,18 @@
       "temp": 18.9,
       "coco": 4,
       "fecha_hora": "2025-11-13 02:00:00"
+    },
+    {
+      "time": "3 AM",
+      "icon": "overcast.svg",
+      "temp": 18.8,
+      "coco": 4,
+      "fecha_hora": "2025-11-13 03:00:00"
     }
   ],
   "La Pampa": [
     {
       "time": "AHORA",
-      "icon": "clear_night.svg",
-      "temp": 18.8,
-      "coco": 1,
-      "fecha_hora": "2025-11-12 21:00:00"
-    },
-    {
-      "time": "10 PM",
       "icon": "clear_night.svg",
       "temp": 17.2,
       "coco": 1,
@@ -437,18 +430,18 @@
       "temp": 13.1,
       "coco": 1,
       "fecha_hora": "2025-11-13 02:00:00"
+    },
+    {
+      "time": "3 AM",
+      "icon": "clear_night.svg",
+      "temp": 12.4,
+      "coco": 1,
+      "fecha_hora": "2025-11-13 03:00:00"
     }
   ],
   "La Rioja": [
     {
       "time": "AHORA",
-      "icon": "cloudy.svg",
-      "temp": 21.0,
-      "coco": 3,
-      "fecha_hora": "2025-11-12 21:00:00"
-    },
-    {
-      "time": "10 PM",
       "icon": "cloudy.svg",
       "temp": 20.4,
       "coco": 3,
@@ -481,18 +474,18 @@
       "temp": 18.8,
       "coco": 3,
       "fecha_hora": "2025-11-13 02:00:00"
+    },
+    {
+      "time": "3 AM",
+      "icon": "cloudy.svg",
+      "temp": 18.8,
+      "coco": 3,
+      "fecha_hora": "2025-11-13 03:00:00"
     }
   ],
   "Mendoza": [
     {
       "time": "AHORA",
-      "icon": "fair_night.svg",
-      "temp": 21.8,
-      "coco": 2,
-      "fecha_hora": "2025-11-12 21:00:00"
-    },
-    {
-      "time": "10 PM",
       "icon": "fair_night.svg",
       "temp": 20.8,
       "coco": 2,
@@ -525,18 +518,18 @@
       "temp": 17.8,
       "coco": 1,
       "fecha_hora": "2025-11-13 02:00:00"
+    },
+    {
+      "time": "3 AM",
+      "icon": "clear_night.svg",
+      "temp": 17.2,
+      "coco": 1,
+      "fecha_hora": "2025-11-13 03:00:00"
     }
   ],
   "Misiones": [
     {
       "time": "AHORA",
-      "icon": "cloudy.svg",
-      "temp": 22.2,
-      "coco": 3,
-      "fecha_hora": "2025-11-12 21:00:00"
-    },
-    {
-      "time": "10 PM",
       "icon": "cloudy.svg",
       "temp": 21.9,
       "coco": 3,
@@ -569,18 +562,18 @@
       "temp": 21.1,
       "coco": 3,
       "fecha_hora": "2025-11-13 02:00:00"
+    },
+    {
+      "time": "3 AM",
+      "icon": "cloudy.svg",
+      "temp": 20.9,
+      "coco": 3,
+      "fecha_hora": "2025-11-13 03:00:00"
     }
   ],
   "Neuquén": [
     {
       "time": "AHORA",
-      "icon": "clear_night.svg",
-      "temp": 16.7,
-      "coco": 1,
-      "fecha_hora": "2025-11-12 21:00:00"
-    },
-    {
-      "time": "10 PM",
       "icon": "clear_night.svg",
       "temp": 15.6,
       "coco": 1,
@@ -613,18 +606,18 @@
       "temp": 13.0,
       "coco": 1,
       "fecha_hora": "2025-11-13 02:00:00"
+    },
+    {
+      "time": "3 AM",
+      "icon": "clear_night.svg",
+      "temp": 12.8,
+      "coco": 1,
+      "fecha_hora": "2025-11-13 03:00:00"
     }
   ],
   "Río Negro": [
     {
       "time": "AHORA",
-      "icon": "fair_night.svg",
-      "temp": 19.3,
-      "coco": 2,
-      "fecha_hora": "2025-11-12 21:00:00"
-    },
-    {
-      "time": "10 PM",
       "icon": "clear_night.svg",
       "temp": 18.7,
       "coco": 1,
@@ -657,18 +650,18 @@
       "temp": 18.1,
       "coco": 1,
       "fecha_hora": "2025-11-13 02:00:00"
+    },
+    {
+      "time": "3 AM",
+      "icon": "clear_night.svg",
+      "temp": 16.7,
+      "coco": 1,
+      "fecha_hora": "2025-11-13 03:00:00"
     }
   ],
   "Salta": [
     {
       "time": "AHORA",
-      "icon": "light_rain.svg",
-      "temp": 17.7,
-      "coco": 7,
-      "fecha_hora": "2025-11-12 21:00:00"
-    },
-    {
-      "time": "10 PM",
       "icon": "rain.svg",
       "temp": 17.3,
       "coco": 8,
@@ -701,18 +694,18 @@
       "temp": 16.5,
       "coco": 3,
       "fecha_hora": "2025-11-13 02:00:00"
+    },
+    {
+      "time": "3 AM",
+      "icon": "cloudy.svg",
+      "temp": 16.4,
+      "coco": 3,
+      "fecha_hora": "2025-11-13 03:00:00"
     }
   ],
   "San Juan": [
     {
       "time": "AHORA",
-      "icon": "clear_night.svg",
-      "temp": 22.8,
-      "coco": 1,
-      "fecha_hora": "2025-11-12 21:00:00"
-    },
-    {
-      "time": "10 PM",
       "icon": "clear_night.svg",
       "temp": 22.3,
       "coco": 1,
@@ -745,18 +738,18 @@
       "temp": 20.6,
       "coco": 2,
       "fecha_hora": "2025-11-13 02:00:00"
+    },
+    {
+      "time": "3 AM",
+      "icon": "clear_night.svg",
+      "temp": 19.9,
+      "coco": 1,
+      "fecha_hora": "2025-11-13 03:00:00"
     }
   ],
   "San Luis": [
     {
       "time": "AHORA",
-      "icon": "clear_night.svg",
-      "temp": 18.1,
-      "coco": 1,
-      "fecha_hora": "2025-11-12 21:00:00"
-    },
-    {
-      "time": "10 PM",
       "icon": "clear_night.svg",
       "temp": 17.3,
       "coco": 1,
@@ -789,18 +782,18 @@
       "temp": 15.0,
       "coco": 17,
       "fecha_hora": "2025-11-13 02:00:00"
+    },
+    {
+      "time": "3 AM",
+      "icon": "fair_night.svg",
+      "temp": 15.9,
+      "coco": 2,
+      "fecha_hora": "2025-11-13 03:00:00"
     }
   ],
   "Santa Cruz": [
     {
       "time": "AHORA",
-      "icon": "clear_night.svg",
-      "temp": 11.1,
-      "coco": 1,
-      "fecha_hora": "2025-11-12 21:00:00"
-    },
-    {
-      "time": "10 PM",
       "icon": "clear_night.svg",
       "temp": 10.4,
       "coco": 1,
@@ -833,18 +826,18 @@
       "temp": 8.4,
       "coco": 1,
       "fecha_hora": "2025-11-13 02:00:00"
+    },
+    {
+      "time": "3 AM",
+      "icon": "cloudy.svg",
+      "temp": 8.1,
+      "coco": 3,
+      "fecha_hora": "2025-11-13 03:00:00"
     }
   ],
   "Santa Fe": [
     {
       "time": "AHORA",
-      "icon": "clear_night.svg",
-      "temp": 20.2,
-      "coco": 1,
-      "fecha_hora": "2025-11-12 21:00:00"
-    },
-    {
-      "time": "10 PM",
       "icon": "clear_night.svg",
       "temp": 19.1,
       "coco": 1,
@@ -877,18 +870,18 @@
       "temp": 16.9,
       "coco": 1,
       "fecha_hora": "2025-11-13 02:00:00"
+    },
+    {
+      "time": "3 AM",
+      "icon": "clear_night.svg",
+      "temp": 16.5,
+      "coco": 1,
+      "fecha_hora": "2025-11-13 03:00:00"
     }
   ],
   "Santiago del Estero": [
     {
       "time": "AHORA",
-      "icon": "cloudy.svg",
-      "temp": 19.7,
-      "coco": 3,
-      "fecha_hora": "2025-11-12 21:00:00"
-    },
-    {
-      "time": "10 PM",
       "icon": "cloudy.svg",
       "temp": 19.6,
       "coco": 3,
@@ -921,18 +914,18 @@
       "temp": 18.9,
       "coco": 3,
       "fecha_hora": "2025-11-13 02:00:00"
+    },
+    {
+      "time": "3 AM",
+      "icon": "cloudy.svg",
+      "temp": 18.8,
+      "coco": 3,
+      "fecha_hora": "2025-11-13 03:00:00"
     }
   ],
   "Tierra del Fuego": [
     {
       "time": "AHORA",
-      "icon": "light_rain.svg",
-      "temp": 5.8,
-      "coco": 7,
-      "fecha_hora": "2025-11-12 21:00:00"
-    },
-    {
-      "time": "10 PM",
       "icon": "light_rain.svg",
       "temp": 5.4,
       "coco": 7,
@@ -965,18 +958,18 @@
       "temp": 4.6,
       "coco": 7,
       "fecha_hora": "2025-11-13 02:00:00"
+    },
+    {
+      "time": "3 AM",
+      "icon": "light_rain.svg",
+      "temp": 4.4,
+      "coco": 7,
+      "fecha_hora": "2025-11-13 03:00:00"
     }
   ],
   "Tucumán": [
     {
       "time": "AHORA",
-      "icon": "cloudy.svg",
-      "temp": 19.0,
-      "coco": 3,
-      "fecha_hora": "2025-11-12 21:00:00"
-    },
-    {
-      "time": "10 PM",
       "icon": "cloudy.svg",
       "temp": 18.3,
       "coco": 3,
@@ -1009,6 +1002,13 @@
       "temp": 17.0,
       "coco": 3,
       "fecha_hora": "2025-11-13 02:00:00"
+    },
+    {
+      "time": "3 AM",
+      "icon": "cloudy.svg",
+      "temp": 16.5,
+      "coco": 3,
+      "fecha_hora": "2025-11-13 03:00:00"
     }
   ]
 }
