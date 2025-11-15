@@ -16,61 +16,10 @@ def cargar_datos(archivo='dataset/clima_argentina.csv'):
     df['fecha_hora'] = pd.to_datetime(df['fecha_hora'])
     return df
 
-def grafico_temperatura(df, provincia=None, guardar=True):
-    """
-    Crea un gráfico de temperatura a lo largo del tiempo
-    
-    Args:
-        df: DataFrame con los datos
-        provincia: Nombre de la provincia a filtrar (None para todas)
-        guardar: Si True, guarda el gráfico como imagen
-    """
-    plt.figure(figsize=(14, 6))
-    
-    if provincia:
-        df_filtrado = df[df['province'] == provincia]
-        titulo = f'Temperatura en {provincia}'
-    else:
-        df_filtrado = df
-        titulo = 'Temperatura en Argentina'
-    
-    # Agrupamos por fecha_hora y calculamos temperatura promedio
-    temp_promedio = df_filtrado.groupby('fecha_hora')['temp'].mean()
-    temp_max = df_filtrado.groupby('fecha_hora')['temp'].max()
-    temp_min = df_filtrado.groupby('fecha_hora')['temp'].min()
-    
-    # Graficamos
-    plt.plot(temp_promedio.index, temp_promedio.values, 
-             color='#FF6B35', linewidth=2.5, label='Temperatura Promedio')
-    plt.fill_between(temp_max.index, temp_min.values, temp_max.values, 
-                      alpha=0.2, color='#FF6B35', label='Rango Min-Max')
-    
-    plt.xlabel('Fecha y Hora', fontsize=12, fontweight='bold')
-    plt.ylabel('Temperatura (°C)', fontsize=12, fontweight='bold')
-    plt.title(titulo, fontsize=14, fontweight='bold', pad=20)
-    plt.legend(loc='best', fontsize=10)
-    plt.grid(True, alpha=0.3)
-    
-    # Formato de fecha en el eje X
-    plt.gcf().autofmt_xdate()
-    ax = plt.gca()
-    ax.xaxis.set_major_formatter(mdates.DateFormatter('%d/%m %H:%M'))
-    
-    plt.tight_layout()
-    
-    if guardar:
-        nombre_archivo = f'grafico_temperatura_{provincia if provincia else "argentina"}.png'
-        plt.savefig(nombre_archivo, dpi=300, bbox_inches='tight')
-        print(f'Gráfico guardado como: {nombre_archivo}')
-    
-    plt.show()
-
+# crea un gráfico de precipitación a lo largo del tiempo
 def grafico_precipitacion(df, provincia=None, guardar=True):
     """
-    Crea un gráfico de barras de precipitación a lo largo del tiempo
-    
-    Args:
-        df: DataFrame con los datos
+        df: dataframe con los datos
         provincia: Nombre de la provincia a filtrar (None para todas)
         guardar: Si True, guarda el gráfico como imagen
     """
@@ -109,12 +58,10 @@ def grafico_precipitacion(df, provincia=None, guardar=True):
     
     plt.show()
 
+# crea un gráfico de velocidad del viento a lo largo del tiempo
 def grafico_velocidad_viento(df, provincia=None, guardar=True):
     """
-    Crea un gráfico de velocidad del viento a lo largo del tiempo
-    
-    Args:
-        df: DataFrame con los datos
+        df: dataframe con los datos
         provincia: Nombre de la provincia a filtrar (None para todas)
         guardar: Si True, guarda el gráfico como imagen
     """
@@ -160,12 +107,10 @@ def grafico_velocidad_viento(df, provincia=None, guardar=True):
     
     plt.show()
 
+# crea un gráfico polar (rosa de los vientos) de la dirección del viento
 def grafico_direccion_viento(df, provincia=None, guardar=True):
     """
-    Crea un gráfico polar (rosa de los vientos) de la dirección del viento
-    
-    Args:
-        df: DataFrame con los datos
+        df: dataframe con los datos
         provincia: Nombre de la provincia a filtrar (None para todas)
         guardar: Si True, guarda el gráfico como imagen
     """
@@ -238,12 +183,10 @@ def grafico_direccion_viento(df, provincia=None, guardar=True):
     
     plt.show()
 
+# crea un gráfico lineal de la dirección del viento a lo largo del tiempo
 def grafico_lineal_direccion_viento(df, provincia=None, guardar=True):
     """
-    Crea un gráfico lineal de la dirección del viento a lo largo del tiempo
-    
-    Args:
-        df: DataFrame con los datos
+        df: dataframe con los datos
         provincia: Nombre de la provincia a filtrar (None para todas)
         guardar: Si True, guarda el gráfico como imagen
     """
@@ -298,40 +241,30 @@ def grafico_lineal_direccion_viento(df, provincia=None, guardar=True):
     
     plt.show()
 
+# genera todos los gráficos disponibles
 def generar_todos_los_graficos(provincia=None):
-    """
-    Genera todos los gráficos disponibles
-    
-    Args:
-        provincia: Nombre de la provincia a filtrar (None para todas)
-    """
     print("Cargando datos...")
     df = cargar_datos()
     
     print("\n=== Generando gráficos ===\n")
     
-    print("1. Gráfico de Temperatura")
-    grafico_temperatura(df, provincia)
-    
-    print("\n2. Gráfico de Precipitación")
+    print("1. Gráfico de Precipitación")
     grafico_precipitacion(df, provincia)
     
-    print("\n3. Gráfico de Velocidad del Viento")
+    print("\n2. Gráfico de Velocidad del Viento")
     grafico_velocidad_viento(df, provincia)
     
-    print("\n4. Gráfico de Dirección del Viento (Rosa de los Vientos)")
+    print("\n3. Gráfico de Dirección del Viento (Rosa de los Vientos)")
     grafico_direccion_viento(df, provincia)
     
-    print("\n5. Gráfico de Dirección del Viento (Lineal)")
+    print("\n4. Gráfico de Dirección del Viento (Lineal)")
     grafico_lineal_direccion_viento(df, provincia)
     
     print("\n¡Todos los gráficos generados exitosamente!")
 
-def generar_grafico_web_temperatura(provincia, output_dir='web/img/graphs'):
+# genera un gráfico de temperatura
+def grafico_temperatura(provincia, output_dir='web/img/graphs'):
     """
-    Genera un gráfico de temperatura optimizado para la web
-    
-    Args:
         provincia: Nombre de la provincia
         output_dir: Directorio donde guardar el gráfico
     """
@@ -425,7 +358,7 @@ def generar_graficos_todas_provincias_web():
     print("\nGenerando gráficos web para todas las provincias...")
     for provincia in provincias:
         print(f"  → {provincia}")
-        generar_grafico_web_temperatura(provincia)
+        grafico_temperatura(provincia)
     print("\n✓ Todos los gráficos web generados exitosamente!")
 
 def menu_interactivo():
@@ -458,18 +391,17 @@ def menu_interactivo():
     # Seleccionar tipo de gráfico
     print("\n" + "-"*50)
     print("Tipos de gráficos disponibles:")
-    print("  1. Temperatura")
-    print("  2. Precipitación")
-    print("  3. Velocidad del Viento")
-    print("  4. Dirección del Viento (Rosa de los Vientos)")
-    print("  5. Dirección del Viento (Lineal)")
-    print("  6. Todos los gráficos")
-    print("  7. Gráfico Web (para integrar en info.html)")
+    print("  1. Precipitación")
+    print("  2. Velocidad del Viento")
+    print("  3. Dirección del Viento (Rosa de los Vientos)")
+    print("  4. Dirección del Viento (Lineal)")
+    print("  5. Todos los gráficos")
+    print("  6. Gráfico Web de Temperatura (para integrar en info.html)")
     
     while True:
         try:
-            opcion_grafico = int(input("\nSeleccione el tipo de gráfico (1-7): "))
-            if 1 <= opcion_grafico <= 7:
+            opcion_grafico = int(input("\nSeleccione el tipo de gráfico (1-6): "))
+            if 1 <= opcion_grafico <= 6:
                 break
             else:
                 print("Opción no válida. Intente de nuevo.")
@@ -482,20 +414,18 @@ def menu_interactivo():
     print("="*50 + "\n")
     
     if opcion_grafico == 1:
-        grafico_temperatura(df, provincia)
-    elif opcion_grafico == 2:
         grafico_precipitacion(df, provincia)
-    elif opcion_grafico == 3:
+    elif opcion_grafico == 2:
         grafico_velocidad_viento(df, provincia)
-    elif opcion_grafico == 4:
+    elif opcion_grafico == 3:
         grafico_direccion_viento(df, provincia)
-    elif opcion_grafico == 5:
+    elif opcion_grafico == 4:
         grafico_lineal_direccion_viento(df, provincia)
-    elif opcion_grafico == 6:
+    elif opcion_grafico == 5:
         generar_todos_los_graficos(provincia)
-    elif opcion_grafico == 7:
+    elif opcion_grafico == 6:
         if provincia:
-            generar_grafico_web_temperatura(provincia)
+            grafico_temperatura(provincia)
         else:
             generar_graficos_todas_provincias_web()
 
@@ -513,7 +443,6 @@ if __name__ == "__main__":
     
     # Opción 4: Generar gráficos individuales
     # df = cargar_datos()
-    # grafico_temperatura(df, provincia="Córdoba")
     # grafico_precipitacion(df)
     # grafico_velocidad_viento(df, provincia="Santa Fe")
     # grafico_direccion_viento(df, provincia="Buenos Aires")
