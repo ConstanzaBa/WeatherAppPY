@@ -249,6 +249,14 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
       });
 
+      // Actualizar gráfico de temperatura
+      const chartImg = cardInfo.querySelector("#temperature-chart");
+      if (chartImg) {
+        const normalizedName = normalize(nombre);
+        chartImg.src = `img/graphs/temp_chart_${normalizedName}.png?cache=${Date.now()}`;
+        chartImg.alt = `Gráfico de temperatura de ${nombre}`;
+      }
+
       // Actualizar animaciones visuales con un pequeño delay para asegurar que el DOM esté listo
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {

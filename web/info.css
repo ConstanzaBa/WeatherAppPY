@@ -731,39 +731,25 @@
   background: var(--card-bg);
   padding: 2rem;
   border-radius: 1.5rem;
-  min-width: 22rem;
+  box-shadow: var(--shadow-soft);
   margin-left: 35px;
 }
 
-.chart {
-  height: 50px;
-  width: 350px;
+.chart-image-wrapper {
+  width: 100%;
   display: flex;
-  align-items: flex-end;
-  gap: 8px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 1rem;
+  overflow: hidden;
 }
 
-.chart-bar {
-  flex: 1;
-  background: linear-gradient(
-    to top,
-    var(--primary-color),
-    var(--secondary-color)
-  );
-  border-radius: 8px 8px 0 0;
-  position: relative;
-  height: 50px;
-  width: 350px;
-}
-
-.chart-label {
-  position: absolute;
-  bottom: -25px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 11px;
-  color: var(--subtext-color);
-  white-space: nowrap;
+.temperature-chart-img {
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  object-fit: contain;
+  border-radius: 0.5rem;
 }
 
 .section-title {
@@ -776,10 +762,6 @@
   display: flex;
   gap: 1rem;
   overflow-x: auto;
-  height: 100px;
-  width: 350px;
-  margin-top: 2rem;
-  padding-bottom: 1rem;
   scrollbar-width: thin;
   scrollbar-color: var(--secondary-color) transparent;
 }
@@ -834,6 +816,7 @@
   background: var(--detail-bg);
   padding: 2rem;
   border-radius: 1.5rem;
+  box-shadow: var(--shadow-soft);
   grid-area: auto;
 }
 

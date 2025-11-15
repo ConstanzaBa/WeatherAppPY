@@ -109,17 +109,17 @@ try {
       let topColor, bottomColor;
       
       if (precipitation === 0) {
-        topColor = 'var(--sky-good-top)';
-        bottomColor = 'var(--sky-good-bottom)';
+        topColor = '#c6d8ff';
+        bottomColor = '#f6eaff';
       } else if (precipitation < 10) {
-        topColor = 'var(--sky-medium-top)';
-        bottomColor = 'var(--sky-medium-bottom)';
+        topColor = '#b1b3ff';
+        bottomColor = '#d9d0ff';
       } else if (precipitation < 50) {
-        topColor = 'var(--sky-low-top)';
-        bottomColor = 'var(--sky-low-bottom)';
+        topColor = '#9e9eff';
+        bottomColor = '#bfb4ff';
       } else {
-        topColor = 'var(--sky-verylow-top)';
-        bottomColor = 'var(--sky-verylow-bottom)';
+        topColor = '#8576ff';
+        bottomColor = '#a29bff';
       }
       
       rainGlass.style.background = `linear-gradient(to bottom, ${topColor}, ${bottomColor})`;
@@ -188,20 +188,20 @@ try {
     // Determinar color de fondo y estado según nivel de humedad
     let topColor, bottomColor, status;
     if (humidity < 30) {
-      topColor = 'var(--sky-good-top)';
-      bottomColor = 'var(--sky-good-bottom)';
+      topColor = '#c6d8ff';
+      bottomColor = '#f6eaff';
       status = "Seco";
     } else if (humidity < 60) {
-      topColor = 'var(--sky-medium-top)';
-      bottomColor = 'var(--sky-medium-bottom)';
+      topColor = '#b1b3ff';
+      bottomColor = '#d9d0ff';
       status = "Moderado";
     } else if (humidity < 85) {
-      topColor = 'var(--sky-low-top)';
-      bottomColor = 'var(--sky-low-bottom)';
+      topColor = '#9e9eff';
+      bottomColor = '#bfb4ff';
       status = "Húmedo";
     } else {
-      topColor = 'var(--sky-verylow-top)';
-      bottomColor = 'var(--sky-verylow-bottom)';
+      topColor = '#8576ff';
+      bottomColor = '#a29bff';
       status = "Condensado";
     }
 

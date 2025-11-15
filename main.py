@@ -25,6 +25,11 @@ def actualizar_clima_en_tiempo_real():
                 print(f"{ahora.strftime('%H:%M:%S')} → Actualizando el clima...")
                 subprocess.run(["python", "actualizarxhora.py"], check=True)
                 print("Actualización exitosa.")
+                
+                # Actualizamos también los gráficos
+                print("Actualizando gráficos...")
+                subprocess.run(["python", "actualizargraficos.py"], check=True)
+                print("Gráficos actualizados.")
             except Exception as e:
                 print(f"Error al actualizar el clima: {e}")
             
@@ -46,6 +51,13 @@ if __name__ == '__main__':
         subprocess.run(["python", "actualizarxhora.py"], check=True)
     except Exception as e:
         print(f"Error al actualizar los datos horarios iniciales: {e}")
+
+    # Generamos los gráficos de temperatura para la web
+    try:
+        print("Generando gráficos de temperatura...")
+        subprocess.run(["python", "actualizargraficos.py"], check=True)
+    except Exception as e:
+        print(f"Error al generar los gráficos: {e}")
 
     # hilo daemon que ejecuta la función de actualización en tiempo real
     hilo = threading.Thread(target=actualizar_clima_en_tiempo_real, daemon=True)
