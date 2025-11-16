@@ -1,34 +1,50 @@
+"""
+Mapeos de códigos meteorológicos (coco) a iconos y descripciones de clima.
+
+Este módulo contiene dos diccionarios:
+    - weather_icons: relaciona códigos coco con el archivo SVG correspondiente.
+    - weather_descriptions: describe en texto la condición asociada al código coco.
+
+Entradas:
+    No recibe parámetros.
+
+Salidas:
+    Diccionarios accesibles desde otros módulos como actualclima.py
+"""
+
+# Íconos asociados a cada código de condición climática (COCO)
 weather_icons = {
-    1: "clear.svg",                  # Despejado
-    2: "fair.svg",                   # Parcialmente despejado
-    3: "cloudy.svg",                 # Parcialmente nublado
-    4: "overcast.svg",               # Nublado
-    5: "fog.svg",                    # Niebla
-    6: "freezing_fog.svg",           # Niebla helada / Con escarcha
-    7: "light_rain.svg",             # Llovizna
-    8: "rain.svg",                   # Lluvia moderada
-    9: "heavy_rain.svg",             # Lluvia intensa
-    10: "freezing_rain.svg",         # Lluvia helada
-    11: "heavy_sleet.svg",           # Lluvia helada intensa
-    12: "sleet.svg",                 # Aguanieve (constante)
-    13: "heavy_sleet.svg",           # Aguanieve intensa
-    14: "light_snowfall.svg",        # Nieve debil
-    15: "snowfall.svg",              # Nieve moderada
-    16: "heavy_snowfall.svg",        # Nieve intensa
-    17: "rain.svg",                  # Lluvias aisladas
-    18: "heavy_rain.svg",            # Lluvias fuertes
-    19: "sleet.svg",                 # Aguanieve intermitente
-    20: "heavy_sleet.svg",           # Aguanieve intensa intermitente
-    21: "light_snowfall.svg",        # Nevadas aisladas
-    22: "heavy_snowfall.svg",        # Nevadas intensas
-    23: "lightning.svg",             # Relámpagos
-    24: "hail.svg",                  # Granizo
-    25: "thunderstorms.svg",         # Tormenta electrica
-    26: "heavy_thunderstorm.svg",    # Tormenta electrica fuerte
-    27: "storm.svg",                 # Tormenta
-    28: "wind.svg"                   # Viento
+    1: "clear.svg",
+    2: "fair.svg",
+    3: "cloudy.svg",
+    4: "overcast.svg",
+    5: "fog.svg",
+    6: "freezing_fog.svg",
+    7: "light_rain.svg",
+    8: "rain.svg",
+    9: "heavy_rain.svg",
+    10: "freezing_rain.svg",
+    11: "heavy_sleet.svg",
+    12: "sleet.svg",
+    13: "heavy_sleet.svg",
+    14: "light_snowfall.svg",
+    15: "snowfall.svg",
+    16: "heavy_snowfall.svg",
+    17: "rain.svg",
+    18: "heavy_rain.svg",
+    19: "sleet.svg",
+    20: "heavy_sleet.svg",
+    21: "light_snowfall.svg",
+    22: "heavy_snowfall.svg",
+    23: "lightning.svg",
+    24: "hail.svg",
+    25: "thunderstorms.svg",
+    26: "heavy_thunderstorm.svg",
+    27: "storm.svg",
+    28: "wind.svg"
 }
 
+# Descripciones de cada código COCO
 weather_descriptions = {
     1: "Despejado",
     2: "Parcialmente despejado",

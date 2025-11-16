@@ -3,7 +3,9 @@ fetch("header.html")
   .then(data => {
     document.getElementById("header").innerHTML = data;
 
-    // === INICIO: Funciones de tema claro/oscuro ===
+    // =============================
+    //       TEMA CLARO / OSCURO
+    // =============================
     function setTheme(isDark) {
       const root = document.documentElement;
       if (isDark) {
@@ -20,24 +22,35 @@ fetch("header.html")
       const isDark = saved === "dark";
       setTheme(isDark);
 
-      // sincronizar el estado visual del toggle
+      // Sincronizar el checkbox visualmente
       const checkbox = document.querySelector(".theme-switch__checkbox");
       if (checkbox) checkbox.checked = isDark;
     }
 
-    // Cargar tema guardado al insertar el header
+    // Ejecutar apenas se inserta el header
     loadSavedTheme();
 
-    // Listener para el toggle
+    // Listener del toggle
     const themeToggle = document.querySelector(".theme-switch__checkbox");
     if (themeToggle) {
       themeToggle.addEventListener("change", (e) => {
         setTheme(e.target.checked);
+
+        // Si hay clima cargado y una función visual, actualizar
+        if (window.provinciaActual && typeof updateVisuals === "function") {
+          const provKey = window.provinciaActual.toLowerCase()
+            .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+            .replace(/\s+/g, "_");
+
+          const clima = window.climaPorProvincia?.[provKey];
+          if (clima) updateVisuals(clima);
+        }
       });
     }
-    // === FIN: Funciones de tema claro/oscuro ===
 
-    // === HOME ICON ===
+    // =============================
+    //            HOME
+    // =============================
     const homeIcon = document.querySelector(".icon");
     if (homeIcon) {
       homeIcon.style.cursor = "pointer";
@@ -46,7 +59,9 @@ fetch("header.html")
       });
     }
 
-    // === REFRESH BUTTON ===
+    // =============================
+    //            REFRESH
+    // =============================
     const refreshBtn = document.querySelector(".refresh-btn svg");
     if (refreshBtn) {
       refreshBtn.addEventListener("click", () => {
@@ -55,7 +70,8 @@ fetch("header.html")
 
         setTimeout(() => {
           refreshBtn.style.transform = "rotate(0deg)";
-          // Si existe la función global para refrescar provincia actual → ejecutarla
+
+          // Si la página tiene función para refrescar clima
           if (typeof cargarProvinciaActual === "function") {
             cargarProvinciaActual();
           }
@@ -63,7 +79,9 @@ fetch("header.html")
       });
     }
 
-    // === ACTUALIZAR NOMBRE DE PROVINCIA ===
+    // =============================
+    //   ACTUALIZAR NOMBRE PROVINCIA
+    // =============================
     window.actualizarNombreProvincia = function (nombreProvincia) {
       const nombreEl = document.querySelector(".nombre-p");
       if (nombreEl) {

@@ -314,7 +314,7 @@ def grafico_temperatura(provincia, df=None, output_dir='web/img/graphs'):
         print(f"No hay datos para {provincia}")
         return None
 
-    df_filtrado = df_filtrado.head(22)
+    df_filtrado = df_filtrado.head(24)
 
     fig, ax = plt.subplots(figsize=(12, 4))
     fig.patch.set_alpha(0)
@@ -332,25 +332,20 @@ def grafico_temperatura(provincia, df=None, output_dir='web/img/graphs'):
                 color=color, linewidth=3)
 
     ax.scatter(df_filtrado['fecha_hora'], df_filtrado['temp'],
-                c=primary_color, s=40, zorder=5,
-                edgecolors='white', linewidths=2)
+            c=primary_color, s=40, zorder=5,
+            edgecolors='white', linewidths=2)
 
     ax.fill_between(df_filtrado['fecha_hora'], df_filtrado['temp'],
                     alpha=0.3, color=primary_color)
 
-    text_color = '#9381FF'
+    text_color = '#9381FF'  # color único para ambos temas
 
-    # Labels 
-    ax.set_xlabel('Hora', color=text_color, fontsize=20)
-    ax.set_ylabel('Temperatura (°C)', color=text_color, fontsize=20)
+    ax.set_xlabel('Hora', color=text_color)
+ax.set_ylabel('Temperatura (°C)', color=text_color)
+ax.grid(True, alpha=0.2, color=text_color, linestyle='--')
+ax.tick_params(colors=text_color)
 
-    # Ticks 
-    ax.tick_params(axis='x', colors=text_color, labelsize=16)
-    ax.tick_params(axis='y', colors=text_color, labelsize=16)
 
-    ax.grid(True, alpha=0.2, color=text_color, linestyle='--')
-
-    # Formato y ubicación de los ticks de tiempo
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M'))
     ax.xaxis.set_major_locator(mdates.HourLocator(interval=3))
 
@@ -359,7 +354,7 @@ def grafico_temperatura(provincia, df=None, output_dir='web/img/graphs'):
     ensure_dir(output_dir)
     out = os.path.join(output_dir, f'temp_chart_{normalize_filename(provincia)}.png')
 
-    plt.savefig(out, dpi=300, transparent=True, bbox_inches='tight', facecolor='none')
+    plt.savefig(out, dpi=150, transparent=True, bbox_inches='tight', facecolor='none')
     plt.close()
 
     print(f'Gráfico web guardado: {out}')

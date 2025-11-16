@@ -1,6 +1,6 @@
 /* === HEADER PRINCIPAL === */
 .header {
-  width: 46rem;
+  width: 48rem;
   border-radius: 1.5rem;
   backdrop-filter: blur(var(--header-blur));
   background-color: var(--header-bg);

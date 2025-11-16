@@ -170,7 +170,7 @@ body {
 .card {
   width: 100%;
   margin: 2rem 0rem;
-  max-width: 44rem;
+  max-width: 46rem;
   border-radius: 1.5rem;
   box-shadow: var(--shadow-soft);
   overflow: hidden;
@@ -257,12 +257,19 @@ path[id^="AR"]:hover {
   flex-direction: column;
   align-content: space-around;
   animation: aparecer 0.4s ease forwards;
+  width: 100%;
+  max-width: 50rem;
   min-height: 900px;
-  min-width: 48rem;
   overflow-y: auto;
   padding: 2rem 0;
   justify-content: space-around;
   align-items: center;
+  border-radius: 1.5rem; 
+  box-shadow: var(--shadow-soft);
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  backdrop-filter: blur(10px);
+  transition: all 0.4s ease;
 }
 
 #loader-text {
@@ -282,7 +289,7 @@ path[id^="AR"]:hover {
   align-items: center;
   animation: aparecer 0.4s ease forwards;
   height: auto;
-  min-width: 30rem;
+  min-width: 46rem;
 }
 
 /* === ANIMACIONES === */

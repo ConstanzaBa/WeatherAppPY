@@ -11,7 +11,7 @@
 /* === GRID GENERAL === */
 .grid-container {
   display: grid;
-  gap: 4rem;
+  gap: 3rem;
   width: 100%;
 }
 
@@ -83,7 +83,7 @@
 .weather-details {
   display: grid;
   grid-template-columns: repeat(3, 0fr);
-  gap: 1rem;
+  gap: 1.7rem;
   justify-items: stretch;
   align-items: stretch;
   justify-content: space-evenly;
@@ -333,7 +333,7 @@
 
 .thermometer {
   position: relative;
-  width: 3rem;
+  width: 2.5rem;
   height: 10rem;
   background: linear-gradient(180deg, var(--thermo-body), var(--thermo-body));
   border-radius: 20px;
