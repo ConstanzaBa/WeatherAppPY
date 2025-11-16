@@ -199,36 +199,6 @@ def grafico_direccion_viento(df, provincia=None, output_dir='web/img/graphs', ar
 
     guardar_fig(fig, nombre_png)
 
-
-def grafico_lineal_direccion_viento(df, provincia=None, output_dir='web/img/graphs', archivo_csv='dataset/clima_argentina.csv'):
-    """
-    Genera un gráfico lineal de dirección promedio del viento.
-    """
-    df_filtrado = df[df['province'] == provincia] if provincia else df
-    dir_prom = df_filtrado.groupby('fecha_hora')['wdir'].mean()
-    if dir_prom.empty:
-        return
-
-    nombre_png = os.path.join(output_dir, f'grafico_lineal_direccion_viento_{normalize_filename(provincia)}.png')
-    ensure_dir(output_dir)
-    if esta_actualizado(archivo_csv, nombre_png):
-        return
-
-    fig, ax = plt.subplots()
-    sc = ax.scatter(dir_prom.index, dir_prom.values, c=dir_prom.values, cmap='twilight', s=60, alpha=0.85)
-
-    ax.set_xlabel('Hora', fontsize=13, color=PURPLE_A)
-    ax.set_ylabel('Dirección (°)', fontsize=13, color=PURPLE_A)
-    ax.tick_params(axis='x', colors=PURPLE_A, labelsize=11)
-    ax.tick_params(axis='y', colors=PURPLE_A, labelsize=11)
-
-    ax.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M'))
-    fig.autofmt_xdate(rotation=30)
-
-    plt.colorbar(sc, label='Dirección (°)')
-    guardar_fig(fig, nombre_png)
-
-
 def grafico_humedad(df, provincia=None, output_dir='web/img/graphs', archivo_csv='dataset/clima_argentina.csv'):
     """
     Grafica la humedad relativa promedio por hora.
@@ -341,7 +311,6 @@ def generar_graficos_provincia(provincia, df, output_dir='web/img/graphs', archi
     grafico_precipitacion(df, provincia, output_dir, archivo_csv)
     grafico_velocidad_viento(df, provincia, output_dir, archivo_csv)
     grafico_direccion_viento(df, provincia, output_dir, archivo_csv)
-    grafico_lineal_direccion_viento(df, provincia, output_dir, archivo_csv)
     grafico_humedad(df, provincia, output_dir, archivo_csv)
     grafico_temp_vs_sensacion(df, provincia, output_dir, archivo_csv)
     grafico_temp_web(df, provincia, output_dir, archivo_csv)

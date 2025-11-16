@@ -401,10 +401,7 @@ function inicializarGraficos() {
     precipitacion: `img/graphs/grafico_precipitacion_${provKey}.png`,
     humedad: `img/graphs/grafico_humedad_${provKey}.png`,
     viento: `img/graphs/grafico_velocidad_viento_${provKey}.png`,
-    direccion_viento: `img/graphs/grafico_direccion_viento_${provKey}.png`,
-    // hay dos de este, el lineal lo hiciste vos, por eso lo deje, elegi el que mas te guste
-    direccion_viento_lineal: `img/graphs/grafico_lineal_direccion_viento_${provKey}.png`
-    // agrega el grafico que quieras y listo
+    direccion_viento: `img/graphs/grafico_direccion_viento_${provKey}.png`
   };
 
   // Inicializa con temperatura
