@@ -11,7 +11,7 @@
 /* === GRID GENERAL === */
 .grid-container {
   display: grid;
-  gap: 3rem;
+  gap: 2rem;
   width: 100%;
 }
 
@@ -34,10 +34,12 @@
 /* === CLIMA ACTUAL === */
 .provincia-container {
   grid-area: 1/1;
-  width: 100%;
-  padding: 2rem;
+  display: grid;
+  padding: 3rem;
+  align-content: center;
   text-align: center;
   background: var(--card-bg);
+  justify-content: center;
   border-radius: 1.5rem;
   box-shadow: var(--shadow-soft);
 }
@@ -428,7 +430,11 @@
 /* === PARTÍCULAS DE VAPOR === */
 .vapor-particle {
   position: absolute;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.6), rgba(200, 220, 255, 0.3));
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.6),
+    rgba(200, 220, 255, 0.3)
+  );
   border-radius: 50%;
   animation: floatVapor linear infinite;
   opacity: 0;
@@ -633,13 +639,14 @@
   left: 50%;
   transform: translateX(-50%);
   border-radius: 50%;
-  background: radial-gradient(circle, #FFF9C4, #FFE082);
+  background: radial-gradient(circle, #fff9c4, #ffe082);
   animation: uvSunPulse 3s ease-in-out infinite;
   z-index: 2;
 }
 
 @keyframes uvSunPulse {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateX(-50%) scale(1);
     opacity: 0.9;
   }
@@ -655,14 +662,14 @@
   left: 50%;
   transform: translateX(-50%);
   border-radius: 50%;
-  background: radial-gradient(circle, #F0F0F0, #C8C8D0);
+  background: radial-gradient(circle, #f0f0f0, #c8c8d0);
   animation: uvMoonGlow 4s ease-in-out infinite;
   z-index: 2;
   position: relative;
 }
 
 .uv-moon::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 15%;
   left: 25%;
@@ -670,13 +677,13 @@
   height: 25%;
   border-radius: 50%;
   background: rgba(180, 180, 190, 0.3);
-  box-shadow: 
-    10px 5px 0 -2px rgba(180, 180, 190, 0.2),
+  box-shadow: 10px 5px 0 -2px rgba(180, 180, 190, 0.2),
     -5px 10px 0 -3px rgba(180, 180, 190, 0.15);
 }
 
 @keyframes uvMoonGlow {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateX(-50%) scale(1);
     opacity: 0.85;
   }
@@ -732,7 +739,6 @@
   padding: 2rem;
   border-radius: 1.5rem;
   box-shadow: var(--shadow-soft);
-  margin-left: 35px;
 }
 
 .chart-image-wrapper {
@@ -860,12 +866,68 @@
   margin-left: 10px;
 }
 
-/* === MODO CLARO - Mantener títulos blancos en cards de animación === */
-:root:not(.dark-theme) .visibility-title,
-:root:not(.dark-theme) .uv-title,
-:root:not(.dark-theme) .wind-card h2,
-:root:not(.dark-theme) .temp-info h2,
-:root:not(.dark-theme) .precipitation-card h2,
-:root:not(.dark-theme) .humidity-card h2 {
-  color: #ffffff;
+/* === Graficos === */
+
+.graph-selector {
+  display: grid;
+  padding: 2rem;
+  gap: 1rem;
+  background: var(--detail-bg);
+  border-radius: 15px;
+  box-shadow: var(--shadow-soft);
+  backdrop-filter: blur(6px);
+}
+
+/* Tabs */
+.graph-tabs {
+  display: flex;
+  gap: 1rem;
+  padding-bottom: 1rem;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--secondary-color) transparent;
+}
+
+.graph-tabs .tab {
+  background: var(--icon-hover);
+  border: none;
+  padding: 10px 18px;
+  border-radius: 10px;
+  color: var(--primary-color);
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.2s ease, color 0.2s ease;
+  white-space: nowrap;
+}
+
+.dark-theme .graph-tabs .tab {
+  background: var(--card-bg);
+  color: var(--primary-color);
+}
+
+.graph-tabs .tab:hover {
+  filter: brightness(1.08);
+}
+
+.graph-tabs .tab.active {
+  background: var(--icon-color);
+  color: white;
+  box-shadow: var(--shadow-soft);
+}
+
+.dark-theme .graph-tabs .tab.active {
+  background: var(--primary-light);
+}
+
+.graph-viewer {
+  width: 100%;
+  text-align: center;
+}
+
+.graph-img {
+  display: flex;
+  width: 100%;
+  object-fit: contain;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.03);
 }

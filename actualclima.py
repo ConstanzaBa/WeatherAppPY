@@ -7,13 +7,12 @@ Este script:
 2. Obtiene para cada provincia:
     - La hora más reciente con datos (clima actual).
     - Las próximas horas (hasta 6 registros) como pronóstico horario.
-3. Calcula visibilidad, sensación térmica y radiación UV.
-4. Selecciona el icono adecuado según hora del día.
-5. Guarda los datos en formato JSON para ser usados por la interfaz web.
+3. Selecciona el icono adecuado según hora del día.
+4. Guarda los datos en formato JSON para ser usados por la interfaz web.
 
 Entradas:
 - Archivos CSV en dataset/provincia/ con columnas:
-    fecha_hora, temp, rhum, prcp, wspd, dwpt, snow, coco
+    fecha_hora, temp, rhum, prcp, wspd, dwpt, snow, coco, sensacionTermica, uvIndex, visibilidad
 
 Salidas:
 - web/clima_actual.json
@@ -27,12 +26,6 @@ from datetime import datetime
 from zoneinfo import ZoneInfo
 
 from codclimatico import weather_icons, weather_descriptions
-from parametros import (
-    calcular_sensacion_termica,
-    calcular_radiacion_uv,
-    calcular_visibilidad,
-)
-
 
 # ============================================================
 # Función auxiliar para cargar un CSV de provincia
@@ -42,16 +35,6 @@ def cargar_csv_provincia(ruta):
     """
     Carga un archivo CSV de clima para una provincia y convierte la columna
     fecha_hora a formato datetime con zona horaria de Argentina.
-
-    Parametros
-    ----------
-    ruta : str
-        Ruta al archivo CSV.
-
-    Retorna
-    -------
-    DataFrame
-        DataFrame con la columna fecha_hora convertida y datos listos para usar.
     """
     df = pd.read_csv(ruta)
     df["fecha_hora"] = pd.to_datetime(df["fecha_hora"])
@@ -62,7 +45,6 @@ def cargar_csv_provincia(ruta):
     )
     return df
 
-
 # ============================================================
 # Función que obtiene el clima actual de una provincia
 # ============================================================
@@ -70,22 +52,7 @@ def cargar_csv_provincia(ruta):
 def obtener_clima_actual(df, ahora, provincia):
     """
     Obtiene el registro de clima más reciente para una provincia.
-
-    Parametros
-    ----------
-    df : DataFrame
-        Datos de clima de la provincia.
-    ahora : datetime
-        Hora actual con timezone Argentina.
-    provincia : str
-        Nombre de la provincia (normalizado desde el archivo CSV).
-
-    Retorna
-    -------
-    dict
-        Diccionario con los datos del clima actual.
     """
-
     df_pasado = df[df["fecha_hora"] <= ahora]
 
     if not df_pasado.empty:
@@ -105,28 +72,20 @@ def obtener_clima_actual(df, ahora, provincia):
         elif icono == "fair.svg":
             icono = "fair_night.svg"
 
-    fecha_iso = fila["fecha_hora"].strftime("%Y-%m-%dT%H:%M:%SZ")
-
     return {
         "provincia": provincia,
         "temperatura": round(fila["temp"], 1) if not pd.isna(fila["temp"]) else None,
         "humedad": round(fila["rhum"], 1) if not pd.isna(fila["rhum"]) else None,
         "precipitacion": round(fila["prcp"], 1) if not pd.isna(fila["prcp"]) else None,
         "viento": round(fila["wspd"], 1) if not pd.isna(fila["wspd"]) else None,
-        "visibilidad": calcular_visibilidad(
-            fila["temp"], fila["rhum"], fila["dwpt"], fila["prcp"],
-            fila["snow"], fila["wspd"], coco
-        ),
-        "sensacionTermica": calcular_sensacion_termica(
-            fila["temp"], fila["rhum"], fila["wspd"]
-        ),
-        "uvIndex": calcular_radiacion_uv(fila["temp"], coco, fecha_iso),
+        "visibilidad": round(fila["visibilidad"], 1) if not pd.isna(fila.get("visibilidad")) else None,
+        "sensacionTermica": round(fila["sensacionTermica"], 1) if not pd.isna(fila.get("sensacionTermica")) else None,
+        "uvIndex": round(fila["uvIndex"], 1) if not pd.isna(fila.get("uvIndex")) else None,
         "coco": coco,
         "icono": icono,
         "condicion": descripcion,
         "fecha_hora": fila["fecha_hora"].strftime("%Y-%m-%d %H:%M:%S %Z"),
     }
-
 
 # ============================================================
 # Función que obtiene el pronóstico horario
@@ -135,20 +94,7 @@ def obtener_clima_actual(df, ahora, provincia):
 def obtener_clima_horario(df, ahora):
     """
     Genera las próximas horas de pronóstico para una provincia.
-
-    Parametros
-    ----------
-    df : DataFrame
-        Datos de clima de la provincia.
-    ahora : datetime
-        Hora actual con timezone Argentina.
-
-    Retorna
-    -------
-    list[dict]
-        Lista con hasta 6 registros horarios (incluye la hora actual).
     """
-
     idx_actual = df[df["fecha_hora"] <= ahora].index.max()
     if pd.isna(idx_actual):
         idx_actual = 0
@@ -185,7 +131,6 @@ def obtener_clima_horario(df, ahora):
 
     return horas
 
-
 # ============================================================
 # Función principal del módulo
 # ============================================================
@@ -194,13 +139,7 @@ def generar_json_clima():
     """
     Recorre todos los archivos CSV de provincias, calcula el clima actual
     y el pronóstico horario, y genera los archivos JSON usados por la interfaz.
-
-    Salidas
-    -------
-    web/clima_actual.json
-    web/clima_horario.json
     """
-
     provincia_dir = "dataset/provincia"
     ahora = datetime.now(tz=ZoneInfo("America/Argentina/Buenos_Aires"))
 
@@ -217,20 +156,17 @@ def generar_json_clima():
 
         df = cargar_csv_provincia(ruta)
 
-        clima_actual.append(
-            obtener_clima_actual(df, ahora, provincia)
-        )
-
+        clima_actual.append(obtener_clima_actual(df, ahora, provincia))
         clima_horario[provincia] = obtener_clima_horario(df, ahora)
 
     # Guardar JSON clima actual
+    os.makedirs("web", exist_ok=True)
     with open("web/clima_actual.json", "w", encoding="utf-8") as f:
         json.dump(clima_actual, f, ensure_ascii=False, indent=2)
 
     # Guardar JSON pronóstico horario
     with open("web/clima_horario.json", "w", encoding="utf-8") as f:
         json.dump(clima_horario, f, ensure_ascii=False, indent=2)
-
 
 # ============================================================
 # Ejecución directa del script

@@ -18,7 +18,12 @@
     <div class="chart-container">
       <div class="section-title">Pronóstico por Hora</div>
       <div class="chart-image-wrapper">
-        <img id="temperature-chart" src="" alt="Gráfico de Temperatura" class="temperature-chart-img">
+        <img
+          id="temperature-chart"
+          src=""
+          alt="Gráfico de Temperatura"
+          class="temperature-chart-img"
+        />
       </div>
 
       <div class="hourly-container">
@@ -51,9 +56,7 @@
     </div>
   </div>
 
-  <div class="weather-details">
-    <!-- contenido se carga dinámicamente -->
-  </div>
+  <div class="weather-details"></div>
 
   <div class="weekly-forecast">
     <div class="section-title">7-Day Forecast</div>
@@ -116,6 +119,28 @@
         <span class="high">81°</span>
         <span class="low">/ 66°</span>
       </div>
+    </div>
+  </div>
+
+  <div class="graph-selector">
+    <div class="graph-tabs">
+      <button class="tab active" data-graph="temp_vs_sensacion">
+        Temperatura
+      </button>
+      <button class="tab" data-graph="precipitacion">Precipitaciones</button>
+      <button class="tab" data-graph="humedad">Humedad</button>
+      <button class="tab" data-graph="viento">Viento</button>
+      <button class="tab" data-graph="direccion_viento">
+        Dirección del Viento
+      </button>
+      <button class="tab" data-graph="direccion_viento_lineal">
+        Dirección del Viento
+      </button>
+      <!-- Agregar un grafico es facil , agrega un boton aca y anda a la ultima fucnion del script.js-->
+    </div>
+
+    <div class="graph-viewer">
+      <img id="graph-image" src="" alt="Gráfico" class="graph-img" />
     </div>
   </div>
 </div>

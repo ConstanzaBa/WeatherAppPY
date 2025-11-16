@@ -32,8 +32,8 @@
   
 
   /* Cielo y nubes */
-   --sky-good-top: #c6d8ff;     /* azul lavanda */
-  --sky-good-bottom: #f6eaff;  /* rosado violeta suave */
+  --sky-good-top: #c6d8ff;     
+  --sky-good-bottom: #f6eaff; 
 
   --sky-medium-top: #b1b3ff;  
   --sky-medium-bottom: #d9d0ff;
@@ -48,8 +48,8 @@
   --cloud-dark: #c8c3ff;
 
   /* Lluvia */
-  --rain-drop: #b3a4ff;
-  --rain-light: #d0caff;
+  --rain-drop: #7f67f6;
+  --rain-light: #8e7ffd;
   --precip-status: #b8b8ff;
 
   /* Termómetro */
@@ -101,9 +101,8 @@
   --shadow-soft: 0 6px 20px rgba(0, 0, 0, 0.4);
   --shadow-strong: 0 12px 38px rgba(0, 0, 0, 0.65);
 
-  /* === info.css (armonizado oscuro) === */
 
- --sky-good-top: #4b4376;
+  --sky-good-top: #4b4376;
   --sky-good-bottom: #2b2245;
 
   --sky-medium-top: #3d3466;
@@ -129,8 +128,9 @@
   --info-muted: #a79edb;
   --info-alt: #b9b5ff;
 
-  --ring-bg: #3e3b63;
-  --ring-progress: #b8b0ff;
+  --rain-drop: #7f67f6;
+  --rain-dark: #8e7ffd;
+  --precip-status: #b8b8ff;
 
   --test: #ceb9f7;
   --wind-line-light: rgba(180, 160, 255, 0.7);

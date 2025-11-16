@@ -2,17 +2,14 @@ import { updateVisuals } from './details.js';
 
 window.updateVisuals = updateVisuals;
 
-
 document.addEventListener("DOMContentLoaded", async () => {
   const cardMapa = document.querySelector(".card.mapa");
   const cardInfo = document.querySelector(".card.info");
   const cardLoader = document.querySelector(".card.loader");
   const svgMapa = document.getElementById("mapa-argentina");
 
-  // variable global para provincia activa
   window.provinciaActual = null;
 
-  // normalizar nombres
   const normalize = (str) => {
     return str
       .toLowerCase()
@@ -21,14 +18,12 @@ document.addEventListener("DOMContentLoaded", async () => {
       .replace(/\s+/g, "_");
   };
 
-  // variables principales
   let climaData = [];
   let climaPorProvincia = {};
   let climaHorarioPorProvincia = {};
   let iconos = [];
   let infoHtmlTemplate = "";
 
-  // iconos detalle
   const detailIconMap = {
     Humedad: "humidity.svg",
     Viento: "wind.svg",
@@ -41,6 +36,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   function getIconFilename(clima) {
     if (!clima) return "clear.svg";
     if (clima.icono) return clima.icono;
+
     const code = Number(clima.coco);
     if (!Number.isNaN(code) && typeof weatherIcons !== "undefined") {
       return weatherIcons[code] || "clear.svg";
@@ -48,16 +44,15 @@ document.addEventListener("DOMContentLoaded", async () => {
     return "clear.svg";
   }
 
-  // cargar plantilla info.html
   async function cargarTemplateInfo() {
     try {
       const response = await fetch("info.html");
       const html = await response.text();
       const container = document.createElement("div");
       container.innerHTML = html;
+
       const containerEl = container.querySelector('.container');
       if (containerEl) {
-        // Intentar cargar el partial de detalles dinámicamente (si existe)
         try {
           const detailsResp = await fetch('partials/details.html');
           if (detailsResp.ok) {
@@ -65,9 +60,9 @@ document.addEventListener("DOMContentLoaded", async () => {
             const detailsTemp = document.createElement('div');
             detailsTemp.innerHTML = detailsHtml;
             const detailsEl = detailsTemp.querySelector('.weather-details') || detailsTemp.firstElementChild;
+
             if (detailsEl) {
               const existing = containerEl.querySelector('.weather-details');
-              // reemplazar el bloque de detalles por el partial cargado
               if (existing) existing.replaceWith(detailsEl.cloneNode(true));
               else containerEl.appendChild(detailsEl.cloneNode(true));
             }
@@ -77,63 +72,57 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
         infoHtmlTemplate = containerEl.outerHTML;
       }
+
     } catch (err) {
       console.error("Error al cargar info.html:", err);
     }
   }
-
-  // cargar datos clima actual
   async function cargarClima() {
-  const response = await fetch("clima_actual.json?cache=" + Date.now());
-  const data = await response.json();
-
-  climaPorProvincia = {};
-  data.forEach((item) => {
-    climaPorProvincia[normalize(item.provincia)] = item;
-  });
-
-  climaData = data;
-
-  window.climaPorProvincia = climaPorProvincia;
-  window.climaData = climaData;
-}
-
-  // cargar datos clima horario
-  async function cargarClimaHorario() {
-  try {
-    const response = await fetch("clima_horario.json?cache=" + Date.now());
+    const response = await fetch("clima_actual.json?cache=" + Date.now());
     const data = await response.json();
 
-    climaHorarioPorProvincia = {};
-    Object.keys(data).forEach((provincia) => {
-      climaHorarioPorProvincia[normalize(provincia)] = data[provincia];
+    climaPorProvincia = {};
+    data.forEach((item) => {
+      climaPorProvincia[normalize(item.provincia)] = item;
     });
 
-    console.log("Clima horario cargado:", climaHorarioPorProvincia);
+    climaData = data;
 
-  } catch (err) {
-    console.error("Error al cargar clima_horario.json:", err);
-    climaHorarioPorProvincia = {};
+    window.climaPorProvincia = climaPorProvincia;
+    window.climaData = climaData;
   }
 
-  window.climaHorarioPorProvincia = climaHorarioPorProvincia;
-}
+  async function cargarClimaHorario() {
+    try {
+      const response = await fetch("clima_horario.json?cache=" + Date.now());
+      const data = await response.json();
 
+      climaHorarioPorProvincia = {};
+      Object.keys(data).forEach((provincia) => {
+        climaHorarioPorProvincia[normalize(provincia)] = data[provincia];
+      });
 
-  // inicializar
-async function inicializar() {
-  await cargarTemplateInfo();
-  await cargarClima();
-  await cargarClimaHorario();
+      console.log("Clima horario cargado:", climaHorarioPorProvincia);
 
-  window.climaPorProvincia = climaPorProvincia;
-  window.climaHorarioPorProvincia = climaHorarioPorProvincia;
+    } catch (err) {
+      console.error("Error al cargar clima_horario.json:", err);
+      climaHorarioPorProvincia = {};
+    }
 
-  colocarIconos();
-}
+    window.climaHorarioPorProvincia = climaHorarioPorProvincia;
+  }
 
+  async function inicializar() {
+    await cargarTemplateInfo();
+    await cargarClima();
+    await cargarClimaHorario();
 
-  // colocar iconos en el mapa
+    window.climaPorProvincia = climaPorProvincia;
+    window.climaHorarioPorProvincia = climaHorarioPorProvincia;
+
+    colocarIconos();
+  }
+
   const labels = document.querySelectorAll("#label_points circle");
 
   function colocarIconos() {
@@ -165,7 +154,6 @@ async function inicializar() {
     });
   }
 
-  // pronóstico horario
   function actualizarPronosticoHorario(provincia) {
     const hourlyContainer = cardInfo.querySelector(".hourly-container");
     if (!hourlyContainer) return;
@@ -208,17 +196,16 @@ async function inicializar() {
       hourlyContainer.appendChild(hourlyItem);
     });
   }
-
-  // actualizar datos de una provincia
   function actualizarDatosProvincia(nombre, clima) {
     const tituloProvincia = cardInfo.querySelector(".titulo-provincia");
     const horaProvincia = cardInfo.querySelector(".hora-provincia");
+
     if (tituloProvincia) {
       const ahora = new Date();
       const diaSemana = ahora.toLocaleDateString('es-AR', { weekday: 'long' });
-      // Capitalizar primera letra
       tituloProvincia.textContent = diaSemana.charAt(0).toUpperCase() + diaSemana.slice(1);
     }
+
     if (horaProvincia && clima) {
       const ahora = new Date();
       horaProvincia.textContent = ahora.toLocaleTimeString("es-AR", {
@@ -237,10 +224,9 @@ async function inicializar() {
       const weatherIcon = cardInfo.querySelector(".weather-icon");
       if (weatherIcon) {
         const iconFilename = getIconFilename(clima);
-        weatherIcon.innerHTML = `<img src="img/weather/${iconFilename}" alt="${clima.coco ?? ""}" width="75" height="75" class="weather-icon-img">`;
+        weatherIcon.innerHTML = `<img src="img/weather/${iconFilename}" alt="${clima.coco ?? ""}" width="85" height="85" class="weather-icon-img">`;
       }
 
-      // Actualizar valores básicos directamente (fallback si updateVisuals falla)
       const humValue = document.getElementById('humValue');
       const windSpeed = document.getElementById('windSpeed');
       const visValue = document.getElementById('visValue');
@@ -255,7 +241,6 @@ async function inicializar() {
       if (precipValue) precipValue.textContent = `${clima.precipitacion ?? 0} mm`;
       if (uvNumber) uvNumber.textContent = `${clima.uvIndex}`;
 
-      // iconos de detalle
       const detailItems = cardInfo.querySelectorAll(".detail-item");
       detailItems.forEach((item) => {
         const labelEl = item.querySelector(".label");
@@ -268,7 +253,6 @@ async function inicializar() {
         }
       });
 
-      // Actualizar gráfico de temperatura
       const chartImg = cardInfo.querySelector("#temperature-chart");
       if (chartImg) {
         const normalizedName = normalize(nombre);
@@ -276,7 +260,6 @@ async function inicializar() {
         chartImg.alt = `Gráfico de temperatura de ${nombre}`;
       }
 
-      // Actualizar animaciones visuales con un pequeño delay para asegurar que el DOM esté listo
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
           updateVisuals(clima);
@@ -287,15 +270,16 @@ async function inicializar() {
     actualizarPronosticoHorario(nombre);
   }
 
-  // evento click en provincias
+  // EVENTO CLICK EN PROVINCIAS
   const provincias = document.querySelectorAll("#mapa-argentina path[id^='AR']");
   provincias.forEach((provinciaEl) => {
     provinciaEl.addEventListener("click", async () => {
       const nombre = provinciaEl.getAttribute("name");
       const clima = climaPorProvincia[normalize(nombre)];
 
-      // guardar la provincia actual globalmente
       window.provinciaActual = nombre;
+      localStorage.setItem("selectedProvince", nombre);
+
       if (typeof actualizarNombreProvincia === "function") {
         actualizarNombreProvincia(nombre);
       }
@@ -312,6 +296,9 @@ async function inicializar() {
       cardInfo.innerHTML = infoHtmlTemplate;
       actualizarDatosProvincia(nombre, clima);
 
+      // INICIALIZAR GRÁFICOS
+      inicializarGraficos();
+
       const elapsed = Date.now() - loaderStart;
       const remaining = Math.max(0, 4000 - elapsed);
       setTimeout(() => {
@@ -321,58 +308,61 @@ async function inicializar() {
     });
   });
 
-  // refrescar provincia actual (usado por el header)
+  // RECARGAR PROVINCIA DESDE LOCALSTORAGE
   window.cargarProvinciaActual = async function () {
-  if (!window.provinciaActual) return;
+    if (!window.provinciaActual) return;
 
-  const nombre = window.provinciaActual;
-  const key = normalize(nombre);
-  const clima = climaPorProvincia[key];
+    const nombre = window.provinciaActual;
+    const key = normalize(nombre);
+    const clima = climaPorProvincia[key];
 
-  cardLoader.style.display = "flex";
-  cardInfo.style.display = "none";
+    cardLoader.style.display = "flex";
+    cardInfo.style.display = "none";
 
-  await cargarClima();
-  await cargarClimaHorario();
-  colocarIconos();
+    await cargarClima();
+    await cargarClimaHorario();
+    colocarIconos();
 
-  cardInfo.innerHTML = infoHtmlTemplate;
-  actualizarDatosProvincia(nombre, clima);
+    cardInfo.innerHTML = infoHtmlTemplate;
+    actualizarDatosProvincia(nombre, clima);
 
-  const container = cardInfo.querySelector(".container");
-  if (container) {
-    const nuevoVolverBtn = document.createElement("button");
-    nuevoVolverBtn.addEventListener("click", () => {
-      cardInfo.style.display = "none";
+    // GRÁFICOS
+    inicializarGraficos();
+
+    const container = cardInfo.querySelector(".container");
+    if (container) {
+      const nuevoVolverBtn = document.createElement("button");
+      nuevoVolverBtn.addEventListener("click", () => {
+        cardInfo.style.display = "none";
+        cardLoader.style.display = "none";
+        cardMapa.style.display = "flex";
+        if (typeof actualizarNombreProvincia === "function") {
+          actualizarNombreProvincia("Argentina");
+        }
+      });
+      container.appendChild(nuevoVolverBtn);
+    }
+
+    setTimeout(() => {
       cardLoader.style.display = "none";
-      cardMapa.style.display = "flex";
-      if (typeof actualizarNombreProvincia === "function") {
-        actualizarNombreProvincia("Argentina");
-      }
-    });
-    container.appendChild(nuevoVolverBtn);
-  }
+      cardInfo.style.display = "flex";
 
-  setTimeout(() => {
-    cardLoader.style.display = "none";
-    cardInfo.style.display = "flex";
+      requestAnimationFrame(() => {
+        if (window.updateVisuals) {
+          window.updateVisuals(clima);
+        }
+      });
+    }, 300);
+  };
 
-    requestAnimationFrame(() => {
-      if (window.updateVisuals) {
-        window.updateVisuals(clima);
-      }
-    });
-  }, 300);
-};
-
-
-  // auto-actualización cada hora
+  // AUTO-UPDATE CADA HORA
   let horaActual = new Date().getHours();
   setInterval(async () => {
     const nuevaHora = new Date().getHours();
     if (nuevaHora !== horaActual) {
       horaActual = nuevaHora;
-      console.log("Cambio de hora detectado → recargando datos...");
+      console.log("Cambio de hora → recargando datos...");
+
       await cargarClima();
       await cargarClimaHorario();
       colocarIconos();
@@ -380,10 +370,56 @@ async function inicializar() {
       if (cardInfo.style.display === "flex" && window.provinciaActual) {
         const clima = climaPorProvincia[normalize(window.provinciaActual)];
         actualizarDatosProvincia(window.provinciaActual, clima);
+
+        inicializarGraficos();
       }
     }
   }, 60000);
 
-  // iniciar
   inicializar();
 });
+
+// =======================================================
+//    GRÁFICOS
+// =======================================================
+
+function inicializarGraficos() {
+  const provincia = window.provinciaActual || localStorage.getItem("selectedProvince");
+  if (!provincia) return;
+
+  const graphImg = document.getElementById("graph-image");
+  if (!graphImg) return;
+
+  const provKey = provincia
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/\s+/g, "_");
+
+  const graphMap = {
+    temp_vs_sensacion: `img/graphs/grafico_temp_vs_sensacion_${provKey}.png`,
+    precipitacion: `img/graphs/grafico_precipitacion_${provKey}.png`,
+    humedad: `img/graphs/grafico_humedad_${provKey}.png`,
+    viento: `img/graphs/grafico_velocidad_viento_${provKey}.png`,
+    direccion_viento: `img/graphs/grafico_direccion_viento_${provKey}.png`,
+    // hay dos de este, el lineal lo hiciste vos, por eso lo deje, elegi el que mas te guste
+    direccion_viento_lineal: `img/graphs/grafico_lineal_direccion_viento_${provKey}.png`
+    // agrega el grafico que quieras y listo
+  };
+
+  // Inicializa con temperatura
+  graphImg.src = graphMap["temp_vs_sensacion"];
+
+  // Marcar tab activo
+  document.querySelectorAll(".graph-tabs .tab").forEach(btn => btn.classList.remove("active"));
+  document.querySelector(`.graph-tabs .tab[data-graph="temp_vs_sensacion"]`)?.classList.add("active");
+
+  // Click en tabs
+  document.querySelectorAll(".graph-tabs .tab").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelector(".tab.active")?.classList.remove("active");
+      btn.classList.add("active");
+      graphImg.src = graphMap[btn.dataset.graph];
+    });
+  });
+}

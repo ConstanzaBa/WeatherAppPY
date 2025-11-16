@@ -1,106 +1,57 @@
-"""
-Módulo encargado de generar gráficos climáticos a partir del dataset
-clima_argentina.csv. Incluye:
+# Archivo completo corregido, con docstrings y sin títulos en los gráficos
 
-- Precipitación
-- Velocidad del viento
-- Dirección del viento (Rosa de los vientos)
-- Dirección del viento lineal
-- Gráficos web de temperatura con fondo transparente
+import matplotlib
+matplotlib.use('Agg')  # Backend no interactivo para guardar imágenes
 
-Además, provee funciones auxiliares y un menú interactivo.
-
-Este módulo está pensado tanto para visualización local como para
-integración en sitios web (carpeta web/).
-"""
+import warnings
+warnings.filterwarnings("ignore", category=UserWarning, module="matplotlib")
 
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 import numpy as np
-from datetime import datetime
 import os
 from matplotlib.colors import LinearSegmentedColormap
+from matplotlib.collections import LineCollection
+from concurrent.futures import ThreadPoolExecutor
 
-# ----------------------------------------
-# CONFIGURACIÓN GLOBAL DE GRÁFICOS
-# ----------------------------------------
+# ------------------------------------------------------------
+# CONFIGURACIÓN GLOBAL
+# ------------------------------------------------------------
 plt.style.use('seaborn-v0_8-darkgrid')
-plt.rcParams['figure.figsize'] = (12, 8)
-plt.rcParams['font.size'] = 10
+plt.rcParams['figure.figsize'] = (14, 7)
+plt.rcParams['font.size'] = 11
+DEFAULT_DPI = 200
 
+PURPLE_A = "#6C4CCF"
+PURPLE_B = "#8E6BFF"
+PURPLE_C = "#B79CFF"
 
-# ========================================
-#     FUNCIONES AUXILIARES 
-# ========================================
+# ------------------------------------------------------------
+# FUNCIONES AUXILIARES
+# ------------------------------------------------------------
 
 def cargar_datos(archivo='dataset/clima_argentina.csv'):
     """
-    Carga el dataset climático desde un archivo CSV.
+    Carga el dataset climático.
 
     Parámetros:
-        archivo (str): Ruta del archivo CSV a cargar.
+        archivo (str): Ruta al archivo CSV.
 
     Retorna:
-        pd.DataFrame: DataFrame con la columna fecha_hora convertida a datetime.
+        DataFrame: Datos con columna fecha_hora ya convertida.
     """
     df = pd.read_csv(archivo)
     df['fecha_hora'] = pd.to_datetime(df['fecha_hora'])
     return df
 
 
-def nueva_figura(figsize=(14, 6), titulo=None):
-    """
-    Crea una nueva figura estandarizada.
-
-    Parámetros:
-        figsize (tuple): Tamaño de figura.
-        titulo (str): Título opcional del gráfico.
-    """
-    plt.figure(figsize=figsize)
-    if titulo:
-        plt.title(titulo, fontsize=14, fontweight='bold', pad=20)
-
-
-def formatear_fechas(formato='%d/%m %H:%M', xlabel='Fecha y Hora'):
-    """
-    Aplica formato al eje X para mostrar fechas correctamente.
-
-    Parámetros:
-        formato (str): Formato de las fechas.
-        xlabel (str): Etiqueta del eje X.
-    """
-    plt.gcf().autofmt_xdate()
-    ax = plt.gca()
-    ax.xaxis.set_major_formatter(mdates.DateFormatter(formato))
-    ax.set_xlabel(xlabel, fontsize=12, fontweight='bold')
-
-
-def guardar_grafico(prefijo, provincia=None, output_dir='.'):
-    """
-    Guarda un gráfico con nombre estandarizado.
-
-    Parámetros:
-        prefijo (str): Prefijo del archivo (ej: 'grafico_precipitacion').
-        provincia (str | None): Provincia opcional.
-        output_dir (str): Carpeta de destino.
-    """
-    nombre = f"{prefijo}_{provincia if provincia else 'argentina'}.png"
-
-    if output_dir:
-        ensure_dir(output_dir)
-        nombre = os.path.join(output_dir, nombre)
-
-    plt.savefig(nombre, dpi=300, bbox_inches='tight')
-    print(f'Gráfico guardado como: {nombre}')
-
-
 def ensure_dir(path):
     """
-    Crea la carpeta si no existe.
+    Crea el directorio indicado si no existe.
 
     Parámetros:
-        path (str): Carpeta a crear.
+        path (str): Ruta del directorio.
     """
     if path:
         os.makedirs(path, exist_ok=True)
@@ -108,117 +59,121 @@ def ensure_dir(path):
 
 def normalize_filename(text):
     """
-    Convierte un texto en un nombre de archivo válido.
+    Normaliza un texto para usarlo como parte de un nombre de archivo.
 
     Parámetros:
-        text (str): Texto original.
+        text (str): Texto a normalizar.
 
     Retorna:
-        str: Texto normalizado (sin acentos y en minúsculas).
+        str: Texto sin tildes, minúsculas y con guiones bajos.
     """
+    if text is None:
+        return "argentina"
     import unicodedata
-    text = unicodedata.normalize('NFD', text)
+    text = unicodedata.normalize('NFD', str(text))
     text = ''.join(c for c in text if unicodedata.category(c) != 'Mn')
     return text.replace(' ', '_').lower()
 
 
-# ========================================
-#     GRÁFICOS PRINCIPALES
-# ========================================
-
-def grafico_precipitacion(df, provincia=None, guardar=True, output_dir='.'):
+def esta_actualizado(archivo_csv, archivo_png):
     """
-    Genera el gráfico de precipitación total por fecha/hora.
+    Determina si el PNG ya fue generado después del CSV.
 
     Parámetros:
-        df (pd.DataFrame): Dataset ya cargado.
-        provincia (str | None): Provincia a filtrar.
-        guardar (bool): Si True guarda el PNG.
-        output_dir (str): Carpeta de salida.
-    """
-    if provincia:
-        df_filtrado = df[df['province'] == provincia]
-        titulo = f'Precipitación en {provincia}'
-    else:
-        df_filtrado = df
-        titulo = 'Precipitación en Argentina'
+        archivo_csv (str): Ruta del CSV.
+        archivo_png (str): Ruta del PNG.
 
+    Retorna:
+        bool: True si el PNG es más reciente que el CSV.
+    """
+    if not os.path.exists(archivo_png):
+        return False
+    fecha_csv = os.path.getmtime(archivo_csv)
+    fecha_png = os.path.getmtime(archivo_png)
+    return fecha_png > fecha_csv
+
+
+def guardar_fig(fig, nombre_png):
+    """
+    Guarda la figura con formato uniforme.
+
+    Parámetros:
+        fig (Figure): Objeto figura.
+        nombre_png (str): Ruta de guardado.
+    """
+    plt.tight_layout()
+    fig.savefig(nombre_png, dpi=DEFAULT_DPI, bbox_inches='tight', transparent=True)
+    plt.close(fig)
+
+# ------------------------------------------------------------
+# GRÁFICOS
+# ------------------------------------------------------------
+
+def grafico_precipitacion(df, provincia=None, output_dir='web/img/graphs', archivo_csv='dataset/clima_argentina.csv'):
+    """
+    Genera un gráfico de barras con la precipitación acumulada por hora.
+    """
+    df_filtrado = df[df['province'] == provincia] if provincia else df
     precip_total = df_filtrado.groupby('fecha_hora')['prcp'].sum()
 
-    nueva_figura(figsize=(14, 6), titulo=titulo)
-    plt.bar(precip_total.index, precip_total.values,
-            color='#4ECDC4', alpha=0.8, width=0.03)
+    nombre_png = os.path.join(output_dir, f'grafico_precipitacion_{normalize_filename(provincia)}.png')
+    ensure_dir(output_dir)
+    if esta_actualizado(archivo_csv, nombre_png):
+        return
 
-    plt.ylabel('Precipitación (mm)', fontsize=12, fontweight='bold')
-    plt.grid(True, alpha=0.3, axis='y')
+    fig, ax = plt.subplots()
+    ax.bar(precip_total.index, precip_total.values, color=PURPLE_B, alpha=0.85, width=0.03)
 
-    formatear_fechas()
+    ax.set_xlabel('Hora', fontsize=13, color=PURPLE_B)
+    ax.set_ylabel('Precipitación (mm)', fontsize=13, color=PURPLE_B)
+    ax.tick_params(axis='x', colors=PURPLE_B, labelsize=11)
+    ax.tick_params(axis='y', colors=PURPLE_B, labelsize=11)
 
-    plt.tight_layout()
-    if guardar:
-        guardar_grafico('grafico_precipitacion', provincia, output_dir)
-    plt.close()
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M'))
+    fig.autofmt_xdate(rotation=30)
+    guardar_fig(fig, nombre_png)
 
 
-def grafico_velocidad_viento(df, provincia=None, guardar=True, output_dir='.'):
+def grafico_velocidad_viento(df, provincia=None, output_dir='web/img/graphs', archivo_csv='dataset/clima_argentina.csv'):
     """
-    Genera el gráfico de velocidad promedio y ráfagas de viento.
-
-    Parámetros:
-        df (pd.DataFrame)
-        provincia (str | None)
-        guardar (bool)
-        output_dir (str)
+    Grafica velocidad promedio y ráfagas de viento por hora.
     """
-    if provincia:
-        df_filtrado = df[df['province'] == provincia]
-        titulo = f'Velocidad del Viento en {provincia}'
-    else:
-        df_filtrado = df
-        titulo = 'Velocidad del Viento en Argentina'
-
+    df_filtrado = df[df['province'] == provincia] if provincia else df
     vel_prom = df_filtrado.groupby('fecha_hora')['wspd'].mean()
     vel_max = df_filtrado.groupby('fecha_hora')['wpgt'].mean()
 
-    nueva_figura(figsize=(14, 6), titulo=titulo)
+    nombre_png = os.path.join(output_dir, f'grafico_velocidad_viento_{normalize_filename(provincia)}.png')
+    ensure_dir(output_dir)
+    if esta_actualizado(archivo_csv, nombre_png):
+        return
 
-    plt.plot(vel_prom.index, vel_prom.values,
-            color='#95E1D3', linewidth=2.5, label='Velocidad Promedio', marker='o', markersize=3)
-
+    fig, ax = plt.subplots()
+    ax.plot(vel_prom.index, vel_prom.values, color=PURPLE_B, linewidth=3)
     if not vel_max.empty and not vel_max.isna().all():
-        plt.plot(vel_max.index, vel_max.values,
-                color='#F38181', linewidth=2, linestyle='--',
-                label='Ráfagas de Viento', alpha=0.7)
+        ax.plot(vel_max.index, vel_max.values, color=PURPLE_A, linewidth=2.2, linestyle='--')
 
-    plt.xlabel('Fecha y Hora', fontsize=12, fontweight='bold')
-    plt.ylabel('Velocidad del Viento (km/h)', fontsize=12, fontweight='bold')
-    plt.legend()
-    plt.grid(True, alpha=0.3)
+    ax.set_xlabel('Hora', fontsize=13, color=PURPLE_B)
+    ax.set_ylabel('Velocidad (km/h)', fontsize=13, color=PURPLE_B)
+    ax.tick_params(axis='x', colors=PURPLE_B, labelsize=11)
+    ax.tick_params(axis='y', colors=PURPLE_B, labelsize=11)
 
-    formatear_fechas()
-
-    plt.tight_layout()
-    if guardar:
-        guardar_grafico('grafico_velocidad_viento', provincia, output_dir)
-    plt.close()
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M'))
+    fig.autofmt_xdate(rotation=30)
+    guardar_fig(fig, nombre_png)
 
 
-def grafico_direccion_viento(df, provincia=None, guardar=True, output_dir='.'):
+def grafico_direccion_viento(df, provincia=None, output_dir='web/img/graphs', archivo_csv='dataset/clima_argentina.csv'):
     """
-    Genera una rosa de los vientos usando dirección + velocidad.
-
-    Parámetros:
-        df (pd.DataFrame)
-        provincia (str | None)
-        guardar (bool)
-        output_dir (str)
+    Genera un gráfico polar de dirección de viento.
     """
     df_filtrado = df[df['province'] == provincia] if provincia else df
-    titulo = f'Dirección del Viento en {provincia}' if provincia else 'Dirección del Viento en Argentina'
-
     df_viento = df_filtrado[['wdir', 'wspd']].dropna()
     if df_viento.empty:
-        print("No hay datos de dirección del viento.")
+        return
+
+    nombre_png = os.path.join(output_dir, f'grafico_direccion_viento_{normalize_filename(provincia)}.png')
+    ensure_dir(output_dir)
+    if esta_actualizado(archivo_csv, nombre_png):
         return
 
     direcciones_rad = np.deg2rad(df_viento['wdir'].values)
@@ -227,215 +182,189 @@ def grafico_direccion_viento(df, provincia=None, guardar=True, output_dir='.'):
     fig = plt.figure(figsize=(10, 10))
     ax = fig.add_subplot(111, projection='polar')
 
-    num_bins = 16
-    bins = np.linspace(0, 2 * np.pi, num_bins + 1)
+    bins = np.linspace(0, 2*np.pi, 17)
     counts, _ = np.histogram(direcciones_rad, bins=bins, weights=velocidades)
-
     max_count = max(counts.max(), 1)
-    colors = plt.cm.YlOrRd(counts / max_count)
 
-    width = 2 * np.pi / num_bins
-    theta = bins[:-1] + width / 2
+    cmap = LinearSegmentedColormap.from_list('purple_map', [PURPLE_C, PURPLE_B, PURPLE_A])
+    colors = cmap(counts / max_count)
 
-    ax.bar(theta, counts, width=width,
-        color=colors, alpha=0.8, edgecolor='white', linewidth=1.5)
+    width = 2*np.pi / 16
+    theta = bins[:-1] + width/2
 
-    ax.set_theta_zero_location('N')
-    ax.set_theta_direction(-1)
-    ax.set_title(titulo, fontsize=14, fontweight='bold')
+    ax.bar(theta, counts, width=width, color=colors, alpha=0.9, edgecolor='white')
 
-    cbar = plt.colorbar(
-        plt.cm.ScalarMappable(cmap='YlOrRd',
-                            norm=plt.Normalize(0, max_count)),
-        ax=ax, pad=0.1, shrink=0.8
-    )
-    cbar.set_label('Velocidad acumulada (km/h)', fontsize=10)
+    ax.set_xlabel('Dirección del Viento', color=PURPLE_A)
+    ax.set_ylabel('Velocidad Acumulada', color=PURPLE_A)
 
-    if guardar:
-        guardar_grafico('grafico_direccion_viento', provincia, output_dir)
-    plt.close()
+    guardar_fig(fig, nombre_png)
 
 
-def grafico_lineal_direccion_viento(df, provincia=None, guardar=True, output_dir='.'):
+def grafico_lineal_direccion_viento(df, provincia=None, output_dir='web/img/graphs', archivo_csv='dataset/clima_argentina.csv'):
     """
-    Genera un scatter lineal de la dirección del viento en grados.
-
-    Parámetros:
-        df (pd.DataFrame)
-        provincia (str | None)
-        guardar (bool)
-        output_dir (str)
+    Genera un gráfico lineal de dirección promedio del viento.
     """
     df_filtrado = df[df['province'] == provincia] if provincia else df
-    titulo = f'Dirección del Viento en {provincia} (lineal)' if provincia else \
-            'Dirección del Viento en Argentina (lineal)'
-
     dir_prom = df_filtrado.groupby('fecha_hora')['wdir'].mean()
+    if dir_prom.empty:
+        return
 
-    nueva_figura(figsize=(14, 6), titulo=titulo)
+    nombre_png = os.path.join(output_dir, f'grafico_lineal_direccion_viento_{normalize_filename(provincia)}.png')
+    ensure_dir(output_dir)
+    if esta_actualizado(archivo_csv, nombre_png):
+        return
 
-    sc = plt.scatter(dir_prom.index, dir_prom.values,
-                    c=dir_prom.values, cmap='twilight', s=50, alpha=0.7)
+    fig, ax = plt.subplots()
+    sc = ax.scatter(dir_prom.index, dir_prom.values, c=dir_prom.values, cmap='twilight', s=60, alpha=0.85)
 
-    plt.xlabel('Fecha y Hora', fontsize=12)
-    plt.ylabel('Dirección del Viento (°)', fontsize=12)
-    plt.grid(True, alpha=0.3)
+    ax.set_xlabel('Hora', fontsize=13, color=PURPLE_A)
+    ax.set_ylabel('Dirección (°)', fontsize=13, color=PURPLE_A)
+    ax.tick_params(axis='x', colors=PURPLE_A, labelsize=11)
+    ax.tick_params(axis='y', colors=PURPLE_A, labelsize=11)
 
-    formatear_fechas()
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M'))
+    fig.autofmt_xdate(rotation=30)
 
     plt.colorbar(sc, label='Dirección (°)')
-
-    if guardar:
-        guardar_grafico('grafico_direccion_viento_lineal', provincia, output_dir)
-    plt.close()
+    guardar_fig(fig, nombre_png)
 
 
-# ========================================
-#     GRAFICO TEMPERATURA 
-# ========================================
-
-def grafico_temperatura(provincia, df=None, output_dir='web/img/graphs'):
+def grafico_humedad(df, provincia=None, output_dir='web/img/graphs', archivo_csv='dataset/clima_argentina.csv'):
     """
-    Genera un gráfico de temperatura
-
-    Parámetros:
-        provincia (str): Provincia a graficar.
-        df (pd.DataFrame | None): DataFrame (si no se pasa se carga del CSV).
-        output_dir (str): Carpeta donde guardar el PNG.
-
-    Retorna:
-        str | None: Ruta del archivo generado o None si no hay datos.
+    Grafica la humedad relativa promedio por hora.
     """
-    if df is None:
-        df = cargar_datos()
+    df_filtrado = df[df['province'] == provincia] if provincia else df
+    hum_prom = df_filtrado.groupby('fecha_hora')['rhum'].mean()
+    if hum_prom.empty:
+        return
 
+    nombre_png = os.path.join(output_dir, f'grafico_humedad_{normalize_filename(provincia)}.png')
+    ensure_dir(output_dir)
+    if esta_actualizado(archivo_csv, nombre_png):
+        return
+
+    fig, ax = plt.subplots()
+    ax.plot(hum_prom.index, hum_prom.values, color=PURPLE_B, linewidth=3)
+
+    ax.set_xlabel('Hora', fontsize=13, color=PURPLE_B)
+    ax.set_ylabel('Humedad (%)', fontsize=13, color=PURPLE_B)
+    ax.tick_params(axis='x', colors=PURPLE_B, labelsize=11)
+    ax.tick_params(axis='y', colors=PURPLE_B, labelsize=11)
+
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M'))
+    fig.autofmt_xdate(rotation=30)
+    guardar_fig(fig, nombre_png)
+
+
+def grafico_temp_vs_sensacion(df, provincia=None, output_dir='web/img/graphs', archivo_csv='dataset/clima_argentina.csv'):
+    """
+    Compara temperatura y sensación térmica por hora.
+    """
     df_filtrado = df[df['province'] == provincia].sort_values('fecha_hora')
+    df_filtrado = df_filtrado.dropna(subset=['temp','sensacionTermica'])
     if df_filtrado.empty:
-        print(f"No hay datos para {provincia}")
-        return None
+        return
 
-    df_filtrado = df_filtrado.head(22)
+    nombre_png = os.path.join(output_dir, f'grafico_temp_vs_sensacion_{normalize_filename(provincia)}.png')
+    ensure_dir(output_dir)
+    if esta_actualizado(archivo_csv, nombre_png):
+        return
 
-    fig, ax = plt.subplots(figsize=(12, 4))
+    fig, ax = plt.subplots()
+    ax.plot(df_filtrado['fecha_hora'], df_filtrado['temp'], color=PURPLE_B, linewidth=3)
+    ax.plot(df_filtrado['fecha_hora'], df_filtrado['sensacionTermica'], color=PURPLE_A, linewidth=3)
+
+    ax.set_xlabel('Hora', fontsize=13, color=PURPLE_B)
+    ax.set_ylabel('Temperatura (°C)', fontsize=13, color=PURPLE_B)
+    ax.tick_params(axis='x', colors=PURPLE_B, labelsize=11)
+    ax.tick_params(axis='y', colors=PURPLE_B, labelsize=11)
+
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M'))
+    fig.autofmt_xdate(rotation=30)
+    guardar_fig(fig, nombre_png)
+
+
+def grafico_temp_web(df, provincia, output_dir='web/img/graphs', archivo_csv='dataset/clima_argentina.csv'):
+    """
+    Gráfico estilizado para temperatura en la web.
+    """
+    df_filtrado = df[df['province'] == provincia].sort_values('fecha_hora').head(22)
+    if df_filtrado.empty:
+        return
+
+    nombre_png = os.path.join(output_dir, f'temp_chart_{normalize_filename(provincia)}.png')
+    ensure_dir(output_dir)
+    if esta_actualizado(archivo_csv, nombre_png):
+        return
+
+    fig, ax = plt.subplots()
     fig.patch.set_alpha(0)
     ax.patch.set_alpha(0)
 
-    primary_color = '#9381ff'
-    secondary_color = "#4545dd"
-    cmap = LinearSegmentedColormap.from_list('custom', [primary_color, secondary_color])
+    primary_color = PURPLE_B
+    secondary_color = PURPLE_A
 
-    n = len(df_filtrado)
-    for i in range(n - 1):
-        color = cmap(i / max(n - 1, 1))
-        ax.plot(df_filtrado['fecha_hora'].iloc[i:i+2],
-                df_filtrado['temp'].iloc[i:i+2],
-                color=color, linewidth=3)
+    cmap = LinearSegmentedColormap.from_list('custom_purple', [primary_color, secondary_color])
 
-    ax.scatter(df_filtrado['fecha_hora'], df_filtrado['temp'],
-                c=primary_color, s=40, zorder=5,
-                edgecolors='white', linewidths=2)
+    dates = mdates.date2num(df_filtrado['fecha_hora'])
+    temps = df_filtrado['temp'].values
+    points = np.array([dates, temps]).T.reshape(-1,1,2)
 
-    ax.fill_between(df_filtrado['fecha_hora'], df_filtrado['temp'],
-                    alpha=0.3, color=primary_color)
+    if len(points) > 1:
+        segments = np.concatenate([points[:-1], points[1:]], axis=1)
+        lc = LineCollection(segments, cmap=cmap, linewidths=4)
+        lc.set_array(np.linspace(0,1,len(segments)))
+        ax.add_collection(lc)
 
-    text_color = '#9381FF'
+    ax.scatter(df_filtrado['fecha_hora'], temps, c=primary_color, s=60, edgecolors='white')
+    ax.fill_between(df_filtrado['fecha_hora'], temps, alpha=0.18, color=primary_color)
 
-    # Labels 
-    ax.set_xlabel('Hora', color=text_color, fontsize=20)
-    ax.set_ylabel('Temperatura (°C)', color=text_color, fontsize=20)
+    ax.set_xlabel('Hora', color=primary_color, fontsize=20, labelpad=15)
+    ax.set_ylabel('Temperatura (°C)',  color=primary_color, fontsize=20, labelpad=15)
+    ax.tick_params(axis='x', colors=primary_color, labelsize=16, pad=10)
+    ax.tick_params(axis='y', colors=primary_color, labelsize=16, pad=10)
 
-    # Ticks 
-    ax.tick_params(axis='x', colors=text_color, labelsize=16)
-    ax.tick_params(axis='y', colors=text_color, labelsize=16)
-
-    ax.grid(True, alpha=0.2, color=text_color, linestyle='--')
-
-    # Formato y ubicación de los ticks de tiempo
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M'))
     ax.xaxis.set_major_locator(mdates.HourLocator(interval=3))
 
-    plt.tight_layout()
+    fig.autofmt_xdate(rotation=30)
+    guardar_fig(fig, nombre_png)
 
-    ensure_dir(output_dir)
-    out = os.path.join(output_dir, f'temp_chart_{normalize_filename(provincia)}.png')
+# ------------------------------------------------------------
+# GENERACIÓN POR PROVINCIA
+# ------------------------------------------------------------
 
-    plt.savefig(out, dpi=300, transparent=True, bbox_inches='tight', facecolor='none')
-    plt.close()
-
-    print(f'Gráfico web guardado: {out}')
-    return out
-
-
-# ========================================
-#     FLUJOS DE GENERACIÓN
-# ========================================
-
-def generar_todos_los_graficos(provincia=None, output_dir='.'):
+def generar_graficos_provincia(provincia, df, output_dir='web/img/graphs', archivo_csv='dataset/clima_argentina.csv'):
     """
-    Genera todos los gráficos.
-
-    Parámetros:
-        provincia (str | None): Provincia específica o None para todas.
-        output_dir (str): Carpeta donde guardar.
+    Genera todos los gráficos para una provincia.
     """
-    df = cargar_datos()
+    grafico_precipitacion(df, provincia, output_dir, archivo_csv)
+    grafico_velocidad_viento(df, provincia, output_dir, archivo_csv)
+    grafico_direccion_viento(df, provincia, output_dir, archivo_csv)
+    grafico_lineal_direccion_viento(df, provincia, output_dir, archivo_csv)
+    grafico_humedad(df, provincia, output_dir, archivo_csv)
+    grafico_temp_vs_sensacion(df, provincia, output_dir, archivo_csv)
+    grafico_temp_web(df, provincia, output_dir, archivo_csv)
 
-    grafico_precipitacion(df, provincia, output_dir=output_dir)
-    grafico_velocidad_viento(df, provincia, output_dir=output_dir)
-    grafico_direccion_viento(df, provincia, output_dir=output_dir)
-    grafico_lineal_direccion_viento(df, provincia, output_dir=output_dir)
+# ------------------------------------------------------------
+# GENERAR TODOS LOS GRÁFICOS
+# ------------------------------------------------------------
 
-
-def generar_graficos_todas_provincias_web(df=None, output_dir='web/img/graphs'):
+def generar_todos_los_graficos_web(df=None, output_dir='web/img/graphs', archivo_csv='dataset/clima_argentina.csv', max_workers=4):
     """
-    Genera gráficos web de temperatura para todas las provincias.
-
-    Parámetros:
-        df (pd.DataFrame | None): DataFrame (None = se carga).
-        output_dir (str): Carpeta de salida.
+    Genera todos los gráficos para todas las provincias usando multihilo.
     """
     if df is None:
-        df = cargar_datos()
+        df = cargar_datos(archivo_csv)
 
     provincias = df['province'].unique()
-    for p in provincias:
-        grafico_temperatura(p, df=df, output_dir=output_dir)
 
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
+        executor.map(lambda p: generar_graficos_provincia(p, df, output_dir, archivo_csv), provincias)
 
-# ========================================
-#     MENU INTERACTIVO
-# ========================================
-
-def menu_interactivo():
-    """
-    Menú para seleccionar provincia y tipo de gráfico.
-    """
-    df = cargar_datos()
-
-    provincias = sorted(df['province'].unique())
-
-    print("=== Provincias ===")
-    for i, p in enumerate(provincias, 1):
-        print(f"{i}. {p}")
-    print(f"{len(provincias)+1}. Todas")
-
-    op = int(input("Seleccione: "))
-    provincia = None if op == len(provincias) + 1 else provincias[op - 1]
-
-    print("1. Precipitación\n2. Velocidad\n3. Dirección (Rosa)\n4. Dirección lineal\n5. Todos\n6. Web Temperatura")
-    g = int(input("Elija gráfico: "))
-
-    if g == 1: grafico_precipitacion(df, provincia)
-    elif g == 2: grafico_velocidad_viento(df, provincia)
-    elif g == 3: grafico_direccion_viento(df, provincia)
-    elif g == 4: grafico_lineal_direccion_viento(df, provincia)
-    elif g == 5: generar_todos_los_graficos(provincia)
-    elif g == 6: grafico_temperatura(provincia, df=df)
-
-
-# ========================================
-#     MAIN
-# ========================================
-
+# ------------------------------------------------------------
+# MAIN
+# ------------------------------------------------------------
 if __name__ == "__main__":
-    generar_graficos_todas_provincias_web()
+    df = cargar_datos()
+    generar_todos_los_graficos_web(df)
