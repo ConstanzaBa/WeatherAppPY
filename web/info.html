@@ -122,22 +122,69 @@
     </div>
   </div>
 
-  <div class="graph-selector">
-    <div class="graph-tabs">
-      <button class="tab active" data-graph="temp_vs_sensacion">
-        Temperatura
-      </button>
-      <button class="tab" data-graph="precipitacion">Precipitaciones</button>
-      <button class="tab" data-graph="humedad">Humedad</button>
-      <button class="tab" data-graph="viento">Viento</button>
-      <button class="tab" data-graph="direccion_viento">
-        Dirección del Viento
-      </button>
-      <!-- Agregar un grafico es facil , agrega un boton aca y anda a la ultima fucnion del script.js-->
-    </div>
+  <div class="carousel-container">
+    <div class="carousel-wrapper" id="carouselWrapper">
+      
+      <!-- Slide 1: Atardecer -->
+      <div class="carousel-slide">
+        <div class="section-title">
+          <div class="icon">☀️</div>
+          No te pierdas el atardecer
+        </div>
+        <div class="content-main">El atardecer será a las</div>
+        <div class="content-detail">19:54</div>
+      </div>
 
-    <div class="graph-viewer">
-      <img id="graph-image" src="" alt="Gráfico" class="graph-img" />
+      <!-- Slide 2: Día soleado -->
+      <div class="carousel-slide">
+        <div class="section-title">
+          <div class="icon">💎</div>
+          Día soleado por delante
+        </div>
+        <div class="content-main">Se espera que el próximo día soleado sea mañana</div>
+      </div>
+
+      <!-- Slide 3: Temperatura -->
+      <div class="carousel-slide">
+        <div class="section-title">
+          <div class="icon">🌡️</div>
+          Temperatura de mañana
+        </div>
+        <div class="content-main">Temperaturas un poco más altas que las de hoy</div>
+      </div>
+
+      <!-- Slide 4: Precipitaciones -->
+      <div class="carousel-slide">
+        <div class="section-title">
+          <div class="icon">💧</div>
+          Pronóstico de lluvia
+        </div>
+        <div class="content-main">Probabilidad de precipitación</div>
+        <div class="content-detail">45% esta tarde</div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Dots Navigation -->
+  <div class="carousel-dots" id="carouselDots"></div>
+
+    <div class="graph-selector">
+      <div class="graph-tabs">
+        <button class="tab active" data-graph="temp_vs_sensacion">
+          Temperatura
+        </button>
+        <button class="tab" data-graph="precipitacion">Precipitación</button>
+        <button class="tab" data-graph="humedad">Humedad</button>
+        <button class="tab" data-graph="viento">Viento</button>
+        <button class="tab" data-graph="direccion_viento">
+          Dirección del Viento
+        </button>
+        <!-- Agregar un grafico es facil , agrega un boton aca y anda a la ultima fucnion del script.js-->
+      </div>
+
+      <div class="graph-viewer">
+        <img id="graph-image" src="" alt="Gráfico" class="graph-img" />
+      </div>
     </div>
   </div>
 </div>
