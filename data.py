@@ -10,7 +10,9 @@ from parametros import (
     calcular_visibilidad,
 )
 
-# Paths
+# -----------------------------
+# Paths y directorios
+# -----------------------------
 dataset = "dataset"
 provincia_dir = os.path.join(dataset, "provincia")
 os.makedirs(provincia_dir, exist_ok=True)
@@ -18,51 +20,34 @@ os.makedirs(provincia_dir, exist_ok=True)
 stations_path = os.path.join(dataset, "stations.csv")
 stations = pd.read_csv(stations_path)
 
+# -----------------------------
 # Tiempos
+# -----------------------------
 tz_arg = pytz.timezone("America/Argentina/Buenos_Aires")
 hoy_local = datetime.now(tz_arg).date()
 
-start_local = tz_arg.localize(datetime.combine(hoy_local, datetime.min.time()))
-end_local = start_local + timedelta(hours=48)
-start, end = start_local.astimezone(pytz.utc), end_local.astimezone(pytz.utc)
+SEMANAS = 12
+start_local = tz_arg.localize(datetime.combine(hoy_local - timedelta(weeks=SEMANAS), datetime.min.time()))
+end_local = tz_arg.localize(datetime.combine(hoy_local, datetime.min.time()) + timedelta(hours=48))
 
-
-# -------------------------------------------------------------------
-# CHEQUEAR SI EL ARCHIVO TIENE DATOS DE HOY
-# -------------------------------------------------------------------
-def archivo_actualizado(path):
-    if not os.path.exists(path):
-        return False
-    try:
-        df = pd.read_csv(path)
-        if df.empty:
-            return False
-        fechas = pd.to_datetime(df["fecha_hora"], errors="coerce")
-        if fechas.isna().all():
-            return False
-        return fechas.max().date() >= hoy_local
-    except:
-        return False
-
-
-# -------------------------------------------------------------------
-# FUNCIÓN QUE PROCESA UNA SOLA PROVINCIA
-# -------------------------------------------------------------------
+# -----------------------------
+# Procesar una sola provincia
+# -----------------------------
 def procesar_provincia(row):
     provincia = row["province"]
     estacion = row["id_estacion"]
-
     archivo_prov = os.path.join(provincia_dir, f"clima_{provincia}.csv")
 
-    # Si ya tiene datos de hoy → evitar descarga
-    if archivo_actualizado(archivo_prov):
-        return provincia, "omitida", pd.read_csv(archivo_prov)
-
-    print(f"[Descargando] {provincia}...")
+    # Descargar todo el rango
+    print(f"[Descargando] {provincia} desde {start_local} hasta {end_local}...")
 
     try:
-        data = Hourly(estacion, start.replace(tzinfo=None), end.replace(tzinfo=None)).fetch()
+        data = Hourly(estacion, start_local.replace(tzinfo=None), end_local.replace(tzinfo=None)).fetch()
         if data.empty:
+            # Si existe CSV previo, devolverlo
+            if os.path.exists(archivo_prov):
+                df_existente = pd.read_csv(archivo_prov)
+                return provincia, "omitida", df_existente
             return provincia, "vacia", None
 
         # Normalizar index y fecha
@@ -73,10 +58,9 @@ def procesar_provincia(row):
             .dt.tz_convert(tz_arg)
             .dt.tz_localize(None)
         )
-
         data["province"] = provincia
 
-        # Rellenos sin warnings
+        # Rellenos
         data["temp"] = data["temp"].ffill()
         data["rhum"] = data["rhum"].ffill()
         data["dwpt"] = data["dwpt"].ffill()
@@ -104,43 +88,45 @@ def procesar_provincia(row):
             axis=1
         )
 
-        # Guardar y devolver
-        data.to_csv(archivo_prov, index=False)
-        return provincia, "actualizada", data
+        # Concatenar con CSV existente si hay
+        if os.path.exists(archivo_prov):
+            df_existente = pd.read_csv(archivo_prov)
+            df_final = pd.concat([df_existente, data], ignore_index=True).drop_duplicates(subset="fecha_hora")
+        else:
+            df_final = data
+
+        df_final.to_csv(archivo_prov, index=False)
+        return provincia, "actualizada", df_final
 
     except Exception as e:
         print(f"[ERROR] {provincia}: {e}")
         return provincia, "error", None
 
-
-# -------------------------------------------------------------------
-# EJECUCIÓN EN PARALELO
-# -------------------------------------------------------------------
+# -----------------------------
+# Ejecución en paralelo
+# -----------------------------
 all_data = []
 status = {"actualizada": [], "omitida": [], "vacia": [], "error": []}
 
 with ThreadPoolExecutor(max_workers=20) as executor:
     futures = [executor.submit(procesar_provincia, row) for _, row in stations.iterrows()]
-
     for fut in as_completed(futures):
         provincia, estado, df = fut.result()
         status[estado].append(provincia)
         if isinstance(df, pd.DataFrame):
             all_data.append(df)
 
-
-# -------------------------------------------------------------------
-# CSV COMBINADO
-# -------------------------------------------------------------------
+# -----------------------------
+# CSV combinado de todo Argentina
+# -----------------------------
 if all_data:
     combinado = pd.concat(all_data, ignore_index=True)
     archivo_combi = os.path.join(dataset, "clima_argentina.csv")
     combinado.to_csv(archivo_combi, index=False)
 
-
-# -------------------------------------------------------------------
-# FINAL
-# -------------------------------------------------------------------
+# -----------------------------
+# Resultados finales
+# -----------------------------
 if status["actualizada"]:
     print("Actualizadas:", ", ".join(status["actualizada"]))
 if status["omitida"]:
