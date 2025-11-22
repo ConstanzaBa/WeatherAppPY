@@ -73,6 +73,35 @@ def normalize_filename(text):
     return text.replace(' ', '_').lower()
 
 
+def filtrar_ultimas_horas(serie_o_df, horas=24):
+    """
+    Filtra una Serie o DataFrame para mantener solo las últimas N horas.
+    
+    Parámetros:
+        serie_o_df: Serie o DataFrame con índice datetime
+        horas (int): Número de horas a mantener
+    
+    Retorna:
+        Serie o DataFrame filtrado
+    """
+    if isinstance(serie_o_df, pd.Series):
+        if serie_o_df.empty:
+            return serie_o_df
+        fecha_limite = serie_o_df.index.max() - pd.Timedelta(hours=horas)
+        return serie_o_df[serie_o_df.index >= fecha_limite]
+    elif isinstance(serie_o_df, pd.DataFrame):
+        if serie_o_df.empty:
+            return serie_o_df
+        if 'fecha_hora' in serie_o_df.columns:
+            fecha_max = pd.to_datetime(serie_o_df['fecha_hora']).max()
+            fecha_limite = fecha_max - pd.Timedelta(hours=horas)
+            return serie_o_df[pd.to_datetime(serie_o_df['fecha_hora']) >= fecha_limite]
+        else:
+            fecha_limite = serie_o_df.index.max() - pd.Timedelta(hours=horas)
+            return serie_o_df[serie_o_df.index >= fecha_limite]
+    return serie_o_df
+
+
 def esta_actualizado(archivo_csv, archivo_png):
     """
     Determina si el PNG ya fue generado después del CSV.
@@ -99,7 +128,10 @@ def guardar_fig(fig, nombre_png):
         fig (Figure): Objeto figura.
         nombre_png (str): Ruta de guardado.
     """
-    plt.tight_layout()
+    try:
+        plt.tight_layout()
+    except:
+        pass  # Ignorar errores de tight_layout
     fig.savefig(nombre_png, dpi=DEFAULT_DPI, bbox_inches='tight', transparent=True)
     plt.close(fig)
     
@@ -190,21 +222,35 @@ def grafico_precipitacion(df, provincia=None, output_dir='web/img/graphs', archi
         df_filtrado = df[df['province'] == provincia] if provincia else df
         precip_total = df_filtrado.groupby('fecha_hora')['prcp'].sum()
 
+    # FILTRAR ÚLTIMAS 24 HORAS
+    precip_total = filtrar_ultimas_horas(precip_total, horas=24)
+
     nombre_png = os.path.join(output_dir, f'grafico_precipitacion_{normalize_filename(provincia)}.png')
     ensure_dir(output_dir)
     if esta_actualizado(archivo_csv, nombre_png):
         return
 
+    if precip_total.empty:
+        return
+
     fig, ax = plt.subplots()
-    ax.bar(precip_total.index, precip_total.values, color=PURPLE_B, alpha=0.85, width=0.03)
+    fechas = precip_total.index if isinstance(precip_total.index, pd.DatetimeIndex) else pd.to_datetime(precip_total.index)
+    ax.bar(fechas, precip_total.values, color=PURPLE_B, alpha=0.85, width=0.03)
 
     ax.set_xlabel('Hora', fontsize=13, color=PURPLE_B)
     ax.set_ylabel('Precipitación (mm)', fontsize=13, color=PURPLE_B)
     ax.tick_params(axis='x', colors=PURPLE_B, labelsize=11)
     ax.tick_params(axis='y', colors=PURPLE_B, labelsize=11)
 
-    ax.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M'))
-    fig.autofmt_xdate(rotation=30)
+    # Ajustar el formatter según la cantidad de datos
+    if len(fechas) > 12:
+        ax.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M'))
+        ax.xaxis.set_major_locator(mdates.HourLocator(interval=3))
+    else:
+        ax.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M'))
+        ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
+    
+    fig.autofmt_xdate(rotation=30, ha='right')
     guardar_fig(fig, nombre_png)
 
 
@@ -220,23 +266,39 @@ def grafico_velocidad_viento(df, provincia=None, output_dir='web/img/graphs', ar
         vel_prom = df_filtrado.groupby('fecha_hora')['wspd'].mean()
         vel_max = df_filtrado.groupby('fecha_hora')['wpgt'].mean()
 
+    # FILTRAR ÚLTIMAS 24 HORAS
+    vel_prom = filtrar_ultimas_horas(vel_prom, horas=24)
+    vel_max = filtrar_ultimas_horas(vel_max, horas=24)
+
     nombre_png = os.path.join(output_dir, f'grafico_velocidad_viento_{normalize_filename(provincia)}.png')
     ensure_dir(output_dir)
     if esta_actualizado(archivo_csv, nombre_png):
         return
 
+    if vel_prom.empty:
+        return
+
     fig, ax = plt.subplots()
-    ax.plot(vel_prom.index, vel_prom.values, color=PURPLE_B, linewidth=3)
+    fechas = vel_prom.index if isinstance(vel_prom.index, pd.DatetimeIndex) else pd.to_datetime(vel_prom.index)
+    ax.plot(fechas, vel_prom.values, color=PURPLE_B, linewidth=3, label='Velocidad promedio')
     if not vel_max.empty and not vel_max.isna().all():
-        ax.plot(vel_max.index, vel_max.values, color=PURPLE_A, linewidth=2.2, linestyle='--')
+        fechas_max = vel_max.index if isinstance(vel_max.index, pd.DatetimeIndex) else pd.to_datetime(vel_max.index)
+        ax.plot(fechas_max, vel_max.values, color=PURPLE_A, linewidth=2.2, linestyle='--', label='Ráfagas')
 
     ax.set_xlabel('Hora', fontsize=13, color=PURPLE_B)
     ax.set_ylabel('Velocidad (km/h)', fontsize=13, color=PURPLE_B)
     ax.tick_params(axis='x', colors=PURPLE_B, labelsize=11)
     ax.tick_params(axis='y', colors=PURPLE_B, labelsize=11)
 
-    ax.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M'))
-    fig.autofmt_xdate(rotation=30)
+    if len(fechas) > 12:
+        ax.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M'))
+        ax.xaxis.set_major_locator(mdates.HourLocator(interval=3))
+    else:
+        ax.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M'))
+        ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
+    
+    fig.autofmt_xdate(rotation=30, ha='right')
+    ax.legend()
     guardar_fig(fig, nombre_png)
 
 
@@ -289,6 +351,10 @@ def grafico_humedad(df, provincia=None, output_dir='web/img/graphs', archivo_csv
     else:
         df_filtrado = df[df['province'] == provincia] if provincia else df
         hum_prom = df_filtrado.groupby('fecha_hora')['rhum'].mean()
+    
+    # FILTRAR ÚLTIMAS 24 HORAS
+    hum_prom = filtrar_ultimas_horas(hum_prom, horas=24)
+    
     if hum_prom.empty:
         return
 
@@ -298,15 +364,22 @@ def grafico_humedad(df, provincia=None, output_dir='web/img/graphs', archivo_csv
         return
 
     fig, ax = plt.subplots()
-    ax.plot(hum_prom.index, hum_prom.values, color=PURPLE_B, linewidth=3)
+    fechas = hum_prom.index if isinstance(hum_prom.index, pd.DatetimeIndex) else pd.to_datetime(hum_prom.index)
+    ax.plot(fechas, hum_prom.values, color=PURPLE_B, linewidth=3)
 
     ax.set_xlabel('Hora', fontsize=13, color=PURPLE_B)
     ax.set_ylabel('Humedad (%)', fontsize=13, color=PURPLE_B)
     ax.tick_params(axis='x', colors=PURPLE_B, labelsize=11)
     ax.tick_params(axis='y', colors=PURPLE_B, labelsize=11)
 
-    ax.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M'))
-    fig.autofmt_xdate(rotation=30)
+    if len(fechas) > 12:
+        ax.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M'))
+        ax.xaxis.set_major_locator(mdates.HourLocator(interval=3))
+    else:
+        ax.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M'))
+        ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
+    
+    fig.autofmt_xdate(rotation=30, ha='right')
     guardar_fig(fig, nombre_png)
 
 
@@ -317,17 +390,26 @@ def grafico_temp_vs_sensacion(df, provincia=None, output_dir='web/img/graphs', a
     if cache is not None and provincia in cache:
         temps = cache[provincia]['temp_mean']
         sens = cache[provincia]['sens_mean']
+        
+        # FILTRAR ÚLTIMAS 24 HORAS ANTES DE INTERSECCIÓN
+        temps = filtrar_ultimas_horas(temps, horas=24)
+        sens = filtrar_ultimas_horas(sens, horas=24)
+        
         idx = temps.index.intersection(sens.index)
         if idx.empty:
             return
         df_filtrado = pd.DataFrame({
-            'fecha_hora': idx,
             'temp': temps.loc[idx].values,
             'sensacionTermica': sens.loc[idx].values
-        })
+        }, index=idx).reset_index()
+        df_filtrado.rename(columns={'index': 'fecha_hora'}, inplace=True)
     else:
-        df_filtrado = df[df['province'] == provincia].sort_values('fecha_hora')
+        df_filtrado = df[df['province'] == provincia] if provincia else df
+        df_filtrado = df_filtrado.sort_values('fecha_hora')
         df_filtrado = df_filtrado.dropna(subset=['temp','sensacionTermica'])
+        # FILTRAR ÚLTIMAS 24 HORAS
+        df_filtrado = filtrar_ultimas_horas(df_filtrado, horas=24)
+    
     if df_filtrado.empty:
         return
 
@@ -337,16 +419,24 @@ def grafico_temp_vs_sensacion(df, provincia=None, output_dir='web/img/graphs', a
         return
 
     fig, ax = plt.subplots()
-    ax.plot(pd.to_datetime(df_filtrado['fecha_hora']), df_filtrado['temp'], color=PURPLE_B, linewidth=3)
-    ax.plot(pd.to_datetime(df_filtrado['fecha_hora']), df_filtrado['sensacionTermica'], color=PURPLE_A, linewidth=3)
+    fechas = pd.to_datetime(df_filtrado['fecha_hora'])
+    ax.plot(fechas, df_filtrado['temp'], color=PURPLE_B, linewidth=3, label='Temperatura')
+    ax.plot(fechas, df_filtrado['sensacionTermica'], color=PURPLE_A, linewidth=3, label='Sensación térmica')
 
     ax.set_xlabel('Hora', fontsize=13, color=PURPLE_B)
     ax.set_ylabel('Temperatura (°C)', fontsize=13, color=PURPLE_B)
     ax.tick_params(axis='x', colors=PURPLE_B, labelsize=11)
     ax.tick_params(axis='y', colors=PURPLE_B, labelsize=11)
 
-    ax.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M'))
-    fig.autofmt_xdate(rotation=30)
+    if len(fechas) > 12:
+        ax.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M'))
+        ax.xaxis.set_major_locator(mdates.HourLocator(interval=3))
+    else:
+        ax.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M'))
+        ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
+    
+    fig.autofmt_xdate(rotation=30, ha='right')
+    ax.legend()
     guardar_fig(fig, nombre_png)
 
 
@@ -375,8 +465,11 @@ def grafico_temp(df, provincia, output_dir='web/img/graphs', archivo_csv='datase
 
     cmap = LinearSegmentedColormap.from_list('custom_purple', [primary_color, secondary_color])
 
-    dates = mdates.date2num(pd.to_datetime(df_filtrado['fecha_hora']))
+    fechas = pd.to_datetime(df_filtrado['fecha_hora'])
     temps = df_filtrado['temp'].values
+    
+    # Convertir fechas a números para LineCollection
+    dates = mdates.date2num(fechas)
     points = np.array([dates, temps]).T.reshape(-1,1,2)
 
     if len(points) > 1:
@@ -385,8 +478,8 @@ def grafico_temp(df, provincia, output_dir='web/img/graphs', archivo_csv='datase
         lc.set_array(np.linspace(0,1,len(segments)))
         ax.add_collection(lc)
 
-    ax.scatter(pd.to_datetime(df_filtrado['fecha_hora']), temps, c=primary_color, s=60, edgecolors='white')
-    ax.fill_between(pd.to_datetime(df_filtrado['fecha_hora']), temps, alpha=0.18, color=primary_color)
+    ax.scatter(fechas, temps, c=primary_color, s=60, edgecolors='white', zorder=3)
+    ax.fill_between(fechas, temps, alpha=0.18, color=primary_color)
 
     ax.set_xlabel('Hora', color=primary_color, fontsize=20, labelpad=15)
     ax.set_ylabel('Temperatura (°C)',  color=primary_color, fontsize=20, labelpad=15)
@@ -396,7 +489,7 @@ def grafico_temp(df, provincia, output_dir='web/img/graphs', archivo_csv='datase
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M'))
     ax.xaxis.set_major_locator(mdates.HourLocator(interval=3))
 
-    fig.autofmt_xdate(rotation=30)
+    fig.autofmt_xdate(rotation=30, ha='right')
     guardar_fig(fig, nombre_png)
 
 # ------------------------------------------------------------
