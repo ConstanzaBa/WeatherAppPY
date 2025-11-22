@@ -1,5 +1,3 @@
-# Archivo completo corregido, con docstrings y sin títulos en los gráficos
-
 import matplotlib
 matplotlib.use('Agg')  # Backend no interactivo para guardar imágenes
 
@@ -13,7 +11,7 @@ import numpy as np
 import os
 from matplotlib.colors import LinearSegmentedColormap
 from matplotlib.collections import LineCollection
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 # ------------------------------------------------------------
 # CONFIGURACIÓN GLOBAL
@@ -104,17 +102,93 @@ def guardar_fig(fig, nombre_png):
     plt.tight_layout()
     fig.savefig(nombre_png, dpi=DEFAULT_DPI, bbox_inches='tight', transparent=True)
     plt.close(fig)
+    
+    
+# ------------------------------------------------------------
+# PREPROCESADO / CACHE POR PROVINCIA
+# ------------------------------------------------------------
+
+def construir_cache_por_provincia(df):
+    """
+    Construye y devuelve un diccionario con series/frames pre-agregados por provincia
+    para evitar repetir groupby en cada función de graficado.
+    """
+    cache = {}
+    if df is None or df.empty:
+        return cache
+
+    # Agrupar por provincia y fecha_hora una sola vez
+    gb = df.groupby(['province', 'fecha_hora'], sort=True)
+
+    # Precalcular agregados comunes
+    agg = gb.agg({
+        'prcp': 'sum',
+        'wspd': 'mean',
+        'wpgt': 'mean',
+        'wdir': 'mean',
+        'rhum': 'mean',
+        'temp': 'mean',
+        'sensacionTermica': 'mean'
+    }).reset_index()
+
+    provinces = agg['province'].unique()
+    for p in provinces:
+        sub = agg[agg['province'] == p].copy()
+        sub = sub.sort_values('fecha_hora')
+        cache[p] = {
+            'precip_total': sub.set_index('fecha_hora')['prcp'],
+            'vel_prom': sub.set_index('fecha_hora')['wspd'],
+            'vel_max': sub.set_index('fecha_hora')['wpgt'],
+            'dir_prom': sub.set_index('fecha_hora')['wdir'],
+            'hum_prom': sub.set_index('fecha_hora')['rhum'],
+            'temp_mean': sub.set_index('fecha_hora')['temp'],
+            'sens_mean': sub.set_index('fecha_hora')['sensacionTermica'],
+            # frame para temp web (top 22 por fecha ya ordenadas)
+            'temp_web': df[df['province'] == p].sort_values('fecha_hora').head(22).copy(),
+            # datos de viento (wdir,wspd) para polar (sin groupby porque usamos valores originales)
+            'viento_raw': df[df['province'] == p][['wdir','wspd']].dropna().copy()
+        }
+
+    # Cache para 'todas' las provincias combinadas
+    combined = {}
+    combined_gb = df.groupby('fecha_hora', sort=True)
+    combined_agg = combined_gb.agg({
+        'prcp': 'sum',
+        'wspd': 'mean',
+        'wpgt': 'mean',
+        'wdir': 'mean',
+        'rhum': 'mean'
+    }).reset_index()
+    combined['precip_total'] = combined_agg.set_index('fecha_hora')['prcp']
+    combined['vel_prom'] = combined_agg.set_index('fecha_hora')['wspd']
+    combined['vel_max'] = combined_agg.set_index('fecha_hora')['wpgt']
+    combined['dir_prom'] = combined_agg.set_index('fecha_hora')['wdir']
+    combined['hum_prom'] = combined_agg.set_index('fecha_hora')['rhum']
+    cache[None] = {
+        'precip_total': combined['precip_total'],
+        'vel_prom': combined['vel_prom'],
+        'vel_max': combined['vel_max'],
+        'dir_prom': combined['dir_prom'],
+        'hum_prom': combined['hum_prom'],
+        'temp_web': df.sort_values('fecha_hora').head(22),
+        'viento_raw': df[['wdir','wspd']].dropna()
+    }
+
+    return cache
 
 # ------------------------------------------------------------
 # GRÁFICOS
 # ------------------------------------------------------------
 
-def grafico_precipitacion(df, provincia=None, output_dir='web/img/graphs', archivo_csv='dataset/clima_argentina.csv'):
+def grafico_precipitacion(df, provincia=None, output_dir='web/img/graphs', archivo_csv='dataset/clima_argentina.csv', cache=None):
     """
     Genera un gráfico de barras con la precipitación acumulada por hora.
     """
-    df_filtrado = df[df['province'] == provincia] if provincia else df
-    precip_total = df_filtrado.groupby('fecha_hora')['prcp'].sum()
+    if cache is not None and provincia in cache:
+        precip_total = cache[provincia]['precip_total']
+    else:
+        df_filtrado = df[df['province'] == provincia] if provincia else df
+        precip_total = df_filtrado.groupby('fecha_hora')['prcp'].sum()
 
     nombre_png = os.path.join(output_dir, f'grafico_precipitacion_{normalize_filename(provincia)}.png')
     ensure_dir(output_dir)
@@ -134,13 +208,17 @@ def grafico_precipitacion(df, provincia=None, output_dir='web/img/graphs', archi
     guardar_fig(fig, nombre_png)
 
 
-def grafico_velocidad_viento(df, provincia=None, output_dir='web/img/graphs', archivo_csv='dataset/clima_argentina.csv'):
+def grafico_velocidad_viento(df, provincia=None, output_dir='web/img/graphs', archivo_csv='dataset/clima_argentina.csv', cache=None):
     """
     Grafica velocidad promedio y ráfagas de viento por hora.
     """
-    df_filtrado = df[df['province'] == provincia] if provincia else df
-    vel_prom = df_filtrado.groupby('fecha_hora')['wspd'].mean()
-    vel_max = df_filtrado.groupby('fecha_hora')['wpgt'].mean()
+    if cache is not None and provincia in cache:
+        vel_prom = cache[provincia]['vel_prom']
+        vel_max = cache[provincia]['vel_max']
+    else:
+        df_filtrado = df[df['province'] == provincia] if provincia else df
+        vel_prom = df_filtrado.groupby('fecha_hora')['wspd'].mean()
+        vel_max = df_filtrado.groupby('fecha_hora')['wpgt'].mean()
 
     nombre_png = os.path.join(output_dir, f'grafico_velocidad_viento_{normalize_filename(provincia)}.png')
     ensure_dir(output_dir)
@@ -162,12 +240,15 @@ def grafico_velocidad_viento(df, provincia=None, output_dir='web/img/graphs', ar
     guardar_fig(fig, nombre_png)
 
 
-def grafico_direccion_viento(df, provincia=None, output_dir='web/img/graphs', archivo_csv='dataset/clima_argentina.csv'):
+def grafico_direccion_viento(df, provincia=None, output_dir='web/img/graphs', archivo_csv='dataset/clima_argentina.csv', cache=None):
     """
     Genera un gráfico polar de dirección de viento.
     """
-    df_filtrado = df[df['province'] == provincia] if provincia else df
-    df_viento = df_filtrado[['wdir', 'wspd']].dropna()
+    if cache is not None and provincia in cache:
+        df_viento = cache[provincia]['viento_raw']
+    else:
+        df_filtrado = df[df['province'] == provincia] if provincia else df
+        df_viento = df_filtrado[['wdir', 'wspd']].dropna()
     if df_viento.empty:
         return
 
@@ -199,12 +280,49 @@ def grafico_direccion_viento(df, provincia=None, output_dir='web/img/graphs', ar
 
     guardar_fig(fig, nombre_png)
 
-def grafico_humedad(df, provincia=None, output_dir='web/img/graphs', archivo_csv='dataset/clima_argentina.csv'):
+
+def grafico_lineal_direccion_viento(df, provincia=None, output_dir='web/img/graphs', archivo_csv='dataset/clima_argentina.csv', cache=None):
+    """
+    Genera un gráfico lineal de dirección promedio del viento.
+    """
+    if cache is not None and provincia in cache:
+        dir_prom = cache[provincia]['dir_prom']
+    else:
+        df_filtrado = df[df['province'] == provincia] if provincia else df
+        dir_prom = df_filtrado.groupby('fecha_hora')['wdir'].mean()
+    if dir_prom.empty:
+        return
+
+    nombre_png = os.path.join(output_dir, f'grafico_lineal_direccion_viento_{normalize_filename(provincia)}.png')
+    ensure_dir(output_dir)
+    if esta_actualizado(archivo_csv, nombre_png):
+        return
+
+    fig, ax = plt.subplots()
+    sc = ax.scatter(dir_prom.index, dir_prom.values, c=dir_prom.values, cmap='twilight', s=60, alpha=0.85)
+
+    ax.set_xlabel('Hora', fontsize=13, color=PURPLE_A)
+    ax.set_ylabel('Dirección (°)', fontsize=13, color=PURPLE_A)
+    ax.tick_params(axis='x', colors=PURPLE_A, labelsize=11)
+    ax.tick_params(axis='y', colors=PURPLE_A, labelsize=11)
+
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M'))
+    fig.autofmt_xdate(rotation=30)
+
+    fig.colorbar(sc, ax=ax, label='Dirección (°)')
+
+    guardar_fig(fig, nombre_png)
+
+
+def grafico_humedad(df, provincia=None, output_dir='web/img/graphs', archivo_csv='dataset/clima_argentina.csv', cache=None):
     """
     Grafica la humedad relativa promedio por hora.
     """
-    df_filtrado = df[df['province'] == provincia] if provincia else df
-    hum_prom = df_filtrado.groupby('fecha_hora')['rhum'].mean()
+    if cache is not None and provincia in cache:
+        hum_prom = cache[provincia]['hum_prom']
+    else:
+        df_filtrado = df[df['province'] == provincia] if provincia else df
+        hum_prom = df_filtrado.groupby('fecha_hora')['rhum'].mean()
     if hum_prom.empty:
         return
 
@@ -226,12 +344,24 @@ def grafico_humedad(df, provincia=None, output_dir='web/img/graphs', archivo_csv
     guardar_fig(fig, nombre_png)
 
 
-def grafico_temp_vs_sensacion(df, provincia=None, output_dir='web/img/graphs', archivo_csv='dataset/clima_argentina.csv'):
+def grafico_temp_vs_sensacion(df, provincia=None, output_dir='web/img/graphs', archivo_csv='dataset/clima_argentina.csv', cache=None):
     """
     Compara temperatura y sensación térmica por hora.
     """
-    df_filtrado = df[df['province'] == provincia].sort_values('fecha_hora')
-    df_filtrado = df_filtrado.dropna(subset=['temp','sensacionTermica'])
+    if cache is not None and provincia in cache:
+        temps = cache[provincia]['temp_mean']
+        sens = cache[provincia]['sens_mean']
+        idx = temps.index.intersection(sens.index)
+        if idx.empty:
+            return
+        df_filtrado = pd.DataFrame({
+            'fecha_hora': idx,
+            'temp': temps.loc[idx].values,
+            'sensacionTermica': sens.loc[idx].values
+        })
+    else:
+        df_filtrado = df[df['province'] == provincia].sort_values('fecha_hora')
+        df_filtrado = df_filtrado.dropna(subset=['temp','sensacionTermica'])
     if df_filtrado.empty:
         return
 
@@ -241,8 +371,8 @@ def grafico_temp_vs_sensacion(df, provincia=None, output_dir='web/img/graphs', a
         return
 
     fig, ax = plt.subplots()
-    ax.plot(df_filtrado['fecha_hora'], df_filtrado['temp'], color=PURPLE_B, linewidth=3)
-    ax.plot(df_filtrado['fecha_hora'], df_filtrado['sensacionTermica'], color=PURPLE_A, linewidth=3)
+    ax.plot(pd.to_datetime(df_filtrado['fecha_hora']), df_filtrado['temp'], color=PURPLE_B, linewidth=3)
+    ax.plot(pd.to_datetime(df_filtrado['fecha_hora']), df_filtrado['sensacionTermica'], color=PURPLE_A, linewidth=3)
 
     ax.set_xlabel('Hora', fontsize=13, color=PURPLE_B)
     ax.set_ylabel('Temperatura (°C)', fontsize=13, color=PURPLE_B)
@@ -254,11 +384,14 @@ def grafico_temp_vs_sensacion(df, provincia=None, output_dir='web/img/graphs', a
     guardar_fig(fig, nombre_png)
 
 
-def grafico_temp_web(df, provincia, output_dir='web/img/graphs', archivo_csv='dataset/clima_argentina.csv'):
+def grafico_temp_web(df, provincia, output_dir='web/img/graphs', archivo_csv='dataset/clima_argentina.csv', cache=None):
     """
     Gráfico estilizado para temperatura en la web.
     """
-    df_filtrado = df[df['province'] == provincia].sort_values('fecha_hora').head(22)
+    if cache is not None and provincia in cache:
+        df_filtrado = cache[provincia]['temp_web']
+    else:
+        df_filtrado = df[df['province'] == provincia].sort_values('fecha_hora').head(22)
     if df_filtrado.empty:
         return
 
@@ -276,7 +409,7 @@ def grafico_temp_web(df, provincia, output_dir='web/img/graphs', archivo_csv='da
 
     cmap = LinearSegmentedColormap.from_list('custom_purple', [primary_color, secondary_color])
 
-    dates = mdates.date2num(df_filtrado['fecha_hora'])
+    dates = mdates.date2num(pd.to_datetime(df_filtrado['fecha_hora']))
     temps = df_filtrado['temp'].values
     points = np.array([dates, temps]).T.reshape(-1,1,2)
 
@@ -286,8 +419,8 @@ def grafico_temp_web(df, provincia, output_dir='web/img/graphs', archivo_csv='da
         lc.set_array(np.linspace(0,1,len(segments)))
         ax.add_collection(lc)
 
-    ax.scatter(df_filtrado['fecha_hora'], temps, c=primary_color, s=60, edgecolors='white')
-    ax.fill_between(df_filtrado['fecha_hora'], temps, alpha=0.18, color=primary_color)
+    ax.scatter(pd.to_datetime(df_filtrado['fecha_hora']), temps, c=primary_color, s=60, edgecolors='white')
+    ax.fill_between(pd.to_datetime(df_filtrado['fecha_hora']), temps, alpha=0.18, color=primary_color)
 
     ax.set_xlabel('Hora', color=primary_color, fontsize=20, labelpad=15)
     ax.set_ylabel('Temperatura (°C)',  color=primary_color, fontsize=20, labelpad=15)
@@ -304,16 +437,17 @@ def grafico_temp_web(df, provincia, output_dir='web/img/graphs', archivo_csv='da
 # GENERACIÓN POR PROVINCIA
 # ------------------------------------------------------------
 
-def generar_graficos_provincia(provincia, df, output_dir='web/img/graphs', archivo_csv='dataset/clima_argentina.csv'):
+def generar_graficos_provincia(provincia, df, cache, output_dir='web/img/graphs', archivo_csv='dataset/clima_argentina.csv'):
     """
     Genera todos los gráficos para una provincia.
     """
-    grafico_precipitacion(df, provincia, output_dir, archivo_csv)
-    grafico_velocidad_viento(df, provincia, output_dir, archivo_csv)
-    grafico_direccion_viento(df, provincia, output_dir, archivo_csv)
-    grafico_humedad(df, provincia, output_dir, archivo_csv)
-    grafico_temp_vs_sensacion(df, provincia, output_dir, archivo_csv)
-    grafico_temp_web(df, provincia, output_dir, archivo_csv)
+    grafico_precipitacion(df, provincia, output_dir, archivo_csv, cache=cache)
+    grafico_velocidad_viento(df, provincia, output_dir, archivo_csv, cache=cache)
+    grafico_direccion_viento(df, provincia, output_dir, archivo_csv, cache=cache)
+    grafico_lineal_direccion_viento(df, provincia, output_dir, archivo_csv, cache=cache)
+    grafico_humedad(df, provincia, output_dir, archivo_csv, cache=cache)
+    grafico_temp_vs_sensacion(df, provincia, output_dir, archivo_csv, cache=cache)
+    grafico_temp_web(df, provincia, output_dir, archivo_csv, cache=cache)
 
 # ------------------------------------------------------------
 # GENERAR TODOS LOS GRÁFICOS
@@ -326,10 +460,15 @@ def generar_todos_los_graficos_web(df=None, output_dir='web/img/graphs', archivo
     if df is None:
         df = cargar_datos(archivo_csv)
 
+    cache = construir_cache_por_provincia(df)
+
     provincias = df['province'].unique()
 
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
-        executor.map(lambda p: generar_graficos_provincia(p, df, output_dir, archivo_csv), provincias)
+        futures = [executor.submit(generar_graficos_provincia, p, df, cache, output_dir, archivo_csv) for p in provincias]
+        for fut in as_completed(futures):
+            # no prints nuevos; solo consumir excepciones si las hay
+            _ = fut.result()
 
 # ------------------------------------------------------------
 # MAIN

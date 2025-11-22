@@ -1,11 +1,13 @@
-"""
-Genera y actualiza el archivo dataset/stations.csv con la estación meteorológica
+""" 
+Genera y actualiza el archivo dataset/stations.csv con la estación meteorológica 
 más representativa de cada provincia argentina.
+
 """
 
 from meteostat import Stations
 import pandas as pd
 import os
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 def esta_actualizado(archivo):
     return os.path.exists(archivo)
@@ -44,11 +46,10 @@ def obtener_estacion_valida(lat, lon, provincia):
         return None
 
     estaciones["id_estacion"] = estaciones.apply(
-        lambda x: x["wmo"] if pd.notna(x["wmo"])
-        else x["icao"] if pd.notna(x["icao"])
-        else None,
+        lambda x: x["wmo"] if pd.notna(x["wmo"]) else x["icao"] if pd.notna(x["icao"]) else None,
         axis=1
     )
+
     estaciones = estaciones.dropna(subset=["id_estacion"])
     if estaciones.empty:
         return None
@@ -57,8 +58,10 @@ def obtener_estacion_valida(lat, lon, provincia):
     estacion["province"] = provincia
     return estacion
 
+
 def generar_csv_estaciones():
     stations_path = "dataset/stations.csv"
+
     if esta_actualizado(stations_path):
         print("stations.csv ya existe. No se genera nuevamente.")
         return
@@ -66,17 +69,28 @@ def generar_csv_estaciones():
     print("Generando stations.csv...")
 
     lista = []
-    for provincia, (lat, lon) in provincias.items():
-        est = obtener_estacion_valida(lat, lon, provincia)
-        if est is not None:
-            lista.append(est)
-            print(f"Estación encontrada para {provincia}")
-        else:
-            print(f"No se encontró estación válida para {provincia}")
+
+    with ThreadPoolExecutor(max_workers=20) as executor:
+        futures = {
+            executor.submit(obtener_estacion_valida, lat, lon, provincia): provincia
+            for provincia, (lat, lon) in provincias.items()
+        }
+
+        for futuro in as_completed(futures):
+            provincia = futures[futuro]
+            est = futuro.result()
+
+            if est is not None:
+                lista.append(est)
+                print(f"Estación encontrada para {provincia}")
+            else:
+                print(f"No se encontró estación válida para {provincia}")
 
     df = pd.DataFrame(lista)
     df.to_csv(stations_path, index=False)
+
     print("\nstations.csv creado correctamente.")
+
 
 if __name__ == "__main__":
     generar_csv_estaciones()
