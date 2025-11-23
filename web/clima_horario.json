@@ -3,924 +3,336 @@
     {
       "time": "AHORA",
       "icon": "clear_night.svg",
-      "temp": 10.8,
+      "temp": 16.1,
       "coco": 1,
-      "fecha_hora": "2025-11-23 02:00:00"
+      "fecha_hora": "2025-11-23 20:00:00"
     },
     {
-      "time": "3 AM",
+      "time": "9 PM",
       "icon": "clear_night.svg",
-      "temp": 10.8,
+      "temp": 15.4,
       "coco": 1,
-      "fecha_hora": "2025-11-23 03:00:00"
-    },
-    {
-      "time": "4 AM",
-      "icon": "clear_night.svg",
-      "temp": 11.0,
-      "coco": 1,
-      "fecha_hora": "2025-11-23 04:00:00"
-    },
-    {
-      "time": "5 AM",
-      "icon": "fair_night.svg",
-      "temp": 11.2,
-      "coco": 2,
-      "fecha_hora": "2025-11-23 05:00:00"
-    },
-    {
-      "time": "6 AM",
-      "icon": "fair_night.svg",
-      "temp": 11.6,
-      "coco": 2,
-      "fecha_hora": "2025-11-23 06:00:00"
-    },
-    {
-      "time": "7 AM",
-      "icon": "clear.svg",
-      "temp": 14.3,
-      "coco": 1,
-      "fecha_hora": "2025-11-23 07:00:00"
+      "fecha_hora": "2025-11-23 21:00:00"
     }
   ],
   "Catamarca": [
     {
       "time": "AHORA",
       "icon": "clear_night.svg",
-      "temp": 23.0,
+      "temp": 29.6,
       "coco": 1,
-      "fecha_hora": "2025-11-23 02:00:00"
+      "fecha_hora": "2025-11-23 20:00:00"
     },
     {
-      "time": "3 AM",
+      "time": "9 PM",
       "icon": "clear_night.svg",
-      "temp": 22.4,
+      "temp": 28.1,
       "coco": 1,
-      "fecha_hora": "2025-11-23 03:00:00"
-    },
-    {
-      "time": "4 AM",
-      "icon": "clear_night.svg",
-      "temp": 22.0,
-      "coco": 1,
-      "fecha_hora": "2025-11-23 04:00:00"
-    },
-    {
-      "time": "5 AM",
-      "icon": "clear_night.svg",
-      "temp": 21.6,
-      "coco": 1,
-      "fecha_hora": "2025-11-23 05:00:00"
-    },
-    {
-      "time": "6 AM",
-      "icon": "clear_night.svg",
-      "temp": 21.3,
-      "coco": 1,
-      "fecha_hora": "2025-11-23 06:00:00"
-    },
-    {
-      "time": "7 AM",
-      "icon": "clear.svg",
-      "temp": 21.7,
-      "coco": 1,
-      "fecha_hora": "2025-11-23 07:00:00"
+      "fecha_hora": "2025-11-23 21:00:00"
     }
   ],
   "Chaco": [
     {
       "time": "AHORA",
-      "icon": "cloudy.svg",
-      "temp": 18.2,
-      "coco": 3,
-      "fecha_hora": "2025-11-23 02:00:00"
-    },
-    {
-      "time": "3 AM",
-      "icon": "cloudy.svg",
-      "temp": 18.0,
-      "coco": 3,
-      "fecha_hora": "2025-11-23 03:00:00"
-    },
-    {
-      "time": "4 AM",
       "icon": "clear_night.svg",
-      "temp": 17.6,
+      "temp": 21.4,
       "coco": 1,
-      "fecha_hora": "2025-11-23 04:00:00"
+      "fecha_hora": "2025-11-23 20:00:00"
     },
     {
-      "time": "5 AM",
+      "time": "9 PM",
       "icon": "clear_night.svg",
-      "temp": 17.1,
+      "temp": 20.5,
       "coco": 1,
-      "fecha_hora": "2025-11-23 05:00:00"
-    },
-    {
-      "time": "6 AM",
-      "icon": "clear_night.svg",
-      "temp": 16.7,
-      "coco": 1,
-      "fecha_hora": "2025-11-23 06:00:00"
-    },
-    {
-      "time": "7 AM",
-      "icon": "clear.svg",
-      "temp": 17.3,
-      "coco": 1,
-      "fecha_hora": "2025-11-23 07:00:00"
+      "fecha_hora": "2025-11-23 21:00:00"
     }
   ],
   "Chubut": [
     {
       "time": "AHORA",
       "icon": "cloudy.svg",
-      "temp": 15.6,
+      "temp": 20.5,
       "coco": 3,
-      "fecha_hora": "2025-11-23 02:00:00"
+      "fecha_hora": "2025-11-23 20:00:00"
     },
     {
-      "time": "3 AM",
+      "time": "9 PM",
       "icon": "cloudy.svg",
-      "temp": 15.6,
+      "temp": 18.2,
       "coco": 3,
-      "fecha_hora": "2025-11-23 03:00:00"
-    },
-    {
-      "time": "4 AM",
-      "icon": "cloudy.svg",
-      "temp": 16.2,
-      "coco": 3,
-      "fecha_hora": "2025-11-23 04:00:00"
-    },
-    {
-      "time": "5 AM",
-      "icon": "cloudy.svg",
-      "temp": 16.9,
-      "coco": 3,
-      "fecha_hora": "2025-11-23 05:00:00"
-    },
-    {
-      "time": "6 AM",
-      "icon": "cloudy.svg",
-      "temp": 16.8,
-      "coco": 3,
-      "fecha_hora": "2025-11-23 06:00:00"
-    },
-    {
-      "time": "7 AM",
-      "icon": "cloudy.svg",
-      "temp": 18.7,
-      "coco": 3,
-      "fecha_hora": "2025-11-23 07:00:00"
+      "fecha_hora": "2025-11-23 21:00:00"
     }
   ],
   "Corrientes": [
     {
       "time": "AHORA",
-      "icon": "cloudy.svg",
-      "temp": 18.2,
-      "coco": 3,
-      "fecha_hora": "2025-11-23 02:00:00"
-    },
-    {
-      "time": "3 AM",
-      "icon": "cloudy.svg",
-      "temp": 18.0,
-      "coco": 3,
-      "fecha_hora": "2025-11-23 03:00:00"
-    },
-    {
-      "time": "4 AM",
       "icon": "clear_night.svg",
-      "temp": 17.6,
+      "temp": 21.4,
       "coco": 1,
-      "fecha_hora": "2025-11-23 04:00:00"
+      "fecha_hora": "2025-11-23 20:00:00"
     },
     {
-      "time": "5 AM",
+      "time": "9 PM",
       "icon": "clear_night.svg",
-      "temp": 17.1,
+      "temp": 20.5,
       "coco": 1,
-      "fecha_hora": "2025-11-23 05:00:00"
-    },
-    {
-      "time": "6 AM",
-      "icon": "clear_night.svg",
-      "temp": 16.7,
-      "coco": 1,
-      "fecha_hora": "2025-11-23 06:00:00"
-    },
-    {
-      "time": "7 AM",
-      "icon": "clear.svg",
-      "temp": 17.3,
-      "coco": 1,
-      "fecha_hora": "2025-11-23 07:00:00"
+      "fecha_hora": "2025-11-23 21:00:00"
     }
   ],
   "Córdoba": [
     {
       "time": "AHORA",
-      "icon": "fair_night.svg",
-      "temp": 17.3,
-      "coco": 2,
-      "fecha_hora": "2025-11-23 02:00:00"
-    },
-    {
-      "time": "3 AM",
       "icon": "clear_night.svg",
-      "temp": 16.3,
+      "temp": 25.0,
       "coco": 1,
-      "fecha_hora": "2025-11-23 03:00:00"
+      "fecha_hora": "2025-11-23 20:00:00"
     },
     {
-      "time": "4 AM",
+      "time": "9 PM",
       "icon": "clear_night.svg",
-      "temp": 15.6,
+      "temp": 23.1,
       "coco": 1,
-      "fecha_hora": "2025-11-23 04:00:00"
-    },
-    {
-      "time": "5 AM",
-      "icon": "clear_night.svg",
-      "temp": 14.9,
-      "coco": 1,
-      "fecha_hora": "2025-11-23 05:00:00"
-    },
-    {
-      "time": "6 AM",
-      "icon": "clear_night.svg",
-      "temp": 14.4,
-      "coco": 1,
-      "fecha_hora": "2025-11-23 06:00:00"
-    },
-    {
-      "time": "7 AM",
-      "icon": "clear.svg",
-      "temp": 15.0,
-      "coco": 1,
-      "fecha_hora": "2025-11-23 07:00:00"
+      "fecha_hora": "2025-11-23 21:00:00"
     }
   ],
   "Entre Ríos": [
     {
       "time": "AHORA",
       "icon": "clear_night.svg",
-      "temp": 15.0,
+      "temp": 21.0,
       "coco": 1,
-      "fecha_hora": "2025-11-23 02:00:00"
+      "fecha_hora": "2025-11-23 20:00:00"
     },
     {
-      "time": "3 AM",
+      "time": "9 PM",
       "icon": "clear_night.svg",
-      "temp": 14.5,
+      "temp": 20.0,
       "coco": 1,
-      "fecha_hora": "2025-11-23 03:00:00"
-    },
-    {
-      "time": "4 AM",
-      "icon": "clear_night.svg",
-      "temp": 14.0,
-      "coco": 1,
-      "fecha_hora": "2025-11-23 04:00:00"
-    },
-    {
-      "time": "5 AM",
-      "icon": "clear_night.svg",
-      "temp": 13.5,
-      "coco": 1,
-      "fecha_hora": "2025-11-23 05:00:00"
-    },
-    {
-      "time": "6 AM",
-      "icon": "clear_night.svg",
-      "temp": 13.0,
-      "coco": 1,
-      "fecha_hora": "2025-11-23 06:00:00"
-    },
-    {
-      "time": "7 AM",
-      "icon": "clear.svg",
-      "temp": 13.8,
-      "coco": 1,
-      "fecha_hora": "2025-11-23 07:00:00"
+      "fecha_hora": "2025-11-23 21:00:00"
     }
   ],
   "Formosa": [
     {
       "time": "AHORA",
-      "icon": "cloudy.svg",
-      "temp": 19.6,
-      "coco": 3,
-      "fecha_hora": "2025-11-23 02:00:00"
+      "icon": "fair_night.svg",
+      "temp": 22.0,
+      "coco": 2,
+      "fecha_hora": "2025-11-23 20:00:00"
     },
     {
-      "time": "3 AM",
-      "icon": "cloudy.svg",
-      "temp": 19.2,
-      "coco": 3,
-      "fecha_hora": "2025-11-23 03:00:00"
-    },
-    {
-      "time": "4 AM",
-      "icon": "cloudy.svg",
-      "temp": 18.7,
-      "coco": 3,
-      "fecha_hora": "2025-11-23 04:00:00"
-    },
-    {
-      "time": "5 AM",
-      "icon": "cloudy.svg",
-      "temp": 18.4,
-      "coco": 3,
-      "fecha_hora": "2025-11-23 05:00:00"
-    },
-    {
-      "time": "6 AM",
-      "icon": "cloudy.svg",
-      "temp": 18.1,
-      "coco": 3,
-      "fecha_hora": "2025-11-23 06:00:00"
-    },
-    {
-      "time": "7 AM",
-      "icon": "cloudy.svg",
-      "temp": 18.4,
-      "coco": 3,
-      "fecha_hora": "2025-11-23 07:00:00"
+      "time": "9 PM",
+      "icon": "fair_night.svg",
+      "temp": 21.2,
+      "coco": 2,
+      "fecha_hora": "2025-11-23 21:00:00"
     }
   ],
   "Jujuy": [
     {
       "time": "AHORA",
-      "icon": "overcast.svg",
-      "temp": 19.0,
-      "coco": 4,
-      "fecha_hora": "2025-11-23 02:00:00"
-    },
-    {
-      "time": "3 AM",
-      "icon": "overcast.svg",
-      "temp": 18.6,
-      "coco": 4,
-      "fecha_hora": "2025-11-23 03:00:00"
-    },
-    {
-      "time": "4 AM",
       "icon": "cloudy.svg",
-      "temp": 18.0,
+      "temp": 25.9,
       "coco": 3,
-      "fecha_hora": "2025-11-23 04:00:00"
+      "fecha_hora": "2025-11-23 20:00:00"
     },
     {
-      "time": "5 AM",
+      "time": "9 PM",
       "icon": "cloudy.svg",
-      "temp": 17.4,
+      "temp": 24.4,
       "coco": 3,
-      "fecha_hora": "2025-11-23 05:00:00"
-    },
-    {
-      "time": "6 AM",
-      "icon": "cloudy.svg",
-      "temp": 17.0,
-      "coco": 3,
-      "fecha_hora": "2025-11-23 06:00:00"
-    },
-    {
-      "time": "7 AM",
-      "icon": "fair.svg",
-      "temp": 17.7,
-      "coco": 2,
-      "fecha_hora": "2025-11-23 07:00:00"
+      "fecha_hora": "2025-11-23 21:00:00"
     }
   ],
   "La Pampa": [
     {
       "time": "AHORA",
       "icon": "clear_night.svg",
-      "temp": 15.6,
+      "temp": 25.0,
       "coco": 1,
-      "fecha_hora": "2025-11-23 02:00:00"
+      "fecha_hora": "2025-11-23 20:00:00"
     },
     {
-      "time": "3 AM",
+      "time": "9 PM",
       "icon": "clear_night.svg",
-      "temp": 14.6,
+      "temp": 23.1,
       "coco": 1,
-      "fecha_hora": "2025-11-23 03:00:00"
-    },
-    {
-      "time": "4 AM",
-      "icon": "clear_night.svg",
-      "temp": 13.7,
-      "coco": 1,
-      "fecha_hora": "2025-11-23 04:00:00"
-    },
-    {
-      "time": "5 AM",
-      "icon": "clear_night.svg",
-      "temp": 13.1,
-      "coco": 1,
-      "fecha_hora": "2025-11-23 05:00:00"
-    },
-    {
-      "time": "6 AM",
-      "icon": "clear_night.svg",
-      "temp": 12.6,
-      "coco": 1,
-      "fecha_hora": "2025-11-23 06:00:00"
-    },
-    {
-      "time": "7 AM",
-      "icon": "clear.svg",
-      "temp": 14.0,
-      "coco": 1,
-      "fecha_hora": "2025-11-23 07:00:00"
+      "fecha_hora": "2025-11-23 21:00:00"
     }
   ],
   "La Rioja": [
     {
       "time": "AHORA",
       "icon": "clear_night.svg",
-      "temp": 23.1,
+      "temp": 32.2,
       "coco": 1,
-      "fecha_hora": "2025-11-23 02:00:00"
+      "fecha_hora": "2025-11-23 20:00:00"
     },
     {
-      "time": "3 AM",
+      "time": "9 PM",
       "icon": "clear_night.svg",
-      "temp": 21.9,
+      "temp": 30.7,
       "coco": 1,
-      "fecha_hora": "2025-11-23 03:00:00"
-    },
-    {
-      "time": "4 AM",
-      "icon": "clear_night.svg",
-      "temp": 20.7,
-      "coco": 1,
-      "fecha_hora": "2025-11-23 04:00:00"
-    },
-    {
-      "time": "5 AM",
-      "icon": "clear_night.svg",
-      "temp": 19.6,
-      "coco": 1,
-      "fecha_hora": "2025-11-23 05:00:00"
-    },
-    {
-      "time": "6 AM",
-      "icon": "clear_night.svg",
-      "temp": 18.8,
-      "coco": 1,
-      "fecha_hora": "2025-11-23 06:00:00"
-    },
-    {
-      "time": "7 AM",
-      "icon": "clear.svg",
-      "temp": 19.3,
-      "coco": 1,
-      "fecha_hora": "2025-11-23 07:00:00"
+      "fecha_hora": "2025-11-23 21:00:00"
     }
   ],
   "Mendoza": [
     {
       "time": "AHORA",
-      "icon": "clear_night.svg",
-      "temp": 21.4,
-      "coco": 1,
-      "fecha_hora": "2025-11-23 02:00:00"
+      "icon": "fair_night.svg",
+      "temp": 31.0,
+      "coco": 2,
+      "fecha_hora": "2025-11-23 20:00:00"
     },
     {
-      "time": "3 AM",
-      "icon": "clear_night.svg",
-      "temp": 20.5,
-      "coco": 1,
-      "fecha_hora": "2025-11-23 03:00:00"
-    },
-    {
-      "time": "4 AM",
-      "icon": "clear_night.svg",
-      "temp": 19.8,
-      "coco": 1,
-      "fecha_hora": "2025-11-23 04:00:00"
-    },
-    {
-      "time": "5 AM",
-      "icon": "clear_night.svg",
-      "temp": 19.3,
-      "coco": 1,
-      "fecha_hora": "2025-11-23 05:00:00"
-    },
-    {
-      "time": "6 AM",
-      "icon": "clear_night.svg",
-      "temp": 19.0,
-      "coco": 1,
-      "fecha_hora": "2025-11-23 06:00:00"
-    },
-    {
-      "time": "7 AM",
-      "icon": "clear.svg",
-      "temp": 19.7,
-      "coco": 1,
-      "fecha_hora": "2025-11-23 07:00:00"
+      "time": "9 PM",
+      "icon": "fair_night.svg",
+      "temp": 29.4,
+      "coco": 2,
+      "fecha_hora": "2025-11-23 21:00:00"
     }
   ],
   "Misiones": [
     {
       "time": "AHORA",
-      "icon": "cloudy.svg",
-      "temp": 19.0,
-      "coco": 3,
-      "fecha_hora": "2025-11-23 02:00:00"
-    },
-    {
-      "time": "3 AM",
-      "icon": "cloudy.svg",
-      "temp": 18.5,
-      "coco": 3,
-      "fecha_hora": "2025-11-23 03:00:00"
-    },
-    {
-      "time": "4 AM",
-      "icon": "fair_night.svg",
-      "temp": 17.7,
-      "coco": 2,
-      "fecha_hora": "2025-11-23 04:00:00"
-    },
-    {
-      "time": "5 AM",
       "icon": "clear_night.svg",
-      "temp": 17.3,
+      "temp": 22.0,
       "coco": 1,
-      "fecha_hora": "2025-11-23 05:00:00"
+      "fecha_hora": "2025-11-23 20:00:00"
     },
     {
-      "time": "6 AM",
+      "time": "9 PM",
       "icon": "clear_night.svg",
-      "temp": 16.9,
+      "temp": 21.0,
       "coco": 1,
-      "fecha_hora": "2025-11-23 06:00:00"
-    },
-    {
-      "time": "7 AM",
-      "icon": "fair.svg",
-      "temp": 17.9,
-      "coco": 2,
-      "fecha_hora": "2025-11-23 07:00:00"
+      "fecha_hora": "2025-11-23 21:00:00"
     }
   ],
   "Neuquén": [
     {
       "time": "AHORA",
-      "icon": "clear_night.svg",
-      "temp": 24.0,
-      "coco": 1,
-      "fecha_hora": "2025-11-23 02:00:00"
-    },
-    {
-      "time": "3 AM",
-      "icon": "clear_night.svg",
-      "temp": 23.4,
-      "coco": 1,
-      "fecha_hora": "2025-11-23 03:00:00"
-    },
-    {
-      "time": "4 AM",
-      "icon": "clear_night.svg",
-      "temp": 22.6,
-      "coco": 1,
-      "fecha_hora": "2025-11-23 04:00:00"
-    },
-    {
-      "time": "5 AM",
-      "icon": "clear_night.svg",
-      "temp": 21.7,
-      "coco": 1,
-      "fecha_hora": "2025-11-23 05:00:00"
-    },
-    {
-      "time": "6 AM",
-      "icon": "clear_night.svg",
-      "temp": 21.0,
-      "coco": 1,
-      "fecha_hora": "2025-11-23 06:00:00"
-    },
-    {
-      "time": "7 AM",
-      "icon": "fair.svg",
-      "temp": 21.4,
+      "icon": "fair_night.svg",
+      "temp": 34.1,
       "coco": 2,
-      "fecha_hora": "2025-11-23 07:00:00"
+      "fecha_hora": "2025-11-23 20:00:00"
+    },
+    {
+      "time": "9 PM",
+      "icon": "cloudy.svg",
+      "temp": 31.7,
+      "coco": 3,
+      "fecha_hora": "2025-11-23 21:00:00"
     }
   ],
   "Río Negro": [
     {
       "time": "AHORA",
       "icon": "cloudy.svg",
-      "temp": 19.1,
+      "temp": 30.4,
       "coco": 3,
-      "fecha_hora": "2025-11-23 02:00:00"
+      "fecha_hora": "2025-11-23 20:00:00"
     },
     {
-      "time": "3 AM",
+      "time": "9 PM",
       "icon": "cloudy.svg",
-      "temp": 19.0,
+      "temp": 28.3,
       "coco": 3,
-      "fecha_hora": "2025-11-23 03:00:00"
-    },
-    {
-      "time": "4 AM",
-      "icon": "clear_night.svg",
-      "temp": 19.3,
-      "coco": 1,
-      "fecha_hora": "2025-11-23 04:00:00"
-    },
-    {
-      "time": "5 AM",
-      "icon": "clear_night.svg",
-      "temp": 20.1,
-      "coco": 1,
-      "fecha_hora": "2025-11-23 05:00:00"
-    },
-    {
-      "time": "6 AM",
-      "icon": "clear_night.svg",
-      "temp": 20.6,
-      "coco": 1,
-      "fecha_hora": "2025-11-23 06:00:00"
-    },
-    {
-      "time": "7 AM",
-      "icon": "clear.svg",
-      "temp": 21.3,
-      "coco": 1,
-      "fecha_hora": "2025-11-23 07:00:00"
+      "fecha_hora": "2025-11-23 21:00:00"
     }
   ],
   "Salta": [
     {
       "time": "AHORA",
       "icon": "cloudy.svg",
-      "temp": 16.0,
+      "temp": 21.6,
       "coco": 3,
-      "fecha_hora": "2025-11-23 02:00:00"
+      "fecha_hora": "2025-11-23 20:00:00"
     },
     {
-      "time": "3 AM",
-      "icon": "fair_night.svg",
-      "temp": 15.5,
-      "coco": 2,
-      "fecha_hora": "2025-11-23 03:00:00"
-    },
-    {
-      "time": "4 AM",
+      "time": "9 PM",
       "icon": "cloudy.svg",
-      "temp": 15.0,
+      "temp": 20.8,
       "coco": 3,
-      "fecha_hora": "2025-11-23 04:00:00"
-    },
-    {
-      "time": "5 AM",
-      "icon": "cloudy.svg",
-      "temp": 14.3,
-      "coco": 3,
-      "fecha_hora": "2025-11-23 05:00:00"
-    },
-    {
-      "time": "6 AM",
-      "icon": "fair_night.svg",
-      "temp": 13.8,
-      "coco": 2,
-      "fecha_hora": "2025-11-23 06:00:00"
-    },
-    {
-      "time": "7 AM",
-      "icon": "fair.svg",
-      "temp": 14.1,
-      "coco": 2,
-      "fecha_hora": "2025-11-23 07:00:00"
+      "fecha_hora": "2025-11-23 21:00:00"
     }
   ],
   "San Juan": [
     {
       "time": "AHORA",
-      "icon": "clear_night.svg",
-      "temp": 24.1,
-      "coco": 1,
-      "fecha_hora": "2025-11-23 02:00:00"
+      "icon": "cloudy.svg",
+      "temp": 31.8,
+      "coco": 3,
+      "fecha_hora": "2025-11-23 20:00:00"
     },
     {
-      "time": "3 AM",
-      "icon": "clear_night.svg",
-      "temp": 23.2,
-      "coco": 1,
-      "fecha_hora": "2025-11-23 03:00:00"
-    },
-    {
-      "time": "4 AM",
-      "icon": "clear_night.svg",
-      "temp": 22.5,
-      "coco": 1,
-      "fecha_hora": "2025-11-23 04:00:00"
-    },
-    {
-      "time": "5 AM",
-      "icon": "clear_night.svg",
-      "temp": 22.9,
-      "coco": 1,
-      "fecha_hora": "2025-11-23 05:00:00"
-    },
-    {
-      "time": "6 AM",
-      "icon": "clear_night.svg",
-      "temp": 22.4,
-      "coco": 1,
-      "fecha_hora": "2025-11-23 06:00:00"
-    },
-    {
-      "time": "7 AM",
-      "icon": "clear.svg",
-      "temp": 22.8,
-      "coco": 1,
-      "fecha_hora": "2025-11-23 07:00:00"
+      "time": "9 PM",
+      "icon": "cloudy.svg",
+      "temp": 30.9,
+      "coco": 3,
+      "fecha_hora": "2025-11-23 21:00:00"
     }
   ],
   "San Luis": [
     {
       "time": "AHORA",
       "icon": "clear_night.svg",
-      "temp": 22.6,
+      "temp": 29.1,
       "coco": 1,
-      "fecha_hora": "2025-11-23 02:00:00"
+      "fecha_hora": "2025-11-23 20:00:00"
     },
     {
-      "time": "3 AM",
+      "time": "9 PM",
       "icon": "clear_night.svg",
-      "temp": 22.3,
+      "temp": 27.8,
       "coco": 1,
-      "fecha_hora": "2025-11-23 03:00:00"
-    },
-    {
-      "time": "4 AM",
-      "icon": "clear_night.svg",
-      "temp": 21.4,
-      "coco": 1,
-      "fecha_hora": "2025-11-23 04:00:00"
-    },
-    {
-      "time": "5 AM",
-      "icon": "clear_night.svg",
-      "temp": 20.6,
-      "coco": 1,
-      "fecha_hora": "2025-11-23 05:00:00"
-    },
-    {
-      "time": "6 AM",
-      "icon": "clear_night.svg",
-      "temp": 19.6,
-      "coco": 1,
-      "fecha_hora": "2025-11-23 06:00:00"
-    },
-    {
-      "time": "7 AM",
-      "icon": "clear.svg",
-      "temp": 20.0,
-      "coco": 1,
-      "fecha_hora": "2025-11-23 07:00:00"
+      "fecha_hora": "2025-11-23 21:00:00"
     }
   ],
   "Santa Cruz": [
     {
       "time": "AHORA",
       "icon": "cloudy.svg",
-      "temp": 12.4,
+      "temp": 13.5,
       "coco": 3,
-      "fecha_hora": "2025-11-23 02:00:00"
+      "fecha_hora": "2025-11-23 20:00:00"
     },
     {
-      "time": "3 AM",
+      "time": "9 PM",
       "icon": "cloudy.svg",
-      "temp": 11.8,
+      "temp": 12.2,
       "coco": 3,
-      "fecha_hora": "2025-11-23 03:00:00"
-    },
-    {
-      "time": "4 AM",
-      "icon": "cloudy.svg",
-      "temp": 11.4,
-      "coco": 3,
-      "fecha_hora": "2025-11-23 04:00:00"
-    },
-    {
-      "time": "5 AM",
-      "icon": "cloudy.svg",
-      "temp": 10.4,
-      "coco": 3,
-      "fecha_hora": "2025-11-23 05:00:00"
-    },
-    {
-      "time": "6 AM",
-      "icon": "cloudy.svg",
-      "temp": 9.9,
-      "coco": 3,
-      "fecha_hora": "2025-11-23 06:00:00"
-    },
-    {
-      "time": "7 AM",
-      "icon": "cloudy.svg",
-      "temp": 10.1,
-      "coco": 3,
-      "fecha_hora": "2025-11-23 07:00:00"
+      "fecha_hora": "2025-11-23 21:00:00"
     }
   ],
   "Santa Fe": [
     {
       "time": "AHORA",
-      "icon": "fair_night.svg",
-      "temp": 16.4,
-      "coco": 2,
-      "fecha_hora": "2025-11-23 02:00:00"
-    },
-    {
-      "time": "3 AM",
       "icon": "clear_night.svg",
-      "temp": 15.8,
+      "temp": 20.9,
       "coco": 1,
-      "fecha_hora": "2025-11-23 03:00:00"
+      "fecha_hora": "2025-11-23 20:00:00"
     },
     {
-      "time": "4 AM",
+      "time": "9 PM",
       "icon": "clear_night.svg",
-      "temp": 15.5,
+      "temp": 20.0,
       "coco": 1,
-      "fecha_hora": "2025-11-23 04:00:00"
-    },
-    {
-      "time": "5 AM",
-      "icon": "fair_night.svg",
-      "temp": 15.2,
-      "coco": 2,
-      "fecha_hora": "2025-11-23 05:00:00"
-    },
-    {
-      "time": "6 AM",
-      "icon": "clear_night.svg",
-      "temp": 14.7,
-      "coco": 1,
-      "fecha_hora": "2025-11-23 06:00:00"
-    },
-    {
-      "time": "7 AM",
-      "icon": "clear.svg",
-      "temp": 15.8,
-      "coco": 1,
-      "fecha_hora": "2025-11-23 07:00:00"
+      "fecha_hora": "2025-11-23 21:00:00"
     }
   ],
   "Santiago del Estero": [
     {
       "time": "AHORA",
-      "icon": "clear_night.svg",
-      "temp": 19.6,
-      "coco": 1,
-      "fecha_hora": "2025-11-23 02:00:00"
+      "icon": "fair_night.svg",
+      "temp": 27.5,
+      "coco": 2,
+      "fecha_hora": "2025-11-23 20:00:00"
     },
     {
-      "time": "3 AM",
-      "icon": "clear_night.svg",
-      "temp": 18.5,
-      "coco": 1,
-      "fecha_hora": "2025-11-23 03:00:00"
-    },
-    {
-      "time": "4 AM",
-      "icon": "clear_night.svg",
-      "temp": 17.9,
-      "coco": 1,
-      "fecha_hora": "2025-11-23 04:00:00"
-    },
-    {
-      "time": "5 AM",
-      "icon": "clear_night.svg",
-      "temp": 17.2,
-      "coco": 1,
-      "fecha_hora": "2025-11-23 05:00:00"
-    },
-    {
-      "time": "6 AM",
-      "icon": "clear_night.svg",
-      "temp": 16.8,
-      "coco": 1,
-      "fecha_hora": "2025-11-23 06:00:00"
-    },
-    {
-      "time": "7 AM",
-      "icon": "clear.svg",
-      "temp": 17.2,
-      "coco": 1,
-      "fecha_hora": "2025-11-23 07:00:00"
+      "time": "9 PM",
+      "icon": "fair_night.svg",
+      "temp": 26.5,
+      "coco": 2,
+      "fecha_hora": "2025-11-23 21:00:00"
     }
   ],
   "Tierra del Fuego": [
@@ -929,86 +341,30 @@
       "icon": "cloudy.svg",
       "temp": 7.7,
       "coco": 3,
-      "fecha_hora": "2025-11-23 02:00:00"
+      "fecha_hora": "2025-11-23 20:00:00"
     },
     {
-      "time": "3 AM",
-      "icon": "fair_night.svg",
-      "temp": 7.2,
-      "coco": 2,
-      "fecha_hora": "2025-11-23 03:00:00"
-    },
-    {
-      "time": "4 AM",
-      "icon": "fair_night.svg",
-      "temp": 7.2,
-      "coco": 2,
-      "fecha_hora": "2025-11-23 04:00:00"
-    },
-    {
-      "time": "5 AM",
-      "icon": "fair_night.svg",
+      "time": "9 PM",
+      "icon": "cloudy.svg",
       "temp": 7.1,
-      "coco": 2,
-      "fecha_hora": "2025-11-23 05:00:00"
-    },
-    {
-      "time": "6 AM",
-      "icon": "cloudy.svg",
-      "temp": 7.0,
       "coco": 3,
-      "fecha_hora": "2025-11-23 06:00:00"
-    },
-    {
-      "time": "7 AM",
-      "icon": "cloudy.svg",
-      "temp": 7.3,
-      "coco": 3,
-      "fecha_hora": "2025-11-23 07:00:00"
+      "fecha_hora": "2025-11-23 21:00:00"
     }
   ],
   "Tucumán": [
     {
       "time": "AHORA",
       "icon": "fair_night.svg",
-      "temp": 19.8,
+      "temp": 26.6,
       "coco": 2,
-      "fecha_hora": "2025-11-23 02:00:00"
+      "fecha_hora": "2025-11-23 20:00:00"
     },
     {
-      "time": "3 AM",
+      "time": "9 PM",
       "icon": "fair_night.svg",
-      "temp": 19.1,
+      "temp": 25.1,
       "coco": 2,
-      "fecha_hora": "2025-11-23 03:00:00"
-    },
-    {
-      "time": "4 AM",
-      "icon": "fair_night.svg",
-      "temp": 18.6,
-      "coco": 2,
-      "fecha_hora": "2025-11-23 04:00:00"
-    },
-    {
-      "time": "5 AM",
-      "icon": "fair_night.svg",
-      "temp": 18.1,
-      "coco": 2,
-      "fecha_hora": "2025-11-23 05:00:00"
-    },
-    {
-      "time": "6 AM",
-      "icon": "fair_night.svg",
-      "temp": 17.5,
-      "coco": 2,
-      "fecha_hora": "2025-11-23 06:00:00"
-    },
-    {
-      "time": "7 AM",
-      "icon": "fair.svg",
-      "temp": 17.8,
-      "coco": 2,
-      "fecha_hora": "2025-11-23 07:00:00"
+      "fecha_hora": "2025-11-23 21:00:00"
     }
   ]
 }
