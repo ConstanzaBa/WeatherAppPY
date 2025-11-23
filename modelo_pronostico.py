@@ -63,6 +63,7 @@ def predecir_7dias(modelo, scaler, features, df):
     """
     Genera predicción iterativa de 7 días usando la columna fecha_hora
     y todas las features proporcionadas, con normalización.
+    El primer día del pronóstico es HOY (última fecha en el dataset).
     """
 
     # Copia para evitar SettingWithCopyWarning
@@ -78,13 +79,24 @@ def predecir_7dias(modelo, scaler, features, df):
 
     predicciones = []
 
-    for _ in range(7):
+    # Primer pronóstico: HOY (usar datos reales del último registro)
+    fecha_actual = ultimo["fecha_hora"]
+    predicciones.append({
+        "fecha": fecha_actual.strftime("%Y-%m-%d"),
+        "temp_high": round(ultimo["temp"] + 2, 1),
+        "temp_low": round(ultimo["temp"] - 2, 1),
+        "precip": float(round(ultimo["prcp"], 1)),
+        "coco": int(ultimo["coco"])
+    })
+
+    # Siguientes 6 días: predicciones del modelo
+    for i in range(6):
         entrada = pd.DataFrame([ultimo[features]])
         entrada_scaled = scaler.transform(entrada)
 
         temp_pred = float(modelo.predict(entrada_scaled)[0])
         coco_pred = int(ultimo["coco"])
-        nueva_fecha = ultimo["fecha_hora"] + timedelta(days=1)
+        nueva_fecha = fecha_actual + timedelta(days=i+1)
 
         predicciones.append({
             "fecha": nueva_fecha.strftime("%Y-%m-%d"),

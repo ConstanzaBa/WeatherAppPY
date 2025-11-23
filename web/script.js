@@ -21,6 +21,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   let climaData = [];
   let climaPorProvincia = {};
   let climaHorarioPorProvincia = {};
+  let pronosticoPorProvincia = {};
   let iconos = [];
   let infoHtmlTemplate = "";
 
@@ -112,13 +113,35 @@ document.addEventListener("DOMContentLoaded", async () => {
     window.climaHorarioPorProvincia = climaHorarioPorProvincia;
   }
 
+  async function cargarPronostico() {
+    try {
+      const response = await fetch("pronostico.json?cache=" + Date.now());
+      const data = await response.json();
+
+      pronosticoPorProvincia = {};
+      data.forEach((item) => {
+        pronosticoPorProvincia[normalize(item.provincia)] = item.pronostico;
+      });
+
+      console.log("Pronóstico cargado:", pronosticoPorProvincia);
+
+    } catch (err) {
+      console.error("Error al cargar pronostico.json:", err);
+      pronosticoPorProvincia = {};
+    }
+
+    window.pronosticoPorProvincia = pronosticoPorProvincia;
+  }
+
   async function inicializar() {
     await cargarTemplateInfo();
     await cargarClima();
     await cargarClimaHorario();
+    await cargarPronostico();
 
     window.climaPorProvincia = climaPorProvincia;
     window.climaHorarioPorProvincia = climaHorarioPorProvincia;
+    window.pronosticoPorProvincia = pronosticoPorProvincia;
 
     colocarIconos();
   }
@@ -196,6 +219,76 @@ document.addEventListener("DOMContentLoaded", async () => {
       hourlyContainer.appendChild(hourlyItem);
     });
   }
+
+  function actualizarPronosticoSemanal(provincia) {
+    const weeklyForecast = cardInfo.querySelector(".weekly-forecast");
+    if (!weeklyForecast) return;
+
+    const provinciaKey = normalize(provincia);
+    const pronosticoData = pronosticoPorProvincia[provinciaKey];
+
+    if (!pronosticoData || pronosticoData.length === 0) {
+      weeklyForecast.innerHTML = '<div class="section-title">Pronóstico Semanal</div><p style="text-align: center; color: #666; padding: 20px;">No hay pronóstico disponible</p>';
+      return;
+    }
+
+    // Limpiar y agregar título
+    weeklyForecast.innerHTML = '<div class="section-title">Pronóstico Semanal</div>';
+
+    const diasSemana = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+    const meses = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+
+    pronosticoData.forEach((dia, index) => {
+      const dailyItem = document.createElement('div');
+      dailyItem.className = 'daily-item';
+
+      // Día
+      const dayDiv = document.createElement('div');
+      dayDiv.className = 'day';
+      
+      const fecha = new Date(dia.fecha + 'T12:00:00');
+      const nombreDia = index === 0 ? 'Hoy' : diasSemana[fecha.getDay()];
+      const diaNum = fecha.getDate();
+      const mes = meses[fecha.getMonth()];
+      
+      dayDiv.innerHTML = `${nombreDia}<br /><span style="font-size: 12px; color: #999">${mes} ${diaNum}</span>`;
+
+      // Icono
+      const iconDiv = document.createElement('div');
+      iconDiv.className = 'day-icon';
+      const iconImg = document.createElement('img');
+      iconImg.src = `img/weather/${dia.icon}`;
+      iconImg.alt = dia.desc;
+      iconImg.width = 40;
+      iconImg.height = 40;
+      iconDiv.appendChild(iconImg);
+
+      // Temperaturas
+      const tempsDiv = document.createElement('div');
+      tempsDiv.className = 'temps';
+      
+      const precipSpan = document.createElement('span');
+      precipSpan.className = 'precip';
+      precipSpan.textContent = `💧 ${Math.round(dia.precip)}%`;
+
+      const highSpan = document.createElement('span');
+      highSpan.className = 'high';
+      highSpan.textContent = `${Math.round(dia.temp_high)}°`;
+
+      const lowSpan = document.createElement('span');
+      lowSpan.className = 'low';
+      lowSpan.textContent = `/ ${Math.round(dia.temp_low)}°`;
+
+      tempsDiv.appendChild(precipSpan);
+      tempsDiv.appendChild(highSpan);
+      tempsDiv.appendChild(lowSpan);
+
+      dailyItem.appendChild(dayDiv);
+      dailyItem.appendChild(iconDiv);
+      dailyItem.appendChild(tempsDiv);
+      weeklyForecast.appendChild(dailyItem);
+    });
+  }
   function actualizarDatosProvincia(nombre, clima) {
     const tituloProvincia = cardInfo.querySelector(".titulo-provincia");
     const horaProvincia = cardInfo.querySelector(".hora-provincia");
@@ -268,6 +361,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     actualizarPronosticoHorario(nombre);
+    actualizarPronosticoSemanal(nombre);
   }
 
   // EVENTO CLICK EN PROVINCIAS
