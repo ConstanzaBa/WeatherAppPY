@@ -26,7 +26,7 @@ stations = pd.read_csv(stations_path)
 tz_arg = pytz.timezone("America/Argentina/Buenos_Aires")
 hoy_local = datetime.now(tz_arg).date()
 
-SEMANAS = 12
+SEMANAS = 6
 start_local = tz_arg.localize(datetime.combine(hoy_local - timedelta(weeks=SEMANAS), datetime.min.time()))
 end_local = tz_arg.localize(datetime.combine(hoy_local, datetime.min.time()) + timedelta(hours=48))
 
@@ -38,16 +38,23 @@ def procesar_provincia(row):
     estacion = row["id_estacion"]
     archivo_prov = os.path.join(provincia_dir, f"clima_{provincia}.csv")
 
-    # Descargar todo el rango
-    print(f"[Descargando] {provincia} desde {start_local} hasta {end_local}...")
-
     try:
+        # Ver si ya existe CSV previo
+        if os.path.exists(archivo_prov):
+            df_existente = pd.read_csv(archivo_prov)
+            if not df_existente.empty:
+                df_existente['fecha_hora'] = pd.to_datetime(df_existente['fecha_hora'])
+                ultima_fecha = df_existente['fecha_hora'].max()
+                ahora_naive = (datetime.now(tz_arg) - timedelta(hours=1)).replace(tzinfo=None)
+                if ultima_fecha >= ahora_naive:
+                    # Datos ya al día
+                    return provincia, "omitida", df_existente
+
+        # Si no está actualizado, descargar todo el rango
+        print(f"[Descargando] {provincia} desde {start_local} hasta {end_local}...")
+
         data = Hourly(estacion, start_local.replace(tzinfo=None), end_local.replace(tzinfo=None)).fetch()
         if data.empty:
-            # Si existe CSV previo, devolverlo
-            if os.path.exists(archivo_prov):
-                df_existente = pd.read_csv(archivo_prov)
-                return provincia, "omitida", df_existente
             return provincia, "vacia", None
 
         # Normalizar index y fecha
@@ -116,13 +123,6 @@ with ThreadPoolExecutor(max_workers=20) as executor:
         if isinstance(df, pd.DataFrame):
             all_data.append(df)
 
-# -----------------------------
-# CSV combinado de todo Argentina
-# -----------------------------
-if all_data:
-    combinado = pd.concat(all_data, ignore_index=True)
-    archivo_combi = os.path.join(dataset, "clima_argentina.csv")
-    combinado.to_csv(archivo_combi, index=False)
 
 # -----------------------------
 # Resultados finales

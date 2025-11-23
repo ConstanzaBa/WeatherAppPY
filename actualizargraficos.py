@@ -3,21 +3,18 @@ Script para actualizar los gráficos de temperatura de todas las provincias.
 Este módulo se ejecuta después de que los datos climáticos han sido actualizados.
 
 Funciones:
-    - Ejecuta la generación de gráficos llamando a generar_graficos_provincia()
-
+    - Llama a generar_todos_los_graficos() sin parámetros
 Entradas:
     No recibe parámetros.
-
 Salidas:
-    Genera y guarda archivos PNG de gráficos en el directorio configurado por graficos.py
+    Genera y guarda PNGs para cada provincia en /graficos/
 """
 
-from graficos import cargar_datos, generar_todos_los_graficos
+from graficos import generar_todos_los_graficos
 
 if __name__ == "__main__":
     print("\n--- Actualizando gráficos ---\n")
 
-    df = cargar_datos()
-    generar_todos_los_graficos(df)
+    generar_todos_los_graficos()
 
     print("\n--- Actualización completada ---\n")
