@@ -22,6 +22,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   let climaPorProvincia = {};
   let climaHorarioPorProvincia = {};
   let pronosticoPorProvincia = {};
+  let carruselPorProvincia = {};
   let iconos = [];
   let infoHtmlTemplate = "";
 
@@ -133,15 +134,37 @@ document.addEventListener("DOMContentLoaded", async () => {
     window.pronosticoPorProvincia = pronosticoPorProvincia;
   }
 
+  async function cargarCarrusel() {
+    try {
+      const response = await fetch("carousel.json?cache=" + Date.now());
+      const data = await response.json();
+
+      carruselPorProvincia = {};
+      data.forEach((item) => {
+        carruselPorProvincia[normalize(item.provincia)] = item.insights;
+      });
+
+      console.log("Carrusel cargado:", carruselPorProvincia);
+
+    } catch (err) {
+      console.error("Error al cargar carousel.json:", err);
+      carruselPorProvincia = {};
+    }
+
+    window.carruselPorProvincia = carruselPorProvincia;
+  }
+
   async function inicializar() {
     await cargarTemplateInfo();
     await cargarClima();
     await cargarClimaHorario();
     await cargarPronostico();
+    await cargarCarrusel();
 
     window.climaPorProvincia = climaPorProvincia;
     window.climaHorarioPorProvincia = climaHorarioPorProvincia;
     window.pronosticoPorProvincia = pronosticoPorProvincia;
+    window.carruselPorProvincia = carruselPorProvincia;
 
     colocarIconos();
   }
@@ -266,10 +289,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       // Temperaturas
       const tempsDiv = document.createElement('div');
       tempsDiv.className = 'temps';
-      
-      const precipSpan = document.createElement('span');
-      precipSpan.className = 'precip';
-      precipSpan.textContent = `💧 ${Math.round(dia.precip)}%`;
 
       const highSpan = document.createElement('span');
       highSpan.className = 'high';
@@ -279,7 +298,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       lowSpan.className = 'low';
       lowSpan.textContent = `/ ${Math.round(dia.temp_low)}°`;
 
-      tempsDiv.appendChild(precipSpan);
       tempsDiv.appendChild(highSpan);
       tempsDiv.appendChild(lowSpan);
 
@@ -362,6 +380,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     actualizarPronosticoHorario(nombre);
     actualizarPronosticoSemanal(nombre);
+    actualizarCarrusel(nombre);
   }
 
   // EVENTO CLICK EN PROVINCIAS
@@ -394,7 +413,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       inicializarGraficos();
       
       // INICIALIZAR CARRUSEL
-      inicializarCarrusel();
+      actualizarCarrusel(nombre);
 
       const elapsed = Date.now() - loaderStart;
       const remaining = Math.max(0, 4000 - elapsed);
@@ -427,7 +446,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     inicializarGraficos();
     
     // CARRUSEL
-    inicializarCarrusel();
+    actualizarCarrusel(nombre);
 
     const container = cardInfo.querySelector(".container");
     if (container) {
@@ -483,6 +502,88 @@ document.addEventListener("DOMContentLoaded", async () => {
 //    CARRUSEL
 // =======================================================
 
+function actualizarCarrusel(provincia) {
+  const wrapper = document.getElementById('carouselWrapper');
+  const dotsContainer = document.getElementById('carouselDots');
+  
+  if (!wrapper || !dotsContainer) {
+    console.log("No se encontraron elementos del carrusel");
+    return;
+  }
+
+  if (!window.carruselPorProvincia) {
+    console.log("carruselPorProvincia no está disponible");
+    wrapper.innerHTML = '<div class="carousel-slide"><p style="text-align:center; padding: 20px;">Cargando datos...</p></div>';
+    return;
+  }
+
+  const provinciaKey = provincia ? provincia.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, "_") : null;
+  console.log("Buscando carrusel para:", provincia, "-> Key:", provinciaKey);
+  console.log("Datos disponibles:", Object.keys(window.carruselPorProvincia));
+  
+  const datosCarrusel = provinciaKey && window.carruselPorProvincia[provinciaKey];
+
+  // Limpiar contenido previo
+  wrapper.innerHTML = '';
+  dotsContainer.innerHTML = '';
+
+  if (!datosCarrusel) {
+    console.log("No se encontraron datos para:", provinciaKey);
+    wrapper.innerHTML = '<div class="carousel-slide"><p style="text-align:center; padding: 20px;">No hay datos disponibles</p></div>';
+    return;
+  }
+
+  console.log("Datos del carrusel encontrados:", datosCarrusel);
+
+  // Crear slides con los 3 datos
+  const slides = [
+    {
+      icon: '💧',
+      title: 'Probabilidad de Lluvia',
+      value: `${datosCarrusel.probabilidad_lluvia}%`,
+      detail: datosCarrusel.probabilidad_lluvia > 50 ? 'Alta probabilidad' : datosCarrusel.probabilidad_lluvia > 20 ? 'Probabilidad moderada' : 'Baja probabilidad'
+    },
+    {
+      icon: '🌡️',
+      title: 'Sensación Térmica',
+      value: `${datosCarrusel.sensacion_termica}°C`,
+      detail: 'Temperatura percibida'
+    },
+    {
+      icon: '☁️',
+      title: 'Nubosidad',
+      value: datosCarrusel.nubosidad,
+      detail: `${datosCarrusel.nubosidad_porcentaje}% de cobertura`
+    }
+  ];
+
+  // Crear HTML de los slides
+  slides.forEach(slide => {
+    const slideDiv = document.createElement('div');
+    slideDiv.className = 'carousel-slide';
+    slideDiv.innerHTML = `
+      <div class="slide-icon">${slide.icon}</div>
+      <h3>${slide.title}</h3>
+      <div class="slide-value">${slide.value}</div>
+      <p class="slide-detail">${slide.detail}</p>
+    `;
+    wrapper.appendChild(slideDiv);
+  });
+
+  // Crear dots
+  for (let i = 0; i < slides.length; i++) {
+    const dot = document.createElement('div');
+    dot.className = 'dot';
+    if (i === 0) dot.classList.add('active');
+    dotsContainer.appendChild(dot);
+  }
+
+  console.log("Carrusel actualizado con", slides.length, "slides");
+
+  // Inicializar carrusel
+  inicializarCarrusel();
+}
+
 async function inicializarCarrusel() {
   const wrapper = document.getElementById('carouselWrapper');
   const dotsContainer = document.getElementById('carouselDots');
@@ -497,15 +598,6 @@ async function inicializarCarrusel() {
   const totalSlides = slides.length;
 
   if (totalSlides === 0) return;
-
-  // Create dots
-  for (let i = 0; i < totalSlides; i++) {
-    const dot = document.createElement('div');
-    dot.className = 'dot';
-    if (i === 0) dot.classList.add('active');
-    dot.addEventListener('click', () => goToSlide(i));
-    dotsContainer.appendChild(dot);
-  }
 
   const dots = dotsContainer.querySelectorAll('.dot');
 
@@ -530,6 +622,11 @@ async function inicializarCarrusel() {
     currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
     updateCarousel();
   }
+
+  // Agregar event listeners a los dots
+  dots.forEach((dot, index) => {
+    dot.addEventListener('click', () => goToSlide(index));
+  });
 
   // Auto-advance (opcional)
   let autoPlay = setInterval(nextSlide, 5000);

@@ -56,6 +56,13 @@ def actualizar_clima_en_tiempo_real():
             except Exception as e:
                 print(f"Error al actualizar pronóstico IA: {e}")
 
+            # Actualizar insights del carrusel cada hora
+            try:
+                subprocess.run(["python", "actualizarcarousel.py"], check=True)
+                print("Insights del carrusel actualizados correctamente.")
+            except Exception as e:
+                print(f"Error al actualizar carousel: {e}")
+
             ultima_hora = hora_actual
 
 
@@ -91,6 +98,17 @@ if __name__ == '__main__':
     try:
         print("Generando pronóstico IA inicial...")
         subprocess.run(["python", "actualizarpronostico.py"], check=True)
+        print("Pronóstico IA generado.\n")
+    except Exception as e:
+        print(f"Error al generar pronóstico IA: {e}")
+
+    # --- Paso 5: Generar datos del carrusel ---
+    try:
+        print("Generando datos del carrusel...")
+        subprocess.run(["python", "actualizarcarousel.py"], check=True)
+        print("Datos del carrusel generados.\n")
+    except Exception as e:
+        print(f"Error al generar datos del carrusel: {e}")
         print("Pronóstico inicial generado.\n")
     except Exception as e:
         print(f"Error al generar pronóstico IA inicial: {e}")

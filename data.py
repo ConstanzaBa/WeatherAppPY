@@ -30,6 +30,16 @@ SEMANAS = 6
 start_local = tz_arg.localize(datetime.combine(hoy_local - timedelta(weeks=SEMANAS), datetime.min.time()))
 end_local = tz_arg.localize(datetime.combine(hoy_local, datetime.min.time()) + timedelta(hours=48))
 
+
+# -----------------------------
+# Obtener última fecha corregida (naive)
+# -----------------------------
+def obtener_ultima_fecha(df):
+    df["fecha_hora"] = pd.to_datetime(df["fecha_hora"], utc=True, errors="coerce")
+    df["fecha_hora"] = df["fecha_hora"].dt.tz_localize(None)
+    return df["fecha_hora"].max()
+
+
 # -----------------------------
 # Procesar una sola provincia
 # -----------------------------
@@ -41,19 +51,26 @@ def procesar_provincia(row):
     try:
         # Ver si ya existe CSV previo
         if os.path.exists(archivo_prov):
+
             df_existente = pd.read_csv(archivo_prov)
+
             if not df_existente.empty:
-                df_existente['fecha_hora'] = pd.to_datetime(df_existente['fecha_hora'])
-                ultima_fecha = df_existente['fecha_hora'].max()
+
+                ultima_fecha = obtener_ultima_fecha(df_existente)
                 ahora_naive = (datetime.now(tz_arg) - timedelta(hours=1)).replace(tzinfo=None)
+
                 if ultima_fecha >= ahora_naive:
-                    # Datos ya al día
                     return provincia, "omitida", df_existente
 
-        # Si no está actualizado, descargar todo el rango
+        # Si no está actualizado, descargar
         print(f"[Descargando] {provincia} desde {start_local} hasta {end_local}...")
 
-        data = Hourly(estacion, start_local.replace(tzinfo=None), end_local.replace(tzinfo=None)).fetch()
+        data = Hourly(
+            estacion,
+            start_local.replace(tzinfo=None),
+            end_local.replace(tzinfo=None)
+        ).fetch()
+
         if data.empty:
             return provincia, "vacia", None
 
@@ -95,10 +112,13 @@ def procesar_provincia(row):
             axis=1
         )
 
-        # Concatenar con CSV existente si hay
+        # Concatenar datos previos si existen
         if os.path.exists(archivo_prov):
-            df_existente = pd.read_csv(archivo_prov)
-            df_final = pd.concat([df_existente, data], ignore_index=True).drop_duplicates(subset="fecha_hora")
+            df_existente = pd.read_csv(archivo_prov, parse_dates=["fecha_hora"])
+            df_existente["fecha_hora"] = df_existente["fecha_hora"].dt.tz_localize(None)
+
+            df_final = pd.concat([df_existente, data], ignore_index=True)
+            df_final = df_final.drop_duplicates(subset="fecha_hora")
         else:
             df_final = data
 
@@ -108,6 +128,7 @@ def procesar_provincia(row):
     except Exception as e:
         print(f"[ERROR] {provincia}: {e}")
         return provincia, "error", None
+
 
 # -----------------------------
 # Ejecución en paralelo
@@ -122,7 +143,6 @@ with ThreadPoolExecutor(max_workers=20) as executor:
         status[estado].append(provincia)
         if isinstance(df, pd.DataFrame):
             all_data.append(df)
-
 
 # -----------------------------
 # Resultados finales
