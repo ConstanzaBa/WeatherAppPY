@@ -1,301 +1,304 @@
-[
-    {
-        "provincia": "Buenos Aires",
-        "insights": {
-            "probabilidad_lluvia": 0,
-            "sensacion_termica": 12.9,
-            "nubosidad": "Despejado",
-            "nubosidad_porcentaje": 10,
-            "metadata": {
-                "fecha_prediccion": "2025-11-24",
-                "fecha_generacion": "2025-11-23 20:21:32"
+{
+    "fecha_generacion": "2025-11-26",
+    "provincias": [
+        {
+            "provincia": "Buenos Aires",
+            "insights": {
+                "probabilidad_lluvia": 0,
+                "sensacion_termica": 23.9,
+                "nubosidad": "Nublado",
+                "nubosidad_porcentaje": 60,
+                "metadata": {
+                    "fecha_prediccion": "2025-11-29",
+                    "fecha_generacion": "2025-11-26 01:25:16"
+                }
+            }
+        },
+        {
+            "provincia": "Catamarca",
+            "insights": {
+                "probabilidad_lluvia": 0,
+                "sensacion_termica": 28.6,
+                "nubosidad": "Despejado",
+                "nubosidad_porcentaje": 10,
+                "metadata": {
+                    "fecha_prediccion": "2025-11-29",
+                    "fecha_generacion": "2025-11-26 01:25:16"
+                }
+            }
+        },
+        {
+            "provincia": "Chaco",
+            "insights": {
+                "probabilidad_lluvia": 0,
+                "sensacion_termica": 26.3,
+                "nubosidad": "Nublado",
+                "nubosidad_porcentaje": 60,
+                "metadata": {
+                    "fecha_prediccion": "2025-11-29",
+                    "fecha_generacion": "2025-11-26 01:25:17"
+                }
+            }
+        },
+        {
+            "provincia": "Chubut",
+            "insights": {
+                "probabilidad_lluvia": 0,
+                "sensacion_termica": 7.6,
+                "nubosidad": "Parcialmente nublado",
+                "nubosidad_porcentaje": 40,
+                "metadata": {
+                    "fecha_prediccion": "2025-11-29",
+                    "fecha_generacion": "2025-11-26 01:25:17"
+                }
+            }
+        },
+        {
+            "provincia": "Corrientes",
+            "insights": {
+                "probabilidad_lluvia": 0,
+                "sensacion_termica": 26.3,
+                "nubosidad": "Nublado",
+                "nubosidad_porcentaje": 60,
+                "metadata": {
+                    "fecha_prediccion": "2025-11-29",
+                    "fecha_generacion": "2025-11-26 01:25:17"
+                }
+            }
+        },
+        {
+            "provincia": "Córdoba",
+            "insights": {
+                "probabilidad_lluvia": 0,
+                "sensacion_termica": 25.7,
+                "nubosidad": "Despejado",
+                "nubosidad_porcentaje": 10,
+                "metadata": {
+                    "fecha_prediccion": "2025-11-29",
+                    "fecha_generacion": "2025-11-26 01:25:17"
+                }
+            }
+        },
+        {
+            "provincia": "Entre Ríos",
+            "insights": {
+                "probabilidad_lluvia": 0,
+                "sensacion_termica": 23.8,
+                "nubosidad": "Nublado",
+                "nubosidad_porcentaje": 60,
+                "metadata": {
+                    "fecha_prediccion": "2025-11-29",
+                    "fecha_generacion": "2025-11-26 01:25:18"
+                }
+            }
+        },
+        {
+            "provincia": "Formosa",
+            "insights": {
+                "probabilidad_lluvia": 0,
+                "sensacion_termica": 26.6,
+                "nubosidad": "Nublado",
+                "nubosidad_porcentaje": 60,
+                "metadata": {
+                    "fecha_prediccion": "2025-11-29",
+                    "fecha_generacion": "2025-11-26 01:25:18"
+                }
+            }
+        },
+        {
+            "provincia": "Jujuy",
+            "insights": {
+                "probabilidad_lluvia": 0,
+                "sensacion_termica": 26.3,
+                "nubosidad": "Parcialmente nublado",
+                "nubosidad_porcentaje": 40,
+                "metadata": {
+                    "fecha_prediccion": "2025-11-29",
+                    "fecha_generacion": "2025-11-26 01:25:18"
+                }
+            }
+        },
+        {
+            "provincia": "La Pampa",
+            "insights": {
+                "probabilidad_lluvia": 0,
+                "sensacion_termica": 16.4,
+                "nubosidad": "Parcialmente nublado",
+                "nubosidad_porcentaje": 40,
+                "metadata": {
+                    "fecha_prediccion": "2025-11-29",
+                    "fecha_generacion": "2025-11-26 01:25:18"
+                }
+            }
+        },
+        {
+            "provincia": "La Rioja",
+            "insights": {
+                "probabilidad_lluvia": 0,
+                "sensacion_termica": 30.2,
+                "nubosidad": "Parcialmente nublado",
+                "nubosidad_porcentaje": 40,
+                "metadata": {
+                    "fecha_prediccion": "2025-11-29",
+                    "fecha_generacion": "2025-11-26 01:25:18"
+                }
+            }
+        },
+        {
+            "provincia": "Mendoza",
+            "insights": {
+                "probabilidad_lluvia": 0,
+                "sensacion_termica": 25.0,
+                "nubosidad": "Parcialmente nublado",
+                "nubosidad_porcentaje": 40,
+                "metadata": {
+                    "fecha_prediccion": "2025-11-29",
+                    "fecha_generacion": "2025-11-26 01:25:19"
+                }
+            }
+        },
+        {
+            "provincia": "Misiones",
+            "insights": {
+                "probabilidad_lluvia": 0,
+                "sensacion_termica": 25.5,
+                "nubosidad": "Despejado",
+                "nubosidad_porcentaje": 10,
+                "metadata": {
+                    "fecha_prediccion": "2025-11-29",
+                    "fecha_generacion": "2025-11-26 01:25:19"
+                }
+            }
+        },
+        {
+            "provincia": "Neuquén",
+            "insights": {
+                "probabilidad_lluvia": 2,
+                "sensacion_termica": 9.9,
+                "nubosidad": "Nublado",
+                "nubosidad_porcentaje": 60,
+                "metadata": {
+                    "fecha_prediccion": "2025-11-29",
+                    "fecha_generacion": "2025-11-26 01:25:19"
+                }
+            }
+        },
+        {
+            "provincia": "Río Negro",
+            "insights": {
+                "probabilidad_lluvia": 0,
+                "sensacion_termica": 6.0,
+                "nubosidad": "Nublado",
+                "nubosidad_porcentaje": 60,
+                "metadata": {
+                    "fecha_prediccion": "2025-11-29",
+                    "fecha_generacion": "2025-11-26 01:25:19"
+                }
+            }
+        },
+        {
+            "provincia": "Salta",
+            "insights": {
+                "probabilidad_lluvia": 0,
+                "sensacion_termica": 22.2,
+                "nubosidad": "Nublado",
+                "nubosidad_porcentaje": 60,
+                "metadata": {
+                    "fecha_prediccion": "2025-11-29",
+                    "fecha_generacion": "2025-11-26 01:25:19"
+                }
+            }
+        },
+        {
+            "provincia": "San Juan",
+            "insights": {
+                "probabilidad_lluvia": 0,
+                "sensacion_termica": 25.7,
+                "nubosidad": "Despejado",
+                "nubosidad_porcentaje": 10,
+                "metadata": {
+                    "fecha_prediccion": "2025-11-29",
+                    "fecha_generacion": "2025-11-26 01:25:20"
+                }
+            }
+        },
+        {
+            "provincia": "San Luis",
+            "insights": {
+                "probabilidad_lluvia": 0,
+                "sensacion_termica": 21.6,
+                "nubosidad": "Parcialmente nublado",
+                "nubosidad_porcentaje": 40,
+                "metadata": {
+                    "fecha_prediccion": "2025-11-29",
+                    "fecha_generacion": "2025-11-26 01:25:20"
+                }
+            }
+        },
+        {
+            "provincia": "Santa Cruz",
+            "insights": {
+                "probabilidad_lluvia": 0,
+                "sensacion_termica": 3.7,
+                "nubosidad": "Nublado",
+                "nubosidad_porcentaje": 60,
+                "metadata": {
+                    "fecha_prediccion": "2025-11-29",
+                    "fecha_generacion": "2025-11-26 01:25:20"
+                }
+            }
+        },
+        {
+            "provincia": "Santa Fe",
+            "insights": {
+                "probabilidad_lluvia": 0,
+                "sensacion_termica": 25.6,
+                "nubosidad": "Despejado",
+                "nubosidad_porcentaje": 10,
+                "metadata": {
+                    "fecha_prediccion": "2025-11-29",
+                    "fecha_generacion": "2025-11-26 01:25:21"
+                }
+            }
+        },
+        {
+            "provincia": "Santiago del Estero",
+            "insights": {
+                "probabilidad_lluvia": 0,
+                "sensacion_termica": 31.1,
+                "nubosidad": "Despejado",
+                "nubosidad_porcentaje": 10,
+                "metadata": {
+                    "fecha_prediccion": "2025-11-29",
+                    "fecha_generacion": "2025-11-26 01:25:21"
+                }
+            }
+        },
+        {
+            "provincia": "Tierra del Fuego",
+            "insights": {
+                "probabilidad_lluvia": 0,
+                "sensacion_termica": 2.7,
+                "nubosidad": "Nublado",
+                "nubosidad_porcentaje": 60,
+                "metadata": {
+                    "fecha_prediccion": "2025-11-29",
+                    "fecha_generacion": "2025-11-26 01:25:21"
+                }
+            }
+        },
+        {
+            "provincia": "Tucumán",
+            "insights": {
+                "probabilidad_lluvia": 0,
+                "sensacion_termica": 29.7,
+                "nubosidad": "Despejado",
+                "nubosidad_porcentaje": 10,
+                "metadata": {
+                    "fecha_prediccion": "2025-11-29",
+                    "fecha_generacion": "2025-11-26 01:25:22"
+                }
             }
         }
-    },
-    {
-        "provincia": "Catamarca",
-        "insights": {
-            "probabilidad_lluvia": 0,
-            "sensacion_termica": 22.6,
-            "nubosidad": "Despejado",
-            "nubosidad_porcentaje": 10,
-            "metadata": {
-                "fecha_prediccion": "2025-11-24",
-                "fecha_generacion": "2025-11-23 20:21:33"
-            }
-        }
-    },
-    {
-        "provincia": "Chaco",
-        "insights": {
-            "probabilidad_lluvia": 0,
-            "sensacion_termica": 19.7,
-            "nubosidad": "Despejado",
-            "nubosidad_porcentaje": 10,
-            "metadata": {
-                "fecha_prediccion": "2025-11-24",
-                "fecha_generacion": "2025-11-23 20:21:34"
-            }
-        }
-    },
-    {
-        "provincia": "Chubut",
-        "insights": {
-            "probabilidad_lluvia": 0,
-            "sensacion_termica": 14.7,
-            "nubosidad": "Nublado",
-            "nubosidad_porcentaje": 60,
-            "metadata": {
-                "fecha_prediccion": "2025-11-24",
-                "fecha_generacion": "2025-11-23 20:21:34"
-            }
-        }
-    },
-    {
-        "provincia": "Corrientes",
-        "insights": {
-            "probabilidad_lluvia": 0,
-            "sensacion_termica": 19.7,
-            "nubosidad": "Despejado",
-            "nubosidad_porcentaje": 10,
-            "metadata": {
-                "fecha_prediccion": "2025-11-24",
-                "fecha_generacion": "2025-11-23 20:21:35"
-            }
-        }
-    },
-    {
-        "provincia": "Córdoba",
-        "insights": {
-            "probabilidad_lluvia": 0,
-            "sensacion_termica": 19.4,
-            "nubosidad": "Despejado",
-            "nubosidad_porcentaje": 10,
-            "metadata": {
-                "fecha_prediccion": "2025-11-24",
-                "fecha_generacion": "2025-11-23 20:21:35"
-            }
-        }
-    },
-    {
-        "provincia": "Entre Ríos",
-        "insights": {
-            "probabilidad_lluvia": 0,
-            "sensacion_termica": 17.6,
-            "nubosidad": "Despejado",
-            "nubosidad_porcentaje": 10,
-            "metadata": {
-                "fecha_prediccion": "2025-11-24",
-                "fecha_generacion": "2025-11-23 20:21:36"
-            }
-        }
-    },
-    {
-        "provincia": "Formosa",
-        "insights": {
-            "probabilidad_lluvia": 0,
-            "sensacion_termica": 21.4,
-            "nubosidad": "Parcialmente nublado",
-            "nubosidad_porcentaje": 40,
-            "metadata": {
-                "fecha_prediccion": "2025-11-24",
-                "fecha_generacion": "2025-11-23 20:21:37"
-            }
-        }
-    },
-    {
-        "provincia": "Jujuy",
-        "insights": {
-            "probabilidad_lluvia": 0,
-            "sensacion_termica": 23.4,
-            "nubosidad": "Nublado",
-            "nubosidad_porcentaje": 60,
-            "metadata": {
-                "fecha_prediccion": "2025-11-24",
-                "fecha_generacion": "2025-11-23 20:21:38"
-            }
-        }
-    },
-    {
-        "provincia": "La Pampa",
-        "insights": {
-            "probabilidad_lluvia": 0,
-            "sensacion_termica": 18.9,
-            "nubosidad": "Despejado",
-            "nubosidad_porcentaje": 10,
-            "metadata": {
-                "fecha_prediccion": "2025-11-24",
-                "fecha_generacion": "2025-11-23 20:21:38"
-            }
-        }
-    },
-    {
-        "provincia": "La Rioja",
-        "insights": {
-            "probabilidad_lluvia": 0,
-            "sensacion_termica": 25.5,
-            "nubosidad": "Despejado",
-            "nubosidad_porcentaje": 10,
-            "metadata": {
-                "fecha_prediccion": "2025-11-24",
-                "fecha_generacion": "2025-11-23 20:21:39"
-            }
-        }
-    },
-    {
-        "provincia": "Mendoza",
-        "insights": {
-            "probabilidad_lluvia": 0,
-            "sensacion_termica": 26.7,
-            "nubosidad": "Parcialmente nublado",
-            "nubosidad_porcentaje": 40,
-            "metadata": {
-                "fecha_prediccion": "2025-11-24",
-                "fecha_generacion": "2025-11-23 20:21:39"
-            }
-        }
-    },
-    {
-        "provincia": "Misiones",
-        "insights": {
-            "probabilidad_lluvia": 0,
-            "sensacion_termica": 19.3,
-            "nubosidad": "Despejado",
-            "nubosidad_porcentaje": 10,
-            "metadata": {
-                "fecha_prediccion": "2025-11-24",
-                "fecha_generacion": "2025-11-23 20:21:40"
-            }
-        }
-    },
-    {
-        "provincia": "Neuquén",
-        "insights": {
-            "probabilidad_lluvia": 0,
-            "sensacion_termica": 27.6,
-            "nubosidad": "Nublado",
-            "nubosidad_porcentaje": 60,
-            "metadata": {
-                "fecha_prediccion": "2025-11-24",
-                "fecha_generacion": "2025-11-23 20:21:41"
-            }
-        }
-    },
-    {
-        "provincia": "Río Negro",
-        "insights": {
-            "probabilidad_lluvia": 0,
-            "sensacion_termica": 21.0,
-            "nubosidad": "Nublado",
-            "nubosidad_porcentaje": 60,
-            "metadata": {
-                "fecha_prediccion": "2025-11-24",
-                "fecha_generacion": "2025-11-23 20:21:41"
-            }
-        }
-    },
-    {
-        "provincia": "Salta",
-        "insights": {
-            "probabilidad_lluvia": 0,
-            "sensacion_termica": 19.8,
-            "nubosidad": "Nublado",
-            "nubosidad_porcentaje": 60,
-            "metadata": {
-                "fecha_prediccion": "2025-11-24",
-                "fecha_generacion": "2025-11-23 20:21:42"
-            }
-        }
-    },
-    {
-        "provincia": "San Juan",
-        "insights": {
-            "probabilidad_lluvia": 0,
-            "sensacion_termica": 27.9,
-            "nubosidad": "Nublado",
-            "nubosidad_porcentaje": 60,
-            "metadata": {
-                "fecha_prediccion": "2025-11-24",
-                "fecha_generacion": "2025-11-23 20:21:42"
-            }
-        }
-    },
-    {
-        "provincia": "San Luis",
-        "insights": {
-            "probabilidad_lluvia": 0,
-            "sensacion_termica": 21.2,
-            "nubosidad": "Despejado",
-            "nubosidad_porcentaje": 10,
-            "metadata": {
-                "fecha_prediccion": "2025-11-24",
-                "fecha_generacion": "2025-11-23 20:21:43"
-            }
-        }
-    },
-    {
-        "provincia": "Santa Cruz",
-        "insights": {
-            "probabilidad_lluvia": 0,
-            "sensacion_termica": 4.4,
-            "nubosidad": "Nublado",
-            "nubosidad_porcentaje": 60,
-            "metadata": {
-                "fecha_prediccion": "2025-11-24",
-                "fecha_generacion": "2025-11-23 20:21:44"
-            }
-        }
-    },
-    {
-        "provincia": "Santa Fe",
-        "insights": {
-            "probabilidad_lluvia": 0,
-            "sensacion_termica": 19.6,
-            "nubosidad": "Despejado",
-            "nubosidad_porcentaje": 10,
-            "metadata": {
-                "fecha_prediccion": "2025-11-24",
-                "fecha_generacion": "2025-11-23 20:21:45"
-            }
-        }
-    },
-    {
-        "provincia": "Santiago del Estero",
-        "insights": {
-            "probabilidad_lluvia": 0,
-            "sensacion_termica": 24.1,
-            "nubosidad": "Parcialmente nublado",
-            "nubosidad_porcentaje": 40,
-            "metadata": {
-                "fecha_prediccion": "2025-11-24",
-                "fecha_generacion": "2025-11-23 20:21:45"
-            }
-        }
-    },
-    {
-        "provincia": "Tierra del Fuego",
-        "insights": {
-            "probabilidad_lluvia": 0,
-            "sensacion_termica": 2.1,
-            "nubosidad": "Nublado",
-            "nubosidad_porcentaje": 60,
-            "metadata": {
-                "fecha_prediccion": "2025-11-24",
-                "fecha_generacion": "2025-11-23 20:21:46"
-            }
-        }
-    },
-    {
-        "provincia": "Tucumán",
-        "insights": {
-            "probabilidad_lluvia": 0,
-            "sensacion_termica": 24.6,
-            "nubosidad": "Parcialmente nublado",
-            "nubosidad_porcentaje": 40,
-            "metadata": {
-                "fecha_prediccion": "2025-11-24",
-                "fecha_generacion": "2025-11-23 20:21:47"
-            }
-        }
-    }
-]
+    ]
+}

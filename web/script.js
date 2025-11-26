@@ -1,4 +1,4 @@
-import { updateVisuals } from './details.js';
+import { updateVisuals } from "./details.js";
 
 window.updateVisuals = updateVisuals;
 
@@ -53,28 +53,29 @@ document.addEventListener("DOMContentLoaded", async () => {
       const container = document.createElement("div");
       container.innerHTML = html;
 
-      const containerEl = container.querySelector('.container');
+      const containerEl = container.querySelector(".container");
       if (containerEl) {
         try {
-          const detailsResp = await fetch('partials/details.html');
+          const detailsResp = await fetch("partials/details.html");
           if (detailsResp.ok) {
             const detailsHtml = await detailsResp.text();
-            const detailsTemp = document.createElement('div');
+            const detailsTemp = document.createElement("div");
             detailsTemp.innerHTML = detailsHtml;
-            const detailsEl = detailsTemp.querySelector('.weather-details') || detailsTemp.firstElementChild;
+            const detailsEl =
+              detailsTemp.querySelector(".weather-details") ||
+              detailsTemp.firstElementChild;
 
             if (detailsEl) {
-              const existing = containerEl.querySelector('.weather-details');
+              const existing = containerEl.querySelector(".weather-details");
               if (existing) existing.replaceWith(detailsEl.cloneNode(true));
               else containerEl.appendChild(detailsEl.cloneNode(true));
             }
           }
         } catch (err) {
-          console.warn('No se pudo cargar partial details:', err);
+          console.warn("No se pudo cargar partial details:", err);
         }
         infoHtmlTemplate = containerEl.outerHTML;
       }
-
     } catch (err) {
       console.error("Error al cargar info.html:", err);
     }
@@ -105,7 +106,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       });
 
       console.log("Clima horario cargado:", climaHorarioPorProvincia);
-
     } catch (err) {
       console.error("Error al cargar clima_horario.json:", err);
       climaHorarioPorProvincia = {};
@@ -120,12 +120,14 @@ document.addEventListener("DOMContentLoaded", async () => {
       const data = await response.json();
 
       pronosticoPorProvincia = {};
-      data.forEach((item) => {
+
+      // Usar la lista dentro de data.provincias
+      const provincias = data.provincias || [];
+      provincias.forEach((item) => {
         pronosticoPorProvincia[normalize(item.provincia)] = item.pronostico;
       });
 
       console.log("Pronóstico cargado:", pronosticoPorProvincia);
-
     } catch (err) {
       console.error("Error al cargar pronostico.json:", err);
       pronosticoPorProvincia = {};
@@ -140,12 +142,14 @@ document.addEventListener("DOMContentLoaded", async () => {
       const data = await response.json();
 
       carruselPorProvincia = {};
-      data.forEach((item) => {
+
+      // Usar la lista dentro de data.provincias
+      const provincias = data.provincias || [];
+      provincias.forEach((item) => {
         carruselPorProvincia[normalize(item.provincia)] = item.insights;
       });
 
       console.log("Carrusel cargado:", carruselPorProvincia);
-
     } catch (err) {
       console.error("Error al cargar carousel.json:", err);
       carruselPorProvincia = {};
@@ -180,7 +184,10 @@ document.addEventListener("DOMContentLoaded", async () => {
       const clima = climaPorProvincia[provincia];
       if (!clima) return;
 
-      const svgImage = document.createElementNS("http://www.w3.org/2000/svg", "image");
+      const svgImage = document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "image"
+      );
       const iconFilename = getIconFilename(clima);
 
       svgImage.setAttributeNS(null, "href", `img/weather/${iconFilename}`);
@@ -251,35 +258,50 @@ document.addEventListener("DOMContentLoaded", async () => {
     const pronosticoData = pronosticoPorProvincia[provinciaKey];
 
     if (!pronosticoData || pronosticoData.length === 0) {
-      weeklyForecast.innerHTML = '<div class="section-title">Pronóstico Semanal</div><p style="text-align: center; color: #666; padding: 20px;">No hay pronóstico disponible</p>';
+      weeklyForecast.innerHTML =
+        '<div class="section-title">Pronóstico Semanal</div><p style="text-align: center; color: #666; padding: 20px;">No hay pronóstico disponible</p>';
       return;
     }
 
     // Limpiar y agregar título
-    weeklyForecast.innerHTML = '<div class="section-title">Pronóstico Semanal</div>';
+    weeklyForecast.innerHTML =
+      '<div class="section-title">Pronóstico Semanal</div>';
 
-    const diasSemana = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
-    const meses = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+    const diasSemana = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];
+    const meses = [
+      "Ene",
+      "Feb",
+      "Mar",
+      "Abr",
+      "May",
+      "Jun",
+      "Jul",
+      "Ago",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dic",
+    ];
 
     pronosticoData.forEach((dia, index) => {
-      const dailyItem = document.createElement('div');
-      dailyItem.className = 'daily-item';
+      const dailyItem = document.createElement("div");
+      dailyItem.className = "daily-item";
 
       // Día
-      const dayDiv = document.createElement('div');
-      dayDiv.className = 'day';
-      
-      const fecha = new Date(dia.fecha + 'T12:00:00');
-      const nombreDia = index === 0 ? 'Hoy' : diasSemana[fecha.getDay()];
+      const dayDiv = document.createElement("div");
+      dayDiv.className = "day";
+
+      const fecha = new Date(dia.fecha + "T12:00:00");
+      const nombreDia = index === 0 ? "Hoy" : diasSemana[fecha.getDay()];
       const diaNum = fecha.getDate();
       const mes = meses[fecha.getMonth()];
-      
+
       dayDiv.innerHTML = `${nombreDia}<br /><span style="font-size: 12px; color: #999">${mes} ${diaNum}</span>`;
 
       // Icono
-      const iconDiv = document.createElement('div');
-      iconDiv.className = 'day-icon';
-      const iconImg = document.createElement('img');
+      const iconDiv = document.createElement("div");
+      iconDiv.className = "day-icon";
+      const iconImg = document.createElement("img");
       iconImg.src = `img/weather/${dia.icon}`;
       iconImg.alt = dia.desc;
       iconImg.width = 40;
@@ -287,15 +309,15 @@ document.addEventListener("DOMContentLoaded", async () => {
       iconDiv.appendChild(iconImg);
 
       // Temperaturas
-      const tempsDiv = document.createElement('div');
-      tempsDiv.className = 'temps';
+      const tempsDiv = document.createElement("div");
+      tempsDiv.className = "temps";
 
-      const highSpan = document.createElement('span');
-      highSpan.className = 'high';
+      const highSpan = document.createElement("span");
+      highSpan.className = "high";
       highSpan.textContent = `${Math.round(dia.temp_high)}°`;
 
-      const lowSpan = document.createElement('span');
-      lowSpan.className = 'low';
+      const lowSpan = document.createElement("span");
+      lowSpan.className = "low";
       lowSpan.textContent = `/ ${Math.round(dia.temp_low)}°`;
 
       tempsDiv.appendChild(highSpan);
@@ -313,8 +335,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     if (tituloProvincia) {
       const ahora = new Date();
-      const diaSemana = ahora.toLocaleDateString('es-AR', { weekday: 'long' });
-      tituloProvincia.textContent = diaSemana.charAt(0).toUpperCase() + diaSemana.slice(1);
+      const diaSemana = ahora.toLocaleDateString("es-AR", { weekday: "long" });
+      tituloProvincia.textContent =
+        diaSemana.charAt(0).toUpperCase() + diaSemana.slice(1);
     }
 
     if (horaProvincia && clima) {
@@ -335,21 +358,24 @@ document.addEventListener("DOMContentLoaded", async () => {
       const weatherIcon = cardInfo.querySelector(".weather-icon");
       if (weatherIcon) {
         const iconFilename = getIconFilename(clima);
-        weatherIcon.innerHTML = `<img src="img/weather/${iconFilename}" alt="${clima.coco ?? ""}" width="85" height="85" class="weather-icon-img">`;
+        weatherIcon.innerHTML = `<img src="img/weather/${iconFilename}" alt="${
+          clima.coco ?? ""
+        }" width="85" height="85" class="weather-icon-img">`;
       }
 
-      const humValue = document.getElementById('humValue');
-      const windSpeed = document.getElementById('windSpeed');
-      const visValue = document.getElementById('visValue');
-      const tempValue = document.getElementById('tempValue');
-      const precipValue = document.getElementById('precipValue');
-      const uvNumber = document.getElementById('uvNumber');
+      const humValue = document.getElementById("humValue");
+      const windSpeed = document.getElementById("windSpeed");
+      const visValue = document.getElementById("visValue");
+      const tempValue = document.getElementById("tempValue");
+      const precipValue = document.getElementById("precipValue");
+      const uvNumber = document.getElementById("uvNumber");
 
       if (humValue) humValue.textContent = `${clima.humedad}%`;
       if (windSpeed) windSpeed.textContent = `${clima.viento} km/h`;
-      if (visValue) visValue.textContent = clima.visibilidad?.toFixed(1) || '0';
+      if (visValue) visValue.textContent = clima.visibilidad?.toFixed(1) || "0";
       if (tempValue) tempValue.textContent = `${clima.sensacionTermica}°C`;
-      if (precipValue) precipValue.textContent = `${clima.precipitacion ?? 0} mm`;
+      if (precipValue)
+        precipValue.textContent = `${clima.precipitacion ?? 0} mm`;
       if (uvNumber) uvNumber.textContent = `${clima.uvIndex}`;
 
       const detailItems = cardInfo.querySelectorAll(".detail-item");
@@ -384,7 +410,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   // EVENTO CLICK EN PROVINCIAS
-  const provincias = document.querySelectorAll("#mapa-argentina path[id^='AR']");
+  const provincias = document.querySelectorAll(
+    "#mapa-argentina path[id^='AR']"
+  );
   provincias.forEach((provinciaEl) => {
     provinciaEl.addEventListener("click", async () => {
       const nombre = provinciaEl.getAttribute("name");
@@ -411,7 +439,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       // INICIALIZAR GRÁFICOS
       inicializarGraficos();
-      
+
       // INICIALIZAR CARRUSEL
       actualizarCarrusel(nombre);
 
@@ -444,7 +472,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // GRÁFICOS
     inicializarGraficos();
-    
+
     // CARRUSEL
     actualizarCarrusel(nombre);
 
@@ -503,9 +531,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 // =======================================================
 
 function actualizarCarrusel(provincia) {
-  const wrapper = document.getElementById('carouselWrapper');
-  const dotsContainer = document.getElementById('carouselDots');
-  
+  const wrapper = document.getElementById("carouselWrapper");
+  const dotsContainer = document.getElementById("carouselDots");
+
   if (!wrapper || !dotsContainer) {
     console.log("No se encontraron elementos del carrusel");
     return;
@@ -513,23 +541,32 @@ function actualizarCarrusel(provincia) {
 
   if (!window.carruselPorProvincia) {
     console.log("carruselPorProvincia no está disponible");
-    wrapper.innerHTML = '<div class="carousel-slide"><p style="text-align:center; padding: 20px;">Cargando datos...</p></div>';
+    wrapper.innerHTML =
+      '<div class="carousel-slide"><p style="text-align:center; padding: 20px;">Cargando datos...</p></div>';
     return;
   }
 
-  const provinciaKey = provincia ? provincia.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, "_") : null;
+  const provinciaKey = provincia
+    ? provincia
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/\s+/g, "_")
+    : null;
   console.log("Buscando carrusel para:", provincia, "-> Key:", provinciaKey);
   console.log("Datos disponibles:", Object.keys(window.carruselPorProvincia));
-  
-  const datosCarrusel = provinciaKey && window.carruselPorProvincia[provinciaKey];
+
+  const datosCarrusel =
+    provinciaKey && window.carruselPorProvincia[provinciaKey];
 
   // Limpiar contenido previo
-  wrapper.innerHTML = '';
-  dotsContainer.innerHTML = '';
+  wrapper.innerHTML = "";
+  dotsContainer.innerHTML = "";
 
   if (!datosCarrusel) {
     console.log("No se encontraron datos para:", provinciaKey);
-    wrapper.innerHTML = '<div class="carousel-slide"><p style="text-align:center; padding: 20px;">No hay datos disponibles</p></div>';
+    wrapper.innerHTML =
+      '<div class="carousel-slide"><p style="text-align:center; padding: 20px;">No hay datos disponibles</p></div>';
     return;
   }
 
@@ -538,29 +575,34 @@ function actualizarCarrusel(provincia) {
   // Crear slides con los 3 datos
   const slides = [
     {
-      icon: '💧',
-      title: 'Probabilidad de Lluvia',
+      icon: "💧",
+      title: "Probabilidad de Lluvia",
       value: `${datosCarrusel.probabilidad_lluvia}%`,
-      detail: datosCarrusel.probabilidad_lluvia > 50 ? 'Alta probabilidad' : datosCarrusel.probabilidad_lluvia > 20 ? 'Probabilidad moderada' : 'Baja probabilidad'
+      detail:
+        datosCarrusel.probabilidad_lluvia > 50
+          ? "Alta probabilidad"
+          : datosCarrusel.probabilidad_lluvia > 20
+          ? "Probabilidad moderada"
+          : "Baja probabilidad",
     },
     {
-      icon: '🌡️',
-      title: 'Sensación Térmica',
+      icon: "🌡️",
+      title: "Sensación Térmica",
       value: `${datosCarrusel.sensacion_termica}°C`,
-      detail: 'Temperatura percibida'
+      detail: "Temperatura percibida",
     },
     {
-      icon: '☁️',
-      title: 'Nubosidad',
+      icon: "☁️",
+      title: "Nubosidad",
       value: datosCarrusel.nubosidad,
-      detail: `${datosCarrusel.nubosidad_porcentaje}% de cobertura`
-    }
+      detail: `${datosCarrusel.nubosidad_porcentaje}% de cobertura`,
+    },
   ];
 
   // Crear HTML de los slides
-  slides.forEach(slide => {
-    const slideDiv = document.createElement('div');
-    slideDiv.className = 'carousel-slide';
+  slides.forEach((slide) => {
+    const slideDiv = document.createElement("div");
+    slideDiv.className = "carousel-slide";
     slideDiv.innerHTML = `
       <div class="slide-icon">${slide.icon}</div>
       <h3>${slide.title}</h3>
@@ -572,9 +614,9 @@ function actualizarCarrusel(provincia) {
 
   // Crear dots
   for (let i = 0; i < slides.length; i++) {
-    const dot = document.createElement('div');
-    dot.className = 'dot';
-    if (i === 0) dot.classList.add('active');
+    const dot = document.createElement("div");
+    dot.className = "dot";
+    if (i === 0) dot.classList.add("active");
     dotsContainer.appendChild(dot);
   }
 
@@ -585,26 +627,26 @@ function actualizarCarrusel(provincia) {
 }
 
 async function inicializarCarrusel() {
-  const wrapper = document.getElementById('carouselWrapper');
-  const dotsContainer = document.getElementById('carouselDots');
-  
+  const wrapper = document.getElementById("carouselWrapper");
+  const dotsContainer = document.getElementById("carouselDots");
+
   // Verificar que existen los elementos
   if (!wrapper || !dotsContainer) {
     return;
   }
-  
-  const slides = wrapper.querySelectorAll('.carousel-slide');
+
+  const slides = wrapper.querySelectorAll(".carousel-slide");
   let currentSlide = 0;
   const totalSlides = slides.length;
 
   if (totalSlides === 0) return;
 
-  const dots = dotsContainer.querySelectorAll('.dot');
+  const dots = dotsContainer.querySelectorAll(".dot");
 
   function updateCarousel() {
     wrapper.style.transform = `translateX(-${currentSlide * 100}%)`;
     dots.forEach((dot, index) => {
-      dot.classList.toggle('active', index === currentSlide);
+      dot.classList.toggle("active", index === currentSlide);
     });
   }
 
@@ -625,15 +667,15 @@ async function inicializarCarrusel() {
 
   // Agregar event listeners a los dots
   dots.forEach((dot, index) => {
-    dot.addEventListener('click', () => goToSlide(index));
+    dot.addEventListener("click", () => goToSlide(index));
   });
 
   // Auto-advance (opcional)
   let autoPlay = setInterval(nextSlide, 5000);
 
   // Pause on hover
-  wrapper.addEventListener('mouseenter', () => clearInterval(autoPlay));
-  wrapper.addEventListener('mouseleave', () => {
+  wrapper.addEventListener("mouseenter", () => clearInterval(autoPlay));
+  wrapper.addEventListener("mouseleave", () => {
     autoPlay = setInterval(nextSlide, 5000);
   });
 
@@ -641,11 +683,11 @@ async function inicializarCarrusel() {
   let touchStartX = 0;
   let touchEndX = 0;
 
-  wrapper.addEventListener('touchstart', e => {
+  wrapper.addEventListener("touchstart", (e) => {
     touchStartX = e.changedTouches[0].screenX;
   });
 
-  wrapper.addEventListener('touchend', e => {
+  wrapper.addEventListener("touchend", (e) => {
     touchEndX = e.changedTouches[0].screenX;
     handleSwipe();
   });
@@ -661,7 +703,8 @@ async function inicializarCarrusel() {
 // =======================================================
 
 function inicializarGraficos() {
-  const provincia = window.provinciaActual || localStorage.getItem("selectedProvince");
+  const provincia =
+    window.provinciaActual || localStorage.getItem("selectedProvince");
   if (!provincia) return;
 
   const graphImg = document.getElementById("graph-image");
@@ -678,18 +721,22 @@ function inicializarGraficos() {
     precipitacion: `img/graphs/grafico_precipitacion_${provKey}.png`,
     humedad: `img/graphs/grafico_humedad_${provKey}.png`,
     viento: `img/graphs/grafico_velocidad_viento_${provKey}.png`,
-    direccion_viento: `img/graphs/grafico_direccion_viento_${provKey}.png`
+    direccion_viento: `img/graphs/grafico_direccion_viento_${provKey}.png`,
   };
 
   // Inicializa con temperatura
   graphImg.src = graphMap["temp_vs_sensacion"];
 
   // Marcar tab activo
-  document.querySelectorAll(".graph-tabs .tab").forEach(btn => btn.classList.remove("active"));
-  document.querySelector(`.graph-tabs .tab[data-graph="temp_vs_sensacion"]`)?.classList.add("active");
+  document
+    .querySelectorAll(".graph-tabs .tab")
+    .forEach((btn) => btn.classList.remove("active"));
+  document
+    .querySelector(`.graph-tabs .tab[data-graph="temp_vs_sensacion"]`)
+    ?.classList.add("active");
 
   // Click en tabs
-  document.querySelectorAll(".graph-tabs .tab").forEach(btn => {
+  document.querySelectorAll(".graph-tabs .tab").forEach((btn) => {
     btn.addEventListener("click", () => {
       document.querySelector(".tab.active")?.classList.remove("active");
       btn.classList.add("active");
