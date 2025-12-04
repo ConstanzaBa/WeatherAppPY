@@ -259,7 +259,7 @@ def predecir_carousel(df, modelos, scaler, features, provincia):
         - Tomar la predicción del primer día (día 0)
         - Usar el código COCO ya calculado
         - Mapear COCO a descripción y porcentaje aproximado de nubosidad
-        - Calcular probabilidad de lluvia y sensación térmica
+        - Calcular probabilidad de lluvia, sensación térmica y nubosidad para el carousel
 
     Parámetros:
         df (pd.DataFrame): Datos históricos de la provincia
@@ -286,14 +286,49 @@ def predecir_carousel(df, modelos, scaler, features, provincia):
     # Tomar el código COCO ya calculado en predecir_7dias
     coco_val = dia1["coco"]
 
-    # Mapear COCO a descripción y porcentaje aproximado de nubosidad
-    descripcion = weather_descriptions.get(coco_val, "Desconocido")
-    if descripcion.lower() in ["lluvia", "lluvia ligera", "lluvia intensa", "chubasco de lluvia"]:
-        nub_pct = 90
-    elif "nublado" in descripcion.lower() or "cubierto" in descripcion.lower():
-        nub_pct = 65
+    # Calcular nubosidad basada en variables meteorológicas reales de la provincia
+    # Obtener datos del último registro para extraer humedad y presión predichas
+    df_copy = df.copy()
+    df_copy.columns = df_copy.columns.str.strip().str.lower()
+    df_copy["fecha_hora"] = pd.to_datetime(df_copy["fecha_hora"], errors="coerce")
+    df_copy = df_copy.dropna(subset=["fecha_hora"]).sort_values("fecha_hora")
+    
+    ultimo = df_copy.iloc[-1]
+    precip = dia1["precip"]
+    
+    # Re-predecir humedad y presión para este día (ya se hizo en predecir_7dias pero no se devolvió)
+    # Como alternativa, usamos una estimación basada en COCO y precipitación
+    
+    # Factor de precipitación (más lluvia = más nubosidad)
+    precip_factor = min(precip / 10.0, 1.0)  # Escala hasta 10mm
+    
+    # Factor de COCO (códigos altos = más nubosidad)
+    if coco_val >= 7:  # Lluvia
+        coco_factor = 1.0
+    elif coco_val >= 3:  # Nublado
+        coco_factor = 0.7
+    elif coco_val == 2:  # Parcialmente nublado
+        coco_factor = 0.4
+    else:  # Despejado
+        coco_factor = 0.1
+    
+    # Combinar factores para calcular porcentaje de nubosidad
+    nub_pct = int(round(precip_factor * 40 + coco_factor * 60))
+    nub_pct = min(max(nub_pct, 0), 100)  # Limitar entre 0-100
+    
+    # Determinar descripción textual basada en nubosidad calculada
+    if nub_pct >= 80:
+        descripcion = "Muy nublado"
+    elif nub_pct >= 60:
+        descripcion = "Nublado"
+    elif nub_pct >= 30:
+        descripcion = "Parcialmente nublado"
     else:
-        nub_pct = 15
+        descripcion = "Despejado"
+    
+    # Si hay lluvia, priorizar descripción de lluvia
+    if precip >= 5.0:
+        descripcion = weather_descriptions.get(coco_val, descripcion)
 
     # Mapear COCO a icono SVG
     icono_svg = weather_icons.get(coco_val, "cloudy.svg")

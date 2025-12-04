@@ -98,10 +98,12 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: space-between;
   text-align: center;
   border-radius: 1.5rem;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   overflow: hidden;
+  padding: 0.5rem 0rem;
 }
 
 .detail-item .icon {
@@ -139,7 +141,8 @@
   font-size: 1.3rem;
   letter-spacing: 0.5px;
   z-index: 2;
-  margin-top: 1.2rem;
+  margin: 0;
+  margin-top: 0.5rem;
   position: relative;
 }
 
@@ -213,7 +216,6 @@
   gap: 0.4rem;
   z-index: 2;
   position: relative;
-  margin-bottom: 0.5rem;
 }
 
 .precip-status {
@@ -239,7 +241,8 @@
   font-size: 1.3rem;
   letter-spacing: 0.5px;
   z-index: 2;
-  margin-top: 1.2rem;
+  margin: 0;
+  margin-top: 0.5rem;
   position: relative;
 }
 
@@ -296,7 +299,6 @@
   display: grid;
   text-align: center;
   gap: 0.2rem;
-  margin-bottom: 0.5rem;
 }
 
 .vis-value {
@@ -306,7 +308,7 @@
 }
 
 .vis-value span {
-  font-size: 1.2em;
+  font-size: 1em;
 }
 
 .vis-status {
@@ -384,13 +386,15 @@
   font-size: 1.3rem;
   opacity: 0.9;
   letter-spacing: 0.5px;
+  margin-top: 0.5rem;
 }
 
 .temp-status {
-  font-size: 1.1em;
+  font-size: 1.4rem;
   opacity: 0.9;
   letter-spacing: 0.3px;
-  color: var(--info-muted);
+  color: var(--text-color);
+  font-weight: 500;
 }
 
 /* Humedad */
@@ -410,7 +414,8 @@
   font-size: 1.3rem;
   letter-spacing: 0.5px;
   z-index: 2;
-  margin-top: 1.2rem;
+  margin: 0;
+  margin-top: 0.5rem;
   position: relative;
 }
 
@@ -464,7 +469,14 @@
   display: grid;
   text-align: center;
   gap: 0.4rem;
-  margin-bottom: 0.5rem;
+  z-index: 2;
+  position: relative;
+}
+
+.hum-value {
+  font-size: 1.4rem;
+  color: var(--text-color);
+  font-weight: 500;
 }
 
 .hum-status {
@@ -491,7 +503,8 @@
   font-size: 1.3rem;
   letter-spacing: 0.5px;
   z-index: 2;
-  margin-top: 1.2rem;
+  margin: 0;
+  margin-top: 0.5rem;
   position: relative;
 }
 
@@ -579,7 +592,6 @@
   display: grid;
   text-align: center;
   gap: 0.2rem;
-  margin-bottom: 0.5rem;
 }
 
 .wind-value {
@@ -616,7 +628,8 @@
   font-size: 1.3rem;
   letter-spacing: 0.5px;
   z-index: 2;
-  margin-top: 1.2rem;
+  margin: 0;
+  margin-top: 0.5rem;
   position: relative;
 }
 
@@ -720,7 +733,6 @@
   display: grid;
   text-align: center;
   gap: 0.4rem;
-  margin-bottom: 0.5rem;
 }
 
 .uv-status {
@@ -767,6 +779,7 @@
 .hourly-container {
   display: flex;
   gap: 1rem;
+  padding-bottom: 0.5rem;
   overflow-x: auto;
   scrollbar-width: thin;
   scrollbar-color: var(--secondary-color) transparent;
