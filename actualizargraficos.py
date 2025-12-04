@@ -1,20 +1,31 @@
 """
-Script para actualizar los gráficos de temperatura de todas las provincias.
-Este módulo se ejecuta después de que los datos climáticos han sido actualizados.
+Módulo: actualización de gráficos meteorológicos
 
-Funciones:
-    - Llama a generar_todos_los_graficos() sin parámetros
+Este script genera los gráficos de temperatura de todas las provincias,
+basándose en los datos climáticos previamente actualizados.
+
+Funciones principales:
+    - generar_todos_los_graficos(): genera y guarda los PNG para cada provincia
+
 Entradas:
-    No recibe parámetros.
+    Ninguna.
+
 Salidas:
-    Genera y guarda PNGs para cada provincia en /graficos/
+    Archivos PNG guardados en /graficos/ por cada provincia.
 """
 
-from graficos import generar_todos_los_graficos
+# ============================
+# Imports principales
+# ============================
+from graficos import generar_todos_los_graficos  # Función que genera todos los gráficos
 
+# ============================
+# Ejecución principal
+# ============================
 if __name__ == "__main__":
     print("\n--- Actualizando gráficos ---\n")
 
+    # Genera los gráficos
     generar_todos_los_graficos()
 
     print("\n--- Actualización completada ---\n")

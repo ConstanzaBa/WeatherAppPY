@@ -1,65 +1,106 @@
-""" 
-Genera y actualiza el archivo dataset/stations.csv con la estación meteorológica 
-más representativa de cada provincia argentina.
+"""
+Módulo: generación y actualización de stations.csv
 
+Este script genera y mantiene actualizado el archivo `dataset/stations.csv`
+con la estación meteorológica más cercana a las coordenadas de cada provincia
+argentina.
+
+Funciones principales:
+- obtener_estacion_exacta(lat, lon, provincia): devuelve la estación más cercana.
+- generar_csv_estaciones(): genera el CSV con todas las provincias.
 """
 
-from meteostat import Stations
-import pandas as pd
-import os
-from concurrent.futures import ThreadPoolExecutor, as_completed
+# ============================
+# Imports principales
+# ============================
+from meteostat import Stations  # Librería para obtener estaciones meteorológicas
+import pandas as pd             # Manejo de DataFrames
+import os                       # Gestión de archivos y directorios
 
-def esta_actualizado(archivo):
-    return os.path.exists(archivo)
-
-os.makedirs("dataset", exist_ok=True)
-
+# ============================
+# Diccionario de coordenadas
+# ============================
+# Coordenadas aproximadas (latitud, longitud) de cada capital provincial
 provincias = {
-    "Buenos Aires": (-34.9, -57.9),
-    "Catamarca": (-28.4, -65.7),
-    "Chaco": (-27.4, -58.9),
-    "Chubut": (-43.3, -65.1),
-    "Córdoba": (-31.4, -64.1),
-    "Corrientes": (-27.9, -58.0),
-    "Entre Ríos": (-31.7, -60.5),
-    "Formosa": (-26.1, -58.1),
-    "Jujuy": (-24.1, -65.2),
-    "La Pampa": (-36.6, -64.2),
-    "La Rioja": (-29.4, -66.8),
-    "Mendoza": (-32.8, -68.8),
-    "Misiones": (-27.3, -55.8),
-    "Neuquén": (-38.9, -68.0),
-    "Río Negro": (-40.8, -65.4),
-    "Salta": (-24.7, -65.4),
-    "San Juan": (-31.5, -68.5),
-    "San Luis": (-33.3, -66.3),
-    "Santa Cruz": (-51.6, -69.2),
-    "Santa Fe": (-31.6, -60.7),
-    "Santiago del Estero": (-27.8, -64.2),
-    "Tierra del Fuego": (-54.8, -68.3),
-    "Tucumán": (-26.8, -65.2)
+    "Buenos Aires": (-34.5667, -58.4167),
+    "Catamarca": (-28.6, -65.7667),
+    "Chaco": (-26.7333, -60.4833),
+    "Chubut": (-42.77, -65.1),
+    "Córdoba": (-31.45, -64.2667),
+    "Corrientes": (-27.45, -59.05),
+    "Entre Ríos": (-33, -58.6167),
+    "Formosa": (-26.85, -58.3167),
+    "Jujuy": (-24.3833, -65.0833),
+    "La Pampa": (-36.5667, -64.2667),
+    "La Rioja": (-29.2333, -67.4333),
+    "Mendoza": (-32.8333, -68.7833),
+    "Misiones": (-27.3667, -55.9667),
+    "Neuquén": (-40.0833, -71.1333),
+    "Río Negro": (-41.25, -68.7333),
+    "Salta": (-23.15, -64.3167),
+    "San Juan": (-32.6, -69.3333),
+    "San Luis": (-33.7333, -65.3833),
+    "Santa Cruz": (-49.3167, -67.75),
+    "Santa Fe": (-32.9167, -60.7833),
+    "Santiago del Estero": (-29.9, -63.6833),
+    "Tierra del Fuego": (-54.8, -68.3167),
+    "Tucumán": (-26.85, -65.1)
 }
 
-def obtener_estacion_valida(lat, lon, provincia):
-    estaciones = Stations().nearby(lat, lon).fetch(5)
-    if estaciones.empty:
+# ============================
+# Funciones auxiliares
+# ============================
+
+def esta_actualizado(archivo):
+    """
+    Verifica si un archivo existe en el sistema.
+
+    Parámetros:
+        archivo (str): Ruta del archivo
+
+    Retorna:
+        bool: True si existe, False si no
+    """
+    return os.path.exists(archivo)
+
+def obtener_estacion_exacta(lat, lon, provincia):
+    """
+    Obtiene la estación meteorológica más cercana a las coordenadas dadas.
+
+    Parámetros:
+        lat (float): Latitud
+        lon (float): Longitud
+        provincia (str): Nombre de la provincia
+
+    Retorna:
+        pd.Series | None: Serie con los datos de la estación o None si no se encuentra
+    """
+    try:
+        estaciones = Stations().nearby(lat, lon).fetch(1)
+    except Exception as e:
+        print(f"Error al buscar estaciones para {provincia}: {e}")
         return None
 
-    estaciones["id_estacion"] = estaciones.apply(
-        lambda x: x["wmo"] if pd.notna(x["wmo"]) else x["icao"] if pd.notna(x["icao"]) else None,
-        axis=1
-    )
-
-    estaciones = estaciones.dropna(subset=["id_estacion"])
     if estaciones.empty:
+        print(f"No se encontraron estaciones cerca de {provincia}")
         return None
 
+    # Seleccionamos la estación más cercana
     estacion = estaciones.iloc[0].copy()
     estacion["province"] = provincia
+    # ID de estación: prioriza WMO (id mundial), si no existe usa ICAO(id internacional)
+    estacion["id_estacion"] = estacion["wmo"] if pd.notna(estacion["wmo"]) else estacion["icao"]
     return estacion
 
-
 def generar_csv_estaciones():
+    """
+    Genera el CSV con las estaciones meteorológicas de cada provincia argentina.
+    Si el archivo ya existe, no se sobrescribe.
+
+    Retorna:
+        None
+    """
+    os.makedirs("dataset", exist_ok=True)
     stations_path = "dataset/stations.csv"
 
     if esta_actualizado(stations_path):
@@ -67,30 +108,26 @@ def generar_csv_estaciones():
         return
 
     print("Generando stations.csv...")
-
     lista = []
 
-    with ThreadPoolExecutor(max_workers=20) as executor:
-        futures = {
-            executor.submit(obtener_estacion_valida, lat, lon, provincia): provincia
-            for provincia, (lat, lon) in provincias.items()
-        }
+    for provincia, (lat, lon) in provincias.items():
+        est = obtener_estacion_exacta(lat, lon, provincia)
+        if est is not None:
+            lista.append(est)
+            print(f"Estación encontrada para {provincia}")
+        else:
+            print(f"No se pudo obtener una estación para {provincia}")
 
-        for futuro in as_completed(futures):
-            provincia = futures[futuro]
-            est = futuro.result()
+    if lista:
+        df = pd.DataFrame(lista)
+        df.to_csv(stations_path, index=False)
+        print("\nstations.csv creado correctamente.")
+    else:
+        print("No se generó ningún CSV porque no se encontraron estaciones.")
 
-            if est is not None:
-                lista.append(est)
-                print(f"Estación encontrada para {provincia}")
-            else:
-                print(f"No se encontró estación válida para {provincia}")
-
-    df = pd.DataFrame(lista)
-    df.to_csv(stations_path, index=False)
-
-    print("\nstations.csv creado correctamente.")
-
+# ============================
+# Ejecutable
+# ============================
 
 if __name__ == "__main__":
     generar_csv_estaciones()

@@ -1,40 +1,41 @@
 """
-Módulo para generar los archivos JSON con el clima actual y el pronóstico
-horario de cada provincia argentina.
+Módulo: generación de JSON de clima actual y pronóstico horario
 
-Este script:
-1. Lee todos los archivos CSV de la carpeta dataset/provincia.
-2. Obtiene para cada provincia:
-    - La hora más reciente con datos (clima actual).
-    - Las próximas horas (hasta 6 registros) como pronóstico horario.
-3. Selecciona el icono adecuado según hora del día.
-4. Guarda los datos en formato JSON para ser usados por la interfaz web.
+Este script procesa los CSV de cada provincia para generar:
+- clima_actual.json: registro más reciente de cada provincia
+- clima_horario.json: pronóstico horario (hasta 6 horas)
 
 Entradas:
-- Archivos CSV en dataset/provincia/ con columnas:
-    fecha_hora, temp, rhum, prcp, wspd, dwpt, snow, coco, sensacionTermica, uvIndex, visibilidad
+    CSVs en dataset/provincia/ con columnas:
+        fecha_hora, temp, rhum, prcp, wspd, dwpt, snow, coco, sensacionTermica, uvIndex, visibilidad
 
 Salidas:
-- web/clima_actual.json
-- web/clima_horario.json
+    JSON en web/clima_actual.json y web/clima_horario.json
 """
 
+# ============================
+# Imports principales
+# ============================
 import os
 import json
 import pandas as pd
 from datetime import datetime
 from zoneinfo import ZoneInfo
-
 from codclimatico import weather_icons, weather_descriptions
 
-# ============================================================
-# Función auxiliar para cargar un CSV de provincia
-# ============================================================
-
+# ============================
+# Función auxiliar: cargar CSV
+# ============================
 def cargar_csv_provincia(ruta):
     """
-    Carga un archivo CSV de clima para una provincia y convierte la columna
-    fecha_hora a formato datetime con zona horaria de Argentina.
+    Carga un CSV de clima de provincia y ajusta la columna fecha_hora
+    a la zona horaria de Argentina.
+    
+    Parámetros:
+        ruta (str): Ruta al CSV
+
+    Retorna:
+        pd.DataFrame: Datos de clima con fecha_hora en tz local
     """
     df = pd.read_csv(ruta)
     df["fecha_hora"] = pd.to_datetime(df["fecha_hora"])
@@ -45,26 +46,30 @@ def cargar_csv_provincia(ruta):
     )
     return df
 
-# ============================================================
-# Función que obtiene el clima actual de una provincia
-# ============================================================
-
+# ============================
+# Función: clima actual de una provincia
+# ============================
 def obtener_clima_actual(df, ahora, provincia):
     """
-    Obtiene el registro de clima más reciente para una provincia.
+    Obtiene el registro más reciente de clima para una provincia,
+    asignando iconos y descripciones según COCO y hora del día.
+
+    Parámetros:
+        df (pd.DataFrame): Datos de clima de la provincia
+        ahora (datetime): Fecha y hora actual
+        provincia (str): Nombre de la provincia
+
+    Retorna:
+        dict: Datos de clima actual formateados
     """
     df_pasado = df[df["fecha_hora"] <= ahora]
-
-    if not df_pasado.empty:
-        fila = df_pasado.iloc[-1]
-    else:
-        fila = df.iloc[0]
+    fila = df_pasado.iloc[-1] if not df_pasado.empty else df.iloc[0]
 
     coco = int(fila["coco"]) if not pd.isna(fila["coco"]) else None
     icono = weather_icons.get(coco, "unknown.svg")
     descripcion = weather_descriptions.get(coco, "Desconocido")
 
-    # Ajuste de icono según la hora (versión noche)
+    # Ajuste de icono según hora (noche)
     hora_actual = ahora.hour
     if 20 <= hora_actual or hora_actual < 7:
         if icono == "clear.svg":
@@ -87,13 +92,20 @@ def obtener_clima_actual(df, ahora, provincia):
         "fecha_hora": fila["fecha_hora"].strftime("%Y-%m-%d %H:%M:%S %Z"),
     }
 
-# ============================================================
-# Función que obtiene el pronóstico horario
-# ============================================================
-
+# ============================
+# Función: pronóstico horario
+# ============================
 def obtener_clima_horario(df, ahora):
     """
-    Genera las próximas horas de pronóstico para una provincia.
+    Genera los próximos 6 registros de pronóstico horario
+    para una provincia, con iconos y formato de hora.
+
+    Parámetros:
+        df (pd.DataFrame): Datos de clima de la provincia
+        ahora (datetime): Fecha y hora actual
+
+    Retorna:
+        list[dict]: Lista de pronósticos horarios
     """
     idx_actual = df[df["fecha_hora"] <= ahora].index.max()
     if pd.isna(idx_actual):
@@ -103,11 +115,10 @@ def obtener_clima_horario(df, ahora):
     horas = []
 
     for i, fila in enumerate(df_futuro.itertuples()):
-
         coco = int(fila.coco) if not pd.isna(fila.coco) else None
         icono = weather_icons.get(coco, "unknown.svg")
 
-        # Icono de noche
+        # Ajuste icono noche
         hora_fila = fila.fecha_hora.hour
         if 20 <= hora_fila or hora_fila < 7:
             if icono == "clear.svg":
@@ -116,10 +127,7 @@ def obtener_clima_horario(df, ahora):
                 icono = "fair_night.svg"
 
         # Texto de hora
-        if i == 0:
-            tiempo = "AHORA"
-        else:
-            tiempo = fila.fecha_hora.strftime("%I %p").lstrip("0")
+        tiempo = "AHORA" if i == 0 else fila.fecha_hora.strftime("%I %p").lstrip("0")
 
         horas.append({
             "time": tiempo,
@@ -131,14 +139,14 @@ def obtener_clima_horario(df, ahora):
 
     return horas
 
-# ============================================================
-# Función principal del módulo
-# ============================================================
-
+# ============================
+# Función principal
+# ============================
 def generar_json_clima():
     """
-    Recorre todos los archivos CSV de provincias, calcula el clima actual
-    y el pronóstico horario, y genera los archivos JSON usados por la interfaz.
+    Recorre todos los CSV de provincias, genera:
+    - clima_actual.json
+    - clima_horario.json
     """
     provincia_dir = "dataset/provincia"
     ahora = datetime.now(tz=ZoneInfo("America/Argentina/Buenos_Aires"))
@@ -147,7 +155,6 @@ def generar_json_clima():
     clima_horario = {}
 
     for archivo in os.listdir(provincia_dir):
-
         if not archivo.endswith(".csv"):
             continue
 
@@ -168,9 +175,8 @@ def generar_json_clima():
     with open("web/clima_horario.json", "w", encoding="utf-8") as f:
         json.dump(clima_horario, f, ensure_ascii=False, indent=2)
 
-# ============================================================
-# Ejecución directa del script
-# ============================================================
-
+# ============================
+# Ejecución directa
+# ============================
 if __name__ == "__main__":
     generar_json_clima()

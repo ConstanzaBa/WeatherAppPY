@@ -1,20 +1,31 @@
 """
-Script para actualizar el dataset basado en fecha y hora.
-Este archivo ejecuta los scripts necesarios para actualizar la lista de estaciones
-y los datos horarios descargados desde la API.
+Módulo: actualización de datasets meteorológicos
+
+Este script ejecuta los scripts `stations.py` y `data.py` para:
+- Actualizar la lista de estaciones
+- Descargar y mantener actualizados los datos horarios
 
 Entradas:
-    No recibe parámetros directamente.
+    Ninguna directamente.
 
 Salidas:
-    Ejecuta otros scripts que generan o actualizan archivos CSV de estaciones y clima.
+    Archivos CSV de estaciones y datos horarios generados o actualizados.
 """
 
-import subprocess
+# ============================
+# Imports principales
+# ============================
+import subprocess  # Para ejecutar scripts externos
 
+# ============================
+# Ejecución principal
+# ============================
 print("Actualizando la fecha y hora ...")
 
+# Ejecuta la actualización de estaciones
 subprocess.run(["python", "stations.py"], check=False)
+
+# Ejecuta la actualización de datos horarios
 subprocess.run(["python", "data.py"], check=False)
 
 print("Datos horarios actualizados.")

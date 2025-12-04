@@ -1,18 +1,30 @@
 """
-Mapeos de códigos meteorológicos (coco) a iconos y descripciones de clima.
+Biblioteca de mapeo de códigos meteorológicos COCO a iconos y descripciones.
 
-Este módulo contiene dos diccionarios:
-    - weather_icons: relaciona códigos coco con el archivo SVG correspondiente.
-    - weather_descriptions: describe en texto la condición asociada al código coco.
+Este módulo permite traducir los códigos meteorológicos estándar COCO en:
+    - iconos SVG para visualización en la web o aplicaciones,
+    - descripciones de texto legibles para usuarios.
 
 Entradas:
-    No recibe parámetros.
+    No recibe parámetros directamente.
+    Se accede a los diccionarios `weather_icons` y `weather_descriptions`.
 
 Salidas:
-    Diccionarios accesibles desde otros módulos como actualclima.py
+    - weather_icons (dict[int, str]): Mapea el código COCO al nombre del archivo SVG correspondiente.
+    - weather_descriptions (dict[int, str]): Mapea el código COCO a la descripción textual del clima.
+
+Uso típico:
+    from esta_biblioteca import weather_icons, weather_descriptions
+
+    icono = weather_icons[8]             # "rain.svg"
+    descripcion = weather_descriptions[8] # "Lluvia"
 """
 
+# =============================================================
 # Íconos asociados a cada código de condición climática (COCO)
+# =============================================================
+# Diccionario que relaciona cada código COCO con un archivo SVG
+# representando visualmente la condición climática.
 weather_icons = {
     1: "clear.svg",
     2: "fair.svg",
@@ -44,7 +56,11 @@ weather_icons = {
     28: "wind.svg"
 }
 
+# =============================================================
 # Descripciones de cada código COCO
+# =============================================================
+# Diccionario que proporciona la descripción en texto de cada
+# condición climática, útil para mostrar en la interfaz de usuario.
 weather_descriptions = {
     1: "Despejado",
     2: "Parcialmente despejado",

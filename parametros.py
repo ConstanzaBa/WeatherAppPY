@@ -4,235 +4,364 @@ Módulo: parámetros meteorológicos derivados
 Este archivo contiene funciones para calcular valores derivados a partir
 de datos climáticos horarios:
 
-- Sensación térmica (frío, calor o templado)
+- Sensación térmica (Wind Chill, Heat Index, Apparent Temperature)
+- Código COCO (condiciones meteorológicas)
 - Índice UV estimado
-- Visibilidad estimada
+- Visibilidad atmosférica
 
-Todas las funciones están preparadas para recibir valores None o NaN
-y responder de manera robusta.
+Todas las funciones son robustas ante valores None o NaN.
 """
 
-import math
-from datetime import datetime
+import math          # Funciones matemáticas y exponenciales
+from datetime import datetime  # Manejo de fechas y horas
 
-# ============================================================
-#   Funciones auxiliares
-# ============================================================
+
+def asignar_estacion(mes):
+    """
+    Asigna la estación del año según el mes.
+    
+    Parámetros:
+        mes (int): Número del mes (1-12)
+        
+    Retorna:
+        str: "verano", "otoño", "invierno" o "primavera"
+    """
+    if mes in [12, 1, 2]:
+        return "verano"
+    elif mes in [3, 4, 5]:
+        return "otoño"
+    elif mes in [6, 7, 8]:
+        return "invierno"
+    else:
+        return "primavera"
 
 def _vapour_pressure_hpa(temp_c, rh_pct):
     """
-    Calcula la presión de vapor (hPa).
-
+    Calcula la presión de vapor en hPa.
+    
     Parámetros:
-        temp_c (float): Temperatura (°C)
-        rh_pct (float): Humedad relativa (%)
-
+        temp_c (float): Temperatura en °C
+        rh_pct (float): Humedad relativa en %
+        
     Retorna:
-        float: presión de vapor en hPa
+        float: Presión de vapor en hPa
     """
-    return (rh_pct / 100.0) * 6.105 * math.exp((17.27 * temp_c) / (237.7 + temp_c))
+    try:
+        if temp_c is None or rh_pct is None:
+            return 0.0
+        
+        t = float(temp_c)
+        rh = float(rh_pct)
+        
+        # Magnus-Tetens
+        es = 6.112 * math.exp((17.62 * t) / (243.12 + t))  # hPa
+        
+        return (rh / 100.0) * es
+    
+    except Exception:
+        return 0.0
 
-
-# ============================================================
-#   Cálculo de sensación térmica
-# ============================================================
+def calcular_coco(temp, dwpt, rhum, pres, precip):
+    """
+    Calcula el código COCO según condiciones meteorológicas.
+    
+    Parámetros:
+        temp (float): Temperatura (°C)
+        dwpt (float): Punto de rocío (°C)
+        rhum (float): Humedad relativa (%)
+        pres (float): Presión atmosférica (hPa)
+        precip (float): Precipitación estimada (mm)
+        
+    Retorna:
+        int: Código COCO
+    """
+    try:
+        temp = None if temp is None else float(temp)
+        dwpt = None if dwpt is None else float(dwpt)
+        rhum = None if rhum is None else float(rhum)
+        pres = None if pres is None else float(pres)
+        precip = None if precip is None else float(precip)
+        snow = None if snow is None else float(snow)
+    except Exception:
+        return 2
+    
+    # Valores por defecto
+    
+    if rhum is None:
+        rhum = 50.0
+    if temp is None:
+        temp = 15.0
+    if dwpt is None:
+        dwpt = temp - 2.0
+    if pres is None:
+        pres = 1013.0
+    if precip is None:
+        precip = 0.0
+    if snow is None:
+        snow = 0.0
+        
+    spread = abs(temp - dwpt)
+    
+    # -- Nieve
+    if snow >= 5.0:
+        return 23  # nieve fuerte
+    if snow >= 2.0:
+        return 22  # nieve moderada
+    if snow > 0.0:
+        return 21  # nieve ligera
+    
+    # -- Tormenta 
+    if precip >= 50.0:
+        return 27  # tormenta extrema
+    if precip >= 20.0 and pres < 1005.0:
+        return 27  # tormenta
+    if precip >= 20.0:
+        return 26  # lluvia muy intensa
+    
+    # -- Lluvia
+    if precip >= 15.0:
+        return 9   # lluvia intensa
+    if precip >= 5.0:
+        return 8   # lluvia moderada
+    if precip >= 2.5:
+        return 7   # lluvia ligera
+    
+    # -- Niebla
+    if rhum >= 98 and spread <= 1.0:
+        return 5   # niebla densa
+    if rhum >= 95 and spread <= 2.0:
+        return 4   # niebla
+    
+    # -- Nubosidad por humedad
+    if rhum >= 85:
+        return 3
+    if rhum >= 70:
+        return 2
+    
+    # -- Despejado 
+    if rhum < 55 and spread > 6.0:
+        return 1
+    
+    return 2
 
 def calcular_wind_chill(temp_c, wspd_kmh):
     """
-    Calcula Wind Chill (sensación térmica por viento).
-
+    Wind Chill (sensación térmica por frío y viento).
+    
     Parámetros:
         temp_c (float): Temperatura (°C)
         wspd_kmh (float): Velocidad del viento (km/h)
-
+        
     Retorna:
-        float | None: Sensación térmica o None si no aplica.
+        float | None: Sensación térmica o None si no aplica
     """
     if temp_c is None or wspd_kmh is None:
         return None
-    try:
-        t = float(temp_c)
-        w = float(wspd_kmh)
-    except:
-        return None
-
+    t, w = float(temp_c), float(wspd_kmh)
     if t > 10 or w < 4.8:
         return None
-
-    wc = 13.12 + 0.6215 * t - 11.37 * math.pow(w, 0.16) + 0.3965 * t * math.pow(w, 0.16)
-    return round(wc, 1)
-
+    return round(13.12 + 0.6215*t - 11.37*math.pow(w, 0.16) + 0.3965*t*math.pow(w, 0.16), 1)
 
 def calcular_heat_index(temp_c, rh_pct):
     """
-    Calcula Heat Index (sensación térmica por calor + humedad).
-
+    Heat Index (sensación térmica por calor + humedad).
+    
     Parámetros:
         temp_c (float): Temperatura (°C)
         rh_pct (float): Humedad relativa (%)
-
+        
     Retorna:
-        float | None: Índice de calor o None si no aplica.
+        float | None: Índice de calor o None si no aplica
     """
-    if temp_c is None or rh_pct is None:
-        return None
-
     try:
+        if temp_c is None or rh_pct is None:
+            return None
         t = float(temp_c)
         rh = float(rh_pct)
-    except:
+    except Exception:
         return None
-
-    if t < 27 or rh < 40:
+    
+    if t < 27.0 or rh < 40.0:
         return None
-
-    t_f = t * 9/5 + 32
-    hi_f = (
-        -42.379 + 2.04901523*t_f + 10.14333127*rh
-        - 0.22475541*t_f*rh - 0.00683783*t_f**2
-        - 0.05481717*rh**2 + 0.00122874*t_f**2*rh
-        + 0.00085282*t_f*rh**2 - 0.00000199*t_f**2*rh**2
-    )
-
-    hi_c = (hi_f - 32) * 5/9
+    
+    # Convertir a Fahrenheit
+    t_f = t * 9.0/5.0 + 32.0
+    
+    # Rothfusz regression (NOAA)
+    hi_f = (-42.379 + 2.04901523 * t_f + 10.14333127 * rh
+            - 0.22475541 * t_f * rh - 0.00683783 * t_f**2
+            - 0.05481717 * rh**2 + 0.00122874 * t_f**2 * rh
+            + 0.00085282 * t_f * rh**2 - 0.00000199 * t_f**2 * rh**2)
+    
+    # Humedad baja / alta (según NOAA)
+    if rh < 13 and 80.0 <= t_f <= 112.0:
+        adj = ((13.0 - rh) / 4.0) * math.sqrt((17.0 - abs(t_f - 95.0)) / 17.0)
+        hi_f -= adj
+    elif rh > 85 and 80.0 <= t_f <= 87.0:
+        adj = ((rh - 85.0) / 10.0) * ((87.0 - t_f) / 5.0)
+        hi_f += adj
+        
+    # Convertir de vuelta a °C
+    hi_c = (hi_f - 32.0) * 5.0/9.0
     return round(hi_c, 1)
-
 
 def calcular_apparent_temperature(temp_c, rh_pct, wspd_kmh):
     """
-    Calcula Apparent Temperature (sensación térmica australiana).
-
+    Apparent Temperature (Australian-style): AT = T + 0.33*e - 0.70*v - 4.0
+    - e = vapour pressure en hPa (usamos _vapour_pressure_hpa)
+    - v = wind speed en m/s (convertir de km/h)
+    
     Parámetros:
         temp_c (float): Temperatura (°C)
-        rh_pct (float): Humedad (%) 
-        wspd_kmh (float): Viento (km/h)
-
+        rh_pct (float): Humedad relativa (%)
+        wspd_kmh (float): Velocidad del viento (km/h)
+        
     Retorna:
-        float | None
+        float (°C) | None
     """
-    if temp_c is None or rh_pct is None or wspd_kmh is None:
-        return None
-
     try:
+        if temp_c is None or rh_pct is None or wspd_kmh is None:
+            return None
         t = float(temp_c)
         rh = float(rh_pct)
-        w = float(wspd_kmh)
-    except:
+        w_kmh = float(wspd_kmh)
+    except Exception:
         return None
-
-    if not (-50 <= t <= 60 and 0 <= rh <= 100 and w >= 0):
-        return None
-
-    v = w / 3.6
-    e = _vapour_pressure_hpa(t, rh)
-
-    at = t + 0.33 * e - 0.70 * v - 4.00
+    
+    # convertir
+    v = w_kmh / 3.6  # m/s
+    e = _vapour_pressure_hpa(t, rh)  # hPa
+    
+    at = t + 0.33 * e - 0.70 * v - 4.0
     return round(at, 1)
-
 
 def calcular_sensacion_termica(temp, rhum, wspd):
     """
-    Selecciona automáticamente la mejor sensación térmica disponible.
-
+    Calcula la sensación térmica combinando:
+        - Wind Chill
+        - Heat Index
+        - Apparent Temperature (fallback)
+        
     Parámetros:
         temp (float): Temperatura (°C)
-        rhum (float): Humedad (%)
-        wspd (float): Viento (km/h)
-
+        rhum (float): Humedad relativa (%)
+        wspd (float): Velocidad del viento (km/h)
+        
     Retorna:
-        float | None
+        float: Sensación térmica aproximada
     """
-    if temp is None or rhum is None or wspd is None:
-        return None
-
     try:
-        temp = float(temp)
-        rhum = float(rhum)
-        wspd = float(wspd)
-    except:
-        return None
-
-    wc = calcular_wind_chill(temp, wspd)
-    hi = calcular_heat_index(temp, rhum)
-    at = calcular_apparent_temperature(temp, rhum, wspd)
-
-    if wc is not None:
-        return wc
-    if hi is not None:
-        return hi
-    return at
-
-
-# ============================================================
-#   Cálculo UV
-# ============================================================
+        # primeros intentos
+        wc = calcular_wind_chill(temp, wspd)
+        hi = calcular_heat_index(temp, rhum)
+        at = calcular_apparent_temperature(temp, rhum, wspd)
+        
+        # priorizar: WC > HI > AT
+        if wc is not None:
+            return round(wc, 1)
+        if hi is not None:
+            return round(hi, 1)
+        if at is not None:
+            return round(at, 1)
+        
+        # fallback: si temp disponible, devolver temp redondeada
+        if temp is not None:
+            return round(float(temp), 1)
+        
+    except Exception:
+        pass
+    
+    return None
 
 def calcular_radiacion_uv(temp, coco, fecha_hora):
     """
-    Estima el índice UV a partir de:
-    - Temperatura
-    - Código de condición (Meteostat)
-    - Hora del día
+    Estima el índice UV según temperatura, COCO y hora.
 
     Parámetros:
         temp (float): Temperatura (°C)
-        coco (int): Código Meteostat
+        coco (int): Código COCO
         fecha_hora (str): Fecha ISO "YYYY-MM-DDTHH:MM:SSZ"
-
+        
     Retorna:
-        float | None
+        float | None: Índice UV estimado
     """
-    if temp is None or coco is None or fecha_hora is None:
-        return None
-
+    if fecha_hora is None:
+        return 0.0
+    
     try:
-        temp = float(temp)
         dt = datetime.fromisoformat(fecha_hora.replace("Z", "+00:00"))
-        hora = dt.hour
     except:
-        return None
-
-    if temp < -50 or temp > 60:
-        return None
-
-    # Curva diaria simple
-    if 10 <= hora <= 15:
-        base_uv = 8.0
-    elif 8 <= hora < 10 or 15 < hora <= 17:
-        base_uv = 4.0
+        return 0.0
+    
+    # Hora solar aproximada
+    hora_local = dt.hour + dt.minute/60.0    
+    mes = dt.month
+    
+    if mes in [12, 1, 2]:       # Verano
+        amanecer = 5.45
+        atardecer = 20.30
+    elif mes in [3, 4, 5]:     # Otoño
+        amanecer = 6.50
+        atardecer = 19.10
+    elif mes in [6, 7, 8]:     # Invierno
+        amanecer = 7.40
+        atardecer = 18.25
+    else:                      # Primavera
+        amanecer = 6.20
+        atardecer = 19.45
+    
+    # Si está de noche: UV = 0
+    if hora_local < amanecer or hora_local > atardecer:
+        return 0.0
+    
+    # Conversion a hora solar
+    eq_time = -7.65 * math.sin(math.radians((360/365)*(dt.timetuple().tm_yday + 10)))
+    long_corr = -4.0  # aprox GMT-3
+    hora_solar = hora_local + (eq_time/60.0) + (long_corr/60.0)
+    
+    # Curva solar tipo campana
+    peak = 12.88
+    sigma = 2.4
+    base_uv = 12.5 * math.exp(-0.5 * ((hora_solar - peak) / sigma) ** 2)
+    
+    # Factor estacional
+    
+    if mes in [12, 1, 2]:
+        base_uv *= 1.15   # verano
+    elif mes in [3, 4, 5]:
+        base_uv *= 0.85   # otoño
+    elif mes in [6, 7, 8]:
+        base_uv *= 0.55   # invierno
     else:
-        base_uv = 1.0
-
-    # Atenuación por nubosidad
-    if coco in [1, 2]:
-        factor = 0.0     # despejado
-    elif coco in [3, 4]:
-        factor = 0.4     # nubes
-    elif coco in [5, 6]:
-        factor = 0.6     # niebla
-    elif coco in [7, 8, 9, 10, 11, 12, 13]:
-        factor = 0.7     # lluvia
-    elif coco in [14, 15, 16, 21, 22]:
-        factor = 0.8     # nieve
-    elif coco in [23, 24, 25, 26, 27]:
-        factor = 0.9     # tormentas
-    else:
-        factor = 0.5
-
-    temp_factor = max(0.8, min(1.2, (temp - 10) / 15))
-
-    uv = base_uv * (1 - factor) * temp_factor
+        base_uv *= 1.00   # primavera
+        
+    # Factor coco
+    coco_factor = {
+        1: 1.00,  # despejado 
+        2: 0.90,
+        3: 0.70,  # parcialmente nublado
+        4: 0.40,  # niebla ligera
+        5: 0.25,  # niebla densa
+        7: 0.65,  # llovizna
+        8: 0.55,
+        9: 0.50,
+        21: 0.50, # nieve ligera
+        22: 0.40,
+        23: 0.30,
+        26: 0.25,
+        27: 0.10  # tormenta
+    }
+    
+    attenuation = coco_factor.get(coco, 0.60)
+    uv = base_uv * attenuation
+    
+    uv = max(0.0, min(uv, 13.0))
     return round(uv, 1)
-
-
-# ============================================================
-#   Visibilidad
-# ============================================================
 
 def calcular_visibilidad(temp, rhum, dwpt, prcp, snow, wspd, coco):
     """
-    Estima la visibilidad atmosférica (km).
-
+    Estima la visibilidad atmosférica (km) según condiciones.
+    
     Parámetros:
         temp (float) : Temperatura (°C)
         rhum (float) : Humedad relativa (%)
@@ -240,103 +369,62 @@ def calcular_visibilidad(temp, rhum, dwpt, prcp, snow, wspd, coco):
         prcp (float) : Precipitación (mm/h)
         snow (float) : Nieve (mm/h)
         wspd (float) : Viento (km/h)
-        coco (int)   : Código Meteostat
-
+        coco (int)   : Código COCO
+        
     Retorna:
-        float | None : visibilidad estimada en km
+        float | None: Visibilidad estimada en km
     """
-    # Parsing seguro
+    
     try:
-        temp = None if temp is None else float(temp)
-        rhum = None if rhum is None else float(rhum)
-        dwpt = None if dwpt is None else float(dwpt)
-        prcp = 0.0 if prcp in [None, math.nan] else float(prcp)
-        snow = 0.0 if snow in [None, math.nan] else float(snow)
-        wspd = 0.0 if wspd in [None, math.nan] else float(wspd)
-        coco = None if coco is None else int(coco)
+        t = float(temp)
+        d = float(dwpt)
+        rh = float(rhum)
+        v = float(wspd)
+        r = float(prcp)
+        s = float(snow)
+        cc = int(coco) if coco is not None else 2
     except:
-        return None
+        return 20.0
+    
+    if s > 0:
+        vis_m = max(100, 1500 - s * 80) 
+        return round(vis_m / 1000, 1)
+    
+    if r > 0:
+        vis_m = max(300, 6000 - r * 1000)
+        return round(vis_m / 1000, 1)
+    
+    delta = t - d
+    if delta < 0.5:
+        return 0.2 
+    if delta < 1.0:
+        return 0.4
+    if delta < 2.0:
+        return 0.8
+    if delta < 3.0:
+        return 2.0
+    
+    vis = 22.0
+    
+    # Humedad alta reduce visibilidad
+    if rh > 95:
+        vis -= 15
+    elif rh > 85:
+        vis -= 10
+    elif rh > 75:
+        vis -= 5
+    elif rh > 65:
+        vis -= 3
+        
+    # Niebla 
+    if cc in [4, 5]:
+        vis = 0.5
+        
+    # Viento levanta polvo en zonas secas
+    if v > 35:
+        vis -= 5
+        
+    # Colapsar a rango válido
+    vis = max(0.2, min(vis, 22.0))
 
-    if temp is None or rhum is None:
-        return None
-    if not (-80 <= temp <= 70 and 0 <= rhum <= 100 and wspd >= 0):
-        return None
-
-    vis_km = 20.0  # valor base máximo
-
-    # --- Niebla ---
-    if dwpt is not None:
-        dep = temp - dwpt
-    else:
-        dep = None
-
-    if rhum >= 95 and dep is not None and dep <= 2:
-        base_fog = 0.05 if (rhum >= 99 and dep <= 0.5) else (0.2 if rhum >= 97 else 0.5)
-
-        if wspd >= 40:
-            vis_km = base_fog * 3
-        elif wspd >= 15:
-            vis_km = base_fog * 1.5
-        else:
-            vis_km = base_fog
-
-        return round(max(vis_km, 0.05), 1)
-
-    # --- Neblina ---
-    if rhum >= 85 and dep is not None and dep <= 4:
-        vis_km = 1.0 + (rhum - 85) / 15 * 3
-        if wspd >= 30:
-            vis_km *= 1.3
-        return round(min(vis_km, 20.0), 1)
-
-    # --- Precipitación ---
-    if prcp > 0:
-        if prcp < 0.5:
-            vis_km = 10.0
-        elif prcp < 2:
-            vis_km = 6.0
-        elif prcp < 10:
-            vis_km = 3.0
-        else:
-            vis_km = 0.8
-
-        if coco in [23, 24, 25, 26, 27, 9, 8, 18]:
-            vis_km = min(vis_km, 2.0)
-
-        if wspd > 80:
-            vis_km *= 0.8
-
-        return round(max(vis_km, 0.05), 1)
-
-    # --- Nieve ---
-    if snow > 0:
-        if snow < 0.5:
-            vis_km = 6.0
-        elif snow < 2:
-            vis_km = 3.0
-        elif snow < 5:
-            vis_km = 1.5
-        else:
-            vis_km = 0.5
-
-        if wspd >= 30:
-            vis_km *= 0.6
-
-        return round(max(vis_km, 0.05), 1)
-
-    # --- Otros ajustes por códigos ---
-    if coco is not None:
-        if coco in [7, 17]:
-            vis_km = min(vis_km, 10.0)
-        elif coco in [8, 18]:
-            vis_km = min(vis_km, 6.0)
-        elif coco in [23, 24, 25, 26, 27]:
-            vis_km = min(vis_km, 3.0)
-
-    # --- Reducción por viento fuerte ---
-    if wspd >= 80:
-        vis_km = min(vis_km, 8.0)
-    elif wspd >= 60:
-        vis_km = min(vis_km, 12.0)
-
-    return round(max(min(vis_km, 20.0), 0.05), 1)
+    return round(vis, 1)
