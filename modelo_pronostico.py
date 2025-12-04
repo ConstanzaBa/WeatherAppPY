@@ -256,7 +256,7 @@ def predecir_carousel(df, modelos, scaler, features, provincia):
     Genera un carousel para la web usando la predicción del primer día.
     
     Utiliza los modelos entrenados y los datos históricos para:
-        - Tomar la predicción del primer día (día 0)
+        - Tomar la predicción del primer día (día 1)
         - Usar el código COCO ya calculado
         - Mapear COCO a descripción y porcentaje aproximado de nubosidad
         - Calcular probabilidad de lluvia, sensación térmica y nubosidad para el carousel
@@ -281,7 +281,7 @@ def predecir_carousel(df, modelos, scaler, features, provincia):
     """
     # Obtener la predicción de 7 días
     pred_7dias = predecir_7dias(df, modelos, scaler, features, provincia)
-    dia1 = pred_7dias[0]  # Tomamos el primer día para el carousel
+    dia1 = pred_7dias[1]  # Tomamos el primer día para el carousel
 
     # Tomar el código COCO ya calculado en predecir_7dias
     coco_val = dia1["coco"]
@@ -295,9 +295,6 @@ def predecir_carousel(df, modelos, scaler, features, provincia):
     
     ultimo = df_copy.iloc[-1]
     precip = dia1["precip"]
-    
-    # Re-predecir humedad y presión para este día (ya se hizo en predecir_7dias pero no se devolvió)
-    # Como alternativa, usamos una estimación basada en COCO y precipitación
     
     # Factor de precipitación (más lluvia = más nubosidad)
     precip_factor = min(precip / 10.0, 1.0)  # Escala hasta 10mm
